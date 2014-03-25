@@ -12,22 +12,22 @@
 
 #ctdata <- f.teamdb.query(dataset=="camera trap")
 #load(ctdata)
-#data <- ctdata
+#alldata <- ctdata
 
-#data<-f.fix.data2(data)
-#Site.Code <- substr(data$Sampling.Unit.Name,4,6)
-#data <- cbind(data, Site.Code)
+#alldata<-f.fix.data2(alldata)
+#Site.Code <- substr(alldata$Sampling.Unit.Name,4,6)
+#alldata <- cbind(alldata, Site.Code)
 
 # Set threshold to one day (24 hours * 60 minutes = 1440 minutes) and the number of replicates for each camera trap as 30 days
 # Note that f.separate.events takes a good bit of time to run on complete CT dataset. Avoid replicating where possible.
-#data <- f.order.data(data)
-#data <- f.separate.events(data, thresh=(1440))
+#alldata <- f.order.data(alldata)
+#eventsdata <- f.separate.events(alldata, thresh=(1440))
 
 
 
 ######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2012 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
-data.use <- data[data$Sampling.Period=="2011.01" & data$Site.Code=="VB-",]
+data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="VB-",]
 
 #subset species to the species in that site and with Include=1
 splist<-read.csv("master_species_list.csv",h=T) #master list
@@ -47,7 +47,7 @@ nrepls = 30   # number of replicates per sample site
 
 # Input data requires the number of replicates in which each species was detected (i.e. max=nrepls)
 Ymat <- table(events.use$bin, events.use$Sampling.Unit.Name)
-Ymat <- as.matrix(X)  
+Ymat <- as.matrix(Ymat)  
 nsites = dim(Ymat)[2]
 n = dim(Ymat)[1]
 nzeros = 150 - n  #  75 = max species richness
