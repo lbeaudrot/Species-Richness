@@ -1,0 +1,41 @@
+model {
+
+omega ~ dunif(0,1)
+
+psi.mean ~ dunif(0,1)
+alpha <- log(psi.mean) - log(1-psi.mean)
+
+theta.mean ~ dunif(0,1)
+beta <- log(theta.mean) - log(1-theta.mean)
+
+tau.u ~ dgamma(0.1,0.1)
+tau.v ~ dgamma(0.1,0.1)
+rho ~ dunif(-1,1)
+var.eta <- tau.v/(1.-pow(rho,2))
+
+sigma.u <- 1/sqrt(tau.u)
+sigma.v <- 1/sqrt(tau.v)
+
+
+for (i in 1:(n+nzeroes)) {
+    w[i] ~ dbin(omega, 1)
+    phi[i] ~ dnorm(alpha, tau.u)
+
+    mu.eta[i] <- beta + (rho*sigma.v/sigma.u)*(phi[i] - alpha)
+    eta[i] ~ dnorm(mu.eta[i], var.eta)
+
+
+    logit(psi[i]) <- phi[i]
+    logit(theta[i]) <- eta[i]
+
+    mu.psi[i] <- psi[i]*w[i]
+    for (j in 1:J) {
+	Z[i,j] ~ dbin(mu.psi[i], 1)
+	mu.theta[i,j] <- theta[i]*Z[i,j]
+	X[i,j] ~ dbin(mu.theta[i,j], K)
+    }
+}
+
+n0 <- sum(w[(n+1):(n+nzeroes)])
+N <- n + n0
+}
