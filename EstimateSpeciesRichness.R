@@ -27,7 +27,7 @@
 
 ######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2012 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
-data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="VB-",]
+data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="YAS",]
 
 #subset species to the species in that site and with Include=1
 splist<-read.csv("master_species_list.csv",h=T) #master list
@@ -56,6 +56,7 @@ X <- round(t(t(X)*(edays/30)))
 
 
 # augment data matrix with an arbitrarily large number of zero row vectors
+nrepls=30
 nzeroes = 125
 n = dim(X)[1]
 nsites = dim(X)[2]
@@ -86,7 +87,6 @@ sp.inits = function() {
   )
 }
 
-nrepls = 30
 n.chains=4
 n.iter=250000
 n.burnin=125000 
@@ -96,12 +96,12 @@ n.thin=3
 # Parallelize code to run on server
 # Parallelize code 
 # Load functions from bugsParallel.r 
-#fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="MultiSpeciesSiteOccModel.txt", 
-#                             n.chains=4, n.iter=100, n.burnin=10, n.thin=3, digits=3, program=c("JAGS"))
+fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", 
+                             n.chains=4, n.iter=100, n.burnin=10, n.thin=3, digits=3, program=c("JAGS"))
 #plot.chains(jmodparallel)
 
 
-
+library(rjags)
 fit <- jags.model(file='MultiSpeciesSiteOccModel.txt', data=sp.data, inits=sp.inits, n.chains=3, n.adapt=1000)
 
 update(fit, n.iter=125000, by=100, progress.bar='text')   # burn in
