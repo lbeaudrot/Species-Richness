@@ -87,33 +87,28 @@ sp.inits = function() {
   )
 }
 
-n.chains=4
-n.iter=250000
-n.burnin=125000 
-n.thin=3
-
+library(rjags)
 
 # Parallelize code to run on server
 # Parallelize code 
 # Load functions from bugsParallel.r 
 n.chains <- 4
-n.iter <- as.integer(100)
-n.burnin <- as.integer(50)
+n.iter <- as.integer(250000)
+n.burnin <- as.integer(125000)
 n.thin <- 3
-n.sims <- as.integer(10)
+n.sims <- as.integer(20000)
 
 fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", 
                              n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin, n.sims=n.sims, digits=3, program=c("JAGS"))
 #plot.chains(jmodparallel)
 
 
- library(rjags)
-fit <- jags.model(file='MultiSpeciesSiteOccModel.txt', data=sp.data, inits=sp.inits, n.chains=3, n.adapt=1000)
+#fit <- jags.model(file='MultiSpeciesSiteOccModel.txt', data=sp.data, inits=sp.inits, n.chains=3, n.adapt=1000)
 
-update(fit, n.iter=125000, by=100, progress.bar='text')   # burn in
+#update(fit, n.iter=125000, by=100, progress.bar='text')   # burn in
 
-post = coda.samples(fit, sp.params, n.iter=125000, thin=3)  # posterior sample
-mypost = as.matrix(post, chain=TRUE)
+#post = coda.samples(fit, sp.params, n.iter=125000, thin=3)  # posterior sample
+#mypost = as.matrix(post, chain=TRUE)
 
 #post2 = coda.samples(fit, params, n.iter=125000, thin=3) # another posterior sample
 #mypost2 = as.matrix(post2, chain=TRUE)
@@ -123,14 +118,14 @@ mypost = as.matrix(post, chain=TRUE)
 #model.file='MultiSpeciesSiteOccModel.txt',
 #debug=F, n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin)
 
-print(fit, digits=3)
-plot(fit)
+print(fitparallel, digits=3)
+#plot(fitparallel)
 
-sp.mean <- round(mean(fit$sims.list$N), digits=2)
-sp.median <- median(fit$sims.list$N)
-sp.mode <- as.numeric(names(sort(table(fit$sims.list$N), decreasing=TRUE))[1])
+sp.mean <- round(mean(fitparallel$sims.list$N), digits=2)
+sp.median <- median(fitparallel$sims.list$N)
+sp.mode <- as.numeric(names(sort(table(fitparallel$sims.list$N), decreasing=TRUE))[1])
 
-hist(fit$sims.list$N, breaks=150, xlab="Species Richness", 
+hist(fitparallel$sims.list$N, breaks=150, xlab="Species Richness", 
      main=paste(events.use$Site.Name[1], events.use$Sampling.Period[1], sep=" "), 
      sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
 text(100, 3000, paste("Mean", sp.mean, sep=" = "))
