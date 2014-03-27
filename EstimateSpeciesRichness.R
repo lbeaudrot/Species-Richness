@@ -23,11 +23,12 @@
 #alldata <- f.order.data(alldata)
 #eventsdata <- f.separate.events(alldata, thresh=(1440))
 
+table(alldata$Site.Code, alldata$Sampling.Period)
 
 
 ######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2012 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
-data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="YAS",]
+data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="CSN",]
 
 #subset species to the species in that site and with Include=1
 splist<-read.csv("master_species_list.csv",h=T) #master list
@@ -125,6 +126,10 @@ sp.mean <- round(mean(fitparallel$sims.list$N), digits=2)
 sp.median <- median(fitparallel$sims.list$N)
 sp.mode <- as.numeric(names(sort(table(fitparallel$sims.list$N), decreasing=TRUE))[1])
 
+sp.mean
+sp.median
+sp.mode
+
 hist(fitparallel$sims.list$N, breaks=150, xlab="Species Richness", 
      main=paste(events.use$Site.Name[1], events.use$Sampling.Period[1], sep=" "), 
      sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
@@ -134,7 +139,9 @@ text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 
 # Need to save model outputs
 
+# Temporarily store site specific outputs
 
+#YASfit <- fitparallel
 
 
 
