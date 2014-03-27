@@ -22,3 +22,10 @@ and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
 DIC info (using the rule, pD = var(deviance)/2)
 pD = 1883.2 and DIC = 3276.7
 DIC is an estimate of expected predictive error (lower deviance is better).
+
+> sp.mean
+[1] 62.77
+> sp.median
+[1] 58
+> sp.mode
+[1] 50
