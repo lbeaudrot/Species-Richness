@@ -97,12 +97,13 @@ n.thin=3
 # Parallelize code 
 # Load functions from bugsParallel.r 
 n.chains <- 4
-n.iter <- as.integer(125000)
-n.burnin <- as.integer(125000)
+n.iter <- as.integer(100)
+n.burnin <- as.integer(50)
 n.thin <- 3
+n.sims <- as.integer(10)
 
 fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", 
-                             n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin, digits=3, program=c("JAGS"))
+                             n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin, n.sims=n.sims, digits=3, program=c("JAGS"))
 #plot.chains(jmodparallel)
 
 
