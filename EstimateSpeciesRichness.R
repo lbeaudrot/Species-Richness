@@ -142,8 +142,7 @@ text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 # Temporarily store site specific outputs
 
 #YASfit <- fitparallel
-
-
+#CSNfit <- fitparallel
 
 
 
