@@ -1,0 +1,24 @@
+# Results of Dorazio et al. 2006 method for estimating species richness with remaining TEAM sites (post-ESA abstract) using SDSC server
+
+# 2011 YAS CT data
+
+> print(fitparallel, digits=3)
+Inference for Bugs model at "/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", fit using JAGS,
+ 4 chains, each with 250000 iterations (first 125000 discarded), n.thin = 3
+ n.sims = 166668 iterations saved
+             mean     sd     2.5%      25%      50%      75%    97.5%  Rhat n.eff
+alpha      -2.775  1.040   -5.237   -3.367   -2.618   -2.046   -1.132 1.002  2500
+beta       -4.501  0.491   -5.691   -4.746   -4.430   -4.168   -3.765 1.006  4200
+N          62.766 19.370   40.000   49.000   58.000   71.000  116.000 1.002  5400
+omega       0.379  0.128    0.214    0.291    0.350    0.435    0.720 1.001  6300
+rho         0.744  0.239    0.098    0.644    0.817    0.918    0.992 1.001  9700
+sigma.u     2.394  0.600    1.453    1.963    2.313    2.738    3.792 1.002  4200
+sigma.v     0.921  0.301    0.500    0.715    0.869    1.063    1.656 1.001  6900
+deviance 1393.419 61.382 1282.234 1350.826 1390.210 1432.771 1521.991 1.001  9200
+
+For each parameter, n.eff is a crude measure of effective sample size,
+and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
+
+DIC info (using the rule, pD = var(deviance)/2)
+pD = 1883.2 and DIC = 3276.7
+DIC is an estimate of expected predictive error (lower deviance is better).
