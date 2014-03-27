@@ -96,12 +96,17 @@ n.thin=3
 # Parallelize code to run on server
 # Parallelize code 
 # Load functions from bugsParallel.r 
+n.chains <- 4
+n.iter <- as.integer(125000)
+n.burnin <- as.integer(125000)
+n.thin <- 3
+
 fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", 
-                             n.chains=4, n.iter=100, n.burnin=10, n.thin=3, digits=3, program=c("JAGS"))
+                             n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin, digits=3, program=c("JAGS"))
 #plot.chains(jmodparallel)
 
 
-library(rjags)
+ library(rjags)
 fit <- jags.model(file='MultiSpeciesSiteOccModel.txt', data=sp.data, inits=sp.inits, n.chains=3, n.adapt=1000)
 
 update(fit, n.iter=125000, by=100, progress.bar='text')   # burn in
