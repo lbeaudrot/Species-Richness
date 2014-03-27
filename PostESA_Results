@@ -67,3 +67,40 @@ DIC is an estimate of expected predictive error (lower deviance is better).
 > sp.mode
 [1] 32
 
+
+# COU 2011 CT results
+
+> print(fitparallel, digits=3)
+Inference for Bugs model at "/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", fit using JAGS,
+ 4 chains, each with 250000 iterations (first 125000 discarded), n.thin = 3
+ n.sims = 166668 iterations saved
+             mean     sd     2.5%      25%      50%      75%    97.5%  Rhat n.eff
+alpha      -1.528  0.586   -2.863   -1.860   -1.460   -1.136   -0.545 1.006   540
+beta       -4.364  0.450   -5.492   -4.584   -4.285   -4.051   -3.729 1.037   130
+N          45.288  7.471   37.000   40.000   43.000   48.000   65.000 1.004   870
+omega       0.256  0.058    0.167    0.216    0.247    0.286    0.394 1.003  1400
+rho         0.690  0.235    0.096    0.575    0.747    0.865    0.976 1.010   400
+sigma.u     1.300  0.419    0.637    1.005    1.245    1.538    2.269 1.007   480
+sigma.v     0.923  0.356    0.431    0.672    0.854    1.099    1.805 1.020   150
+deviance 1167.706 58.285 1059.774 1127.374 1165.758 1205.821 1287.955 1.008   360
+
+For each parameter, n.eff is a crude measure of effective sample size,
+and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
+
+DIC info (using the rule, pD = var(deviance)/2)
+pD = 1683.9 and DIC = 2851.6
+DIC is an estimate of expected predictive error (lower deviance is better).
+> #plot(fitparallel)
+> 
+> sp.mean <- round(mean(fitparallel$sims.list$N), digits=2)
+> sp.median <- median(fitparallel$sims.list$N)
+> sp.mode <- as.numeric(names(sort(table(fitparallel$sims.list$N), decreasing=TRUE))[1])
+> 
+> sp.mean
+[1] 45.29
+> sp.median
+[1] 43
+> sp.mode
+[1] 40
+
+
