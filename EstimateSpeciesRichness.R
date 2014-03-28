@@ -23,11 +23,12 @@
 #alldata <- f.order.data(alldata)
 #eventsdata <- f.separate.events(alldata, thresh=(1440))
 
+table(alldata$Site.Code, alldata$Sampling.Period)
 
 
 ######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2012 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
-data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="VB-",]
+data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="NAK",]
 
 #subset species to the species in that site and with Include=1
 splist<-read.csv("master_species_list.csv",h=T) #master list
@@ -56,6 +57,7 @@ X <- round(t(t(X)*(edays/30)))
 
 
 # augment data matrix with an arbitrarily large number of zero row vectors
+nrepls=30
 nzeroes = 125
 n = dim(X)[1]
 nsites = dim(X)[2]
@@ -86,28 +88,28 @@ sp.inits = function() {
   )
 }
 
-nrepls = 30
-n.chains=4
-n.iter=250000
-n.burnin=125000 
-n.thin=3
-
+library(rjags)
 
 # Parallelize code to run on server
 # Parallelize code 
 # Load functions from bugsParallel.r 
-#fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="MultiSpeciesSiteOccModel.txt", 
-#                             n.chains=4, n.iter=100, n.burnin=10, n.thin=3, digits=3, program=c("JAGS"))
+n.chains <- 4
+n.iter <- as.integer(250000)
+n.burnin <- as.integer(125000)
+n.thin <- 3
+n.sims <- as.integer(20000)
+
+fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", 
+                             n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin, n.sims=n.sims, digits=3, program=c("JAGS"))
 #plot.chains(jmodparallel)
 
 
+#fit <- jags.model(file='MultiSpeciesSiteOccModel.txt', data=sp.data, inits=sp.inits, n.chains=3, n.adapt=1000)
 
-fit <- jags.model(file='MultiSpeciesSiteOccModel.txt', data=sp.data, inits=sp.inits, n.chains=3, n.adapt=1000)
+#update(fit, n.iter=125000, by=100, progress.bar='text')   # burn in
 
-update(fit, n.iter=125000, by=100, progress.bar='text')   # burn in
-
-post = coda.samples(fit, sp.params, n.iter=125000, thin=3)  # posterior sample
-mypost = as.matrix(post, chain=TRUE)
+#post = coda.samples(fit, sp.params, n.iter=125000, thin=3)  # posterior sample
+#mypost = as.matrix(post, chain=TRUE)
 
 #post2 = coda.samples(fit, params, n.iter=125000, thin=3) # another posterior sample
 #mypost2 = as.matrix(post2, chain=TRUE)
@@ -117,14 +119,18 @@ mypost = as.matrix(post, chain=TRUE)
 #model.file='MultiSpeciesSiteOccModel.txt',
 #debug=F, n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin)
 
-print(fit, digits=3)
-plot(fit)
+print(fitparallel, digits=3)
+#plot(fitparallel)
 
-sp.mean <- round(mean(fit$sims.list$N), digits=2)
-sp.median <- median(fit$sims.list$N)
-sp.mode <- as.numeric(names(sort(table(fit$sims.list$N), decreasing=TRUE))[1])
+sp.mean <- round(mean(fitparallel$sims.list$N), digits=2)
+sp.median <- median(fitparallel$sims.list$N)
+sp.mode <- as.numeric(names(sort(table(fitparallel$sims.list$N), decreasing=TRUE))[1])
 
-hist(fit$sims.list$N, breaks=150, xlab="Species Richness", 
+sp.mean
+sp.median
+sp.mode
+
+hist(fitparallel$sims.list$N, breaks=150, xlab="Species Richness", 
      main=paste(events.use$Site.Name[1], events.use$Sampling.Period[1], sep=" "), 
      sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
 text(100, 3000, paste("Mean", sp.mean, sep=" = "))
@@ -133,9 +139,13 @@ text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 
 # Need to save model outputs
 
+# Temporarily store site specific outputs
 
-
-
+#YASfit <- fitparallel
+#CSNfit <- fitparallel
+#COUfit <- fitparallel
+#KRPfit <- fitparallel
+#NAKfit <- fitparallel
 
 
 
@@ -341,7 +351,8 @@ text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 #post2 = coda.samples(jmod, params, n.iter=100000, thin=50) # another posterior sample
 #mypost2 = as.matrix(post2, chain=TRUE)
 
-
+# new file name for commit
+# This file should now be modified
 
 
 
