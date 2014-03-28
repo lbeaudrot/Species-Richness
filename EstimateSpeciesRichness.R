@@ -22,6 +22,9 @@
 # Note that f.separate.events takes a good bit of time to run on complete CT dataset. Avoid replicating where possible.
 #alldata <- f.order.data(alldata)
 #eventsdata <- f.separate.events(alldata, thresh=(1440))
+#allevents <- f.separate.events(alldata, thresh=(1))
+#dataCleanTable <- table(allevents$Site.Code, allevents$Sampling.Period, allevents$bin)
+write.table(dataCleanTable, file="dataCleanTable.csv", row.names=TRUE, col.names=TRUE, sep=",")
 
 table(alldata$Site.Code, alldata$Sampling.Period)
 
