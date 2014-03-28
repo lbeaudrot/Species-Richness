@@ -28,7 +28,7 @@ table(alldata$Site.Code, alldata$Sampling.Period)
 
 ######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2012 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
-data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="CSN",]
+data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="NAK",]
 
 #subset species to the species in that site and with Include=1
 splist<-read.csv("master_species_list.csv",h=T) #master list
@@ -143,6 +143,9 @@ text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 
 #YASfit <- fitparallel
 #CSNfit <- fitparallel
+#COUfit <- fitparallel
+#KRPfit <- fitparallel
+#NAKfit <- fitparallel
 
 
 
