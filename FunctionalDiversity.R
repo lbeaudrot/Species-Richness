@@ -33,6 +33,10 @@ Ntraits <- cbind(colnames(mammals), Nspecies)
 mammalianTraits <- cbind(mammals[1:4], mammals$AdultHeadBodyLen_mm, mammals$LitterSize, mammals$GR_Area_km2, as.factor(mammals$ActivityCycle), as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$Guild)
 names(mammalianTraits) <- c("Bin", "Mass", "Class", "Family", "BodyLength", "LitterSize", "GR_Area", "ActivityCycle",  "HabitatBreadth", "DietBreadth", "Guild")
 
+
+
+
+
 f.family.avg <- function(data){
 Mass_m <- tapply(data$Mass, droplevels(data$Family), median, na.rm=TRUE)
 BodyLength_m <- tapply(data$BodyLength, droplevels(data$Family), median, na.rm=TRUE)
@@ -59,13 +63,17 @@ fam_avg
 f.family.mode <- function()
 
 hold <- table(mammalianTraits$Family, mammalianTraits$ActivityCycle)
+temp <- vector(mode="numeric", length=dim(hold)[1])
 
-for(i in 1:length(hold)){
-  hold[i] <- max(i)
-  
+for(i in 1:dim(hold)[1]){
+  temp[i] <- ifelse(hold[i,1] > hold[i,2] & hold[i,1] > hold[i,3], 1, 
+                    ifelse(hold[i,2] > hold[i,1] & hold[i,2] > hold[i,3], 2, 
+                           ifelse(hold[i,3] > hold[i,1] & hold[i,3] > hold[i,2], 3, NA)))
+  temp
 }
 
-
+# Figure out how to properly code this ifelse statment, then insert into a function for determining modes; then insert that function into f.family.avg function
+ifelse(hold[i,1]>hold[i,2]&hold[i,1]>hold[i,3], 1, ifelse(hold[i,2]>hold[i,1]&hold[i,2]>hold[i,3], 2, ifelse(hold[i,3]>hold[i,1]&hold[i,3]>hold[i,2], 3, NA))
 
 mammalTraits <- cbind(mammals[1:2], mammals$AdultHeadBodyLen_mm, mammals$LitterSize, mammals$GR_Area_km2, as.factor(mammals$ActivityCycle), as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$Guild)
 names(mammalTraits) <- c("Bin", "Mass", "BodyLength", "LitterSize", "GR_Area", "ActivityCycle",  "HabitatBreadth", "DietBreadth", "Guild")
