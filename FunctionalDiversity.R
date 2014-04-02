@@ -17,5 +17,13 @@ newsplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
 subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
 subdata<-f.correct.DF(subdata)
 
-#mammals <- splist[splist$Class=="MAMMALIA",]
+mammals <- splist[splist$Class=="MAMMALIA",]
 #birds <- splist[splist$Class=="AVES",]
+
+# Determine the number of species for which data are available for each trait
+Nspecies <- vector(mode = "numeric", length=dim(mammals)[2])
+for(i in 1:length(Nspecies)){
+  Nspecies[i] <- sum(table(mammals[,i]))
+}
+
+Ntraits <- cbind(colnames(mammals), Nspecies)
