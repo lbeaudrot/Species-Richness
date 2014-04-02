@@ -30,7 +30,9 @@ Ntraits <- cbind(colnames(mammals), Nspecies)
 
 # Subset trait data for which >150 species on TEAM list have data
 
-mammalTraits <- cbind(mammals[1:6], mammals$ActivityCycle, mammals$AdultHeadBodyLen_mm, mammals$HabitatBreadth, mammals$DietBreadth, mammals$LitterSize, mammals$GR_Area_km2)
+mammalTraits <- cbind(mammals[1:6], as.factor(mammals$ActivityCycle), mammals$AdultHeadBodyLen_mm, as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$LitterSize, mammals$GR_Area_km2)
 names(mammalTraits) <- c("Bin", "Mass", "Class", "Family", "Guild", "Include", "ActivityCycle", "BodyLength", "HabitatBreadth", "DietBreadth", "LitterSize", "GR_Area")
 
+# Calculate Functional Diversity using the FD package
 
+gowdis()
