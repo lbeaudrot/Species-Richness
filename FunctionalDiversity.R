@@ -30,9 +30,57 @@ Ntraits <- cbind(colnames(mammals), Nspecies)
 
 # Subset trait data for which >150 species on TEAM list have data
 
-mammalTraits <- cbind(mammals[1:6], as.factor(mammals$ActivityCycle), mammals$AdultHeadBodyLen_mm, as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$LitterSize, mammals$GR_Area_km2)
-names(mammalTraits) <- c("Bin", "Mass", "Class", "Family", "Guild", "Include", "ActivityCycle", "BodyLength", "HabitatBreadth", "DietBreadth", "LitterSize", "GR_Area")
+mammalianTraits <- cbind(mammals[1:4], mammals$AdultHeadBodyLen_mm, mammals$LitterSize, mammals$GR_Area_km2, as.factor(mammals$ActivityCycle), as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$Guild)
+names(mammalianTraits) <- c("Bin", "Mass", "Class", "Family", "BodyLength", "LitterSize", "GR_Area", "ActivityCycle",  "HabitatBreadth", "DietBreadth", "Guild")
+
+f.family.avg <- function(data){
+Mass_m <- tapply(data$Mass, droplevels(data$Family), median, na.rm=TRUE)
+BodyLength_m <- tapply(data$BodyLength, droplevels(data$Family), median, na.rm=TRUE)
+LitterSize_m <-tapply(data$LitterSize, droplevels(data$Family), median, na.rm=TRUE)
+GR_Area_m <- tapply(data$GR_Area, droplevels(data$Family), median, na.rm=TRUE)
+medians <- cbind(Mass_m, BodyLength_m, LitterSize_m, GR_Area_m)
+ActivityCycle_m <- ifelse(apply(table(data$Family, data$ActivityCycle), MARGIN=1, FUN=max)>0,apply(table(data$Family, data$ActivityCycle), MARGIN=1, FUN=max), NA) 
+HabitatBreadth_m <- ifelse(apply(table(data$Family, data$HabitatBreadth), MARGIN=1, FUN=max)>0,apply(table(data$Family, data$HabitatBreadth), MARGIN=1, FUN=max), NA) 
+DietBreadth_m <- ifelse(apply(table(data$Family, data$DietBreadth), MARGIN=1, FUN=max)>0,apply(table(data$Family, data$DietBreadth), MARGIN=1, FUN=max), NA) 
+Guild_m <- ifelse(apply(table(data$Family, data$Guild), MARGIN=1, FUN=max)>0,apply(table(data$Family, data$Guild), MARGIN=1, FUN=max), NA) 
+modes <- cbind(ActivityCycle_m, HabitatBreadth_m, DietBreadth_m)
+modes <- modes[match(rownames(medians), rownames(modes)),]
+fam_avg <- cbind(medians, modes)
+fam_avg
+}
+
+#Mass_m <- tapply(mammalianTraits$Mass, droplevels(mammalianTraits$Family), median, na.rm=TRUE)
+#BodyLength_m <- tapply(mammalianTraits$BodyLength, droplevels(mammalianTraits$Family), median, na.rm=TRUE)
+#LitterSize_m <-tapply(mammalianTraits$LitterSize, droplevels(mammalianTraits$Family), median, na.rm=TRUE)
+#GR_Area_m <- tapply(mammalianTraits$GR_Area, droplevels(mammalianTraits$Family), median, na.rm=TRUE)
+#medians <- cbind(Mass_m, BodyLength_m, LitterSize_m, GR_Area_m)
+
+
+f.family.mode <- function()
+
+hold <- table(mammalianTraits$Family, mammalianTraits$ActivityCycle)
+
+for(i in 1:length(hold)){
+  hold[i] <- max(i)
+  
+}
+
+
+
+mammalTraits <- cbind(mammals[1:2], mammals$AdultHeadBodyLen_mm, mammals$LitterSize, mammals$GR_Area_km2, as.factor(mammals$ActivityCycle), as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$Guild)
+names(mammalTraits) <- c("Bin", "Mass", "BodyLength", "LitterSize", "GR_Area", "ActivityCycle",  "HabitatBreadth", "DietBreadth", "Guild")
+
+mTraits <- mammalTraits[,2:9]
+mTraits[,1] <- as.numeric(mTraits[,1])
+rownames(mTraits) <- mammalTraits$Bin
+#rownames(mTraits) <-paste("sp",1:242, sep=".") #Alternate (shorter) species labels
+
+# Fill in missing values using family level averages (mode for factors; median for continuous variables)
+
+table(mamm)
+
 
 # Calculate Functional Diversity using the FD package
 
-gowdis()
+gowdis(mTraits)
+dbFD(x=mammalTraits)
