@@ -1,24 +1,17 @@
-# Calculate Functional Diversity
+# Process Trait Data and Calculate Functional Diversity Metrics
 
-library(FD)
 
 # Connect TEAM master species list to the PanTHERIA mammalian trait data
 
-masterlist<-read.csv("master_species_list.csv",h=T) #master list
+masterlist<-read.csv("master_species_list_updated.csv",h=T) #master list
 pantheria <- read.csv("Pantheria_Data_WR05_Aug2008.csv") # PanTHERIA data
 
 #subset TEAM species list from overall PanTHERIA database
 matchedlist <- pantheria[match(masterlist$Unique_Name, pantheria$Binomial),]
 splist <- cbind(masterlist, matchedlist)
 
-#subset species to the species in that site and with Include=1
-sitelist<-unique(data.use$bin) #site list
-newsplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
-subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
-subdata<-f.correct.DF(subdata)
-
 mammals <- splist[splist$Class=="MAMMALIA",]
-#birds <- splist[splist$Class=="AVES",]
+birds <- splist[splist$Class=="AVES",]
 
 # Determine the number of species for which data are available for each trait
 Nspecies <- vector(mode = "numeric", length=dim(mammals)[2])
@@ -28,86 +21,13 @@ for(i in 1:length(Nspecies)){
 
 Ntraits <- cbind(colnames(mammals), Nspecies)
 
-# Subset trait data for which >150 species on TEAM list have data
+# Subset trait data for which >150 mammal species on TEAM list have data
 
 mammalianTraits <- cbind(mammals[1:4], mammals$AdultHeadBodyLen_mm, mammals$LitterSize, mammals$GR_Area_km2, as.factor(mammals$ActivityCycle), as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$Guild)
 names(mammalianTraits) <- c("Bin", "Mass", "Class", "Family", "BodyLength", "LitterSize", "GR_Area", "ActivityCycle",  "HabitatBreadth", "DietBreadth", "Guild")
 
-# Use "mammalianTraits" as input data for the f.family.avg function, which uses the following helper functions:
-f.family.AC <- function(data){ #provide only data that are factors as input data
-     hold <- table(data$Family, data$ActivityCycle)
-     ActivityCycle_m <- vector(mode="numeric", length=dim(hold)[1])
-  
-      for(i in 1:dim(hold)[1]){
-        ActivityCycle_m[i] <- ifelse(hold[i,1] > hold[i,2] & hold[i,1] > hold[i,3], 1, 
-                      ifelse(hold[i,2] > hold[i,1] & hold[i,2] > hold[i,3], 2, 
-                             ifelse(hold[i,3] > hold[i,1] & hold[i,3] > hold[i,2], 3, NA)))
-  }
-  ActivityCycle_m
-}
-  
-f.family.HB <- function(data){ #provide only data that are factors as input data
-  hold <- table(data$Family, data$HabitatBreadth)
-  HabitatBreadth_m <- vector(mode="numeric", length=dim(hold)[1])
-  
-  for(i in 1:dim(hold)[1]){
-    HabitatBreadth_m[i] <- ifelse(hold[i,1] > hold[i,2] & hold[i,1] > hold[i,3] & hold[i,1] > hold[i,4], 1, 
-                                 ifelse(hold[i,2] > hold[i,1] & hold[i,2] > hold[i,3] & hold[i,2] > hold[i,4], 2, 
-                                        ifelse(hold[i,3] > hold[i,1] & hold[i,3] > hold[i,2] & hold[i,3] > hold[i,4], 3, 
-                                            ifelse(hold[i,4] > hold[i,1] & hold[i,4] > hold[i,2] & hold[i,4] > hold[i,3], 4, NA))))
-  }
-  HabitatBreadth_m
-}
+# Use "mammalianTraits" as input data for the f.family.avg function, which requires loading the helper functions from FunctionalTrait_HelperFunctions.R
 
-
-f.family.DB <- function(data){ 
-  hold <- table(data$Family, data$DietBreadth)
-  DietBreadth_m <- vector(mode="numeric", length=dim(hold)[1])
-  
-  for(i in 1:dim(hold)[1]){
-    DietBreadth_m[i] <- ifelse(hold[i,1] > hold[i,2] & hold[i,1] > hold[i,3] & hold[i,1] > hold[i,4] & hold[i,1] > hold[i,5] & hold[i,1] > hold[i,6] & hold[i,1] > hold[i,7], 1, 
-                                  ifelse(hold[i,2] > hold[i,1] & hold[i,2] > hold[i,3] & hold[i,2] > hold[i,4] & hold[i,2] > hold[i,5] & hold[i,2] > hold[i,6] & hold[i,2] > hold[i,7], 2, 
-                                         ifelse(hold[i,3] > hold[i,1] & hold[i,3] > hold[i,2] & hold[i,3] > hold[i,4] & hold[i,3] > hold[i,5] & hold[i,3] > hold[i,6] & hold[i,3] > hold[i,7], 3, 
-                                                ifelse(hold[i,4] > hold[i,1] & hold[i,4] > hold[i,2] & hold[i,4] > hold[i,3] & hold[i,4] > hold[i,5] & hold[i,4] > hold[i,6] & hold[i,4] > hold[i,7], 4, 
-                                                       ifelse(hold[i,5] > hold[i,1] & hold[i,5] > hold[i,2] & hold[i,5] > hold[i,3] & hold[i,5] > hold[i,4] & hold[i,5] > hold[i,6] & hold[i,5] > hold[i,7], 5, 
-                                                              ifelse(hold[i,6] > hold[i,1] & hold[i,6] > hold[i,2] & hold[i,6] > hold[i,3] & hold[i,6] > hold[i,4] & hold[i,6] > hold[i,5] & hold[i,6] > hold[i,7], 6, 
-                                                                     ifelse(hold[i,7] > hold[i,1] & hold[i,7] > hold[i,2] & hold[i,7] > hold[i,3] & hold[i,7] > hold[i,4] & hold[i,7] > hold[i,5] & hold[i,7] > hold[i,6], 7, NA)))))))
-  }
-  DietBreadth_m
-}
-
-
-f.family.G <- function(data){ 
-  hold <- table(data$Family, data$Guild)
-  Guild_m <- vector(mode="numeric", length=dim(hold)[1])
-  
-  for(i in 1:dim(hold)[1]){
-    Guild_m[i] <- ifelse(hold[i,2] > hold[i,3] & hold[i,2] > hold[i,4] & hold[i,2] > hold[i,5], 1, 
-                               ifelse(hold[i,3] > hold[i,2] & hold[i,3] > hold[i,4] & hold[i,3] > hold[i,5], 2, 
-                                      ifelse(hold[i,4] > hold[i,2] & hold[i,4] > hold[i,3] & hold[i,4] > hold[i,5], 3, 
-                                             ifelse(hold[i,5] > hold[i,2] & hold[i,5] > hold[i,3] & hold[i,5] > hold[i,4], 3, NA))))
-  }
-  Guild_m
-}
-
-
-f.family.avg <- function(data){
-  Mass_m <- tapply(data$Mass, droplevels(data$Family), median, na.rm=TRUE)
-  BodyLength_m <- tapply(data$BodyLength, droplevels(data$Family), median, na.rm=TRUE)
-  LitterSize_m <-tapply(data$LitterSize, droplevels(data$Family), median, na.rm=TRUE)
-  GR_Area_m <- tapply(data$GR_Area, droplevels(data$Family), median, na.rm=TRUE)
-  medians <- cbind(Mass_m, BodyLength_m, LitterSize_m, GR_Area_m)
-  medians
-  ActivityCycle_m <- f.family.AC(data)
-  HabitatBreadth_m <- f.family.HB(data)
-  DietBreadth_m <- f.family.HB(data)
-  Guild_m <- f.family.G(data)
-  modes <- cbind(ActivityCycle_m, HabitatBreadth_m, DietBreadth_m, Guild_m)
-  rownames(modes) <- levels(data$Family)
-  modes <- modes[match(rownames(medians), rownames(modes)),]
-  fam_avg <- cbind(medians, modes)
-  fam_avg
-}
 fam_avg <- f.family.avg(mammalianTraits)
 fam_avg <- as.data.frame(fam_avg)
 
@@ -125,7 +45,7 @@ HabitatBreadth_c <- ifelse(is.na(mammalianTraits$HabitatBreadth)==TRUE, fam_avg$
 DietBreadth_c <- ifelse(is.na(mammalianTraits$DietBreadth)==TRUE, fam_avg$DietBreadth_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$DietBreadth)
 Guild_c <- ifelse(is.na(mammalianTraits$Guild)==TRUE, fam_avg$Guild_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$Guild)
 
-# Create data frame out of corrected Trait values to use in functional diversity metrics
+# Create data frame out of corrected Trait values to use in functional diversity metrics; coerce factors into factors
 Mtraits <- cbind(Mass_c, BodyLength_c, LitterSize_c, GR_Area_c, ActivityCycle_c, HabitatBreadth_c, DietBreadth_c, Guild_c)
 rownames(Mtraits) <- mammalTraits$Bin
 Mtraits <- as.data.frame(Mtraits)
@@ -138,17 +58,46 @@ str(Mtraits)
 #rownames(Mtraits) <-paste("sp",1:242, sep=".") #Alternate (shorter) species labels
 
 
+
+####### PROCESS DATA to subset for various models - time consuming so don't run unless necessary ###########
+
+#ctdata <- f.teamdb.query(dataset=="camera trap")
+#load(ctdata)
+#alldata <- ctdata
+
+#alldata<-f.fix.data2(alldata)
+#Site.Code <- substr(alldata$Sampling.Unit.Name,4,6)
+#alldata <- cbind(alldata, Site.Code)
+
+# Set threshold to one minute
+# Note that f.separate.events takes a good bit of time to run on complete CT dataset. Avoid replicating where possible.
+#alldata <- f.order.data(alldata)
+#eventsdata <- f.separate.events(alldata, thresh=(1440))
+#allevents <- f.separate.events(alldata, thresh=(1))
+
+table(alldata$Site.Code, alldata$Sampling.Period) #Examine which sites have data for which years
+
+
+######## Start here to CHANGE INPUT DATA FOR Functional Diversity metrics ###############
+# Use  "Site.Code" to designate which site to include
+data.use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="NAK",]
+
+
 # Subset the species list for each site to calculate the functional diversity metrics
 
-
 splist<-read.csv("master_species_list_updated.csv",h=T) #master list
+sitelist<-unique(data.use$bin) #site list
+newsplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
+subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
+subdata<-f.correct.DF(subdata)
 
-
+# Use the subsetted species list for the site to extract the corresponding functional trait data
 
 
 
 
 ####### Calculate Functional Diversity using the FD package (try again once missing values are filled in with family averages)
+library(FD)
 
 #gowdis(Mtraits)
 test4 <- dbFD(Mtraits, corr="cailliez")
