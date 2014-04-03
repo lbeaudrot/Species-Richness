@@ -141,6 +141,7 @@ str(Mtraits)
 # Subset the species list for each site to calculate the functional diversity metrics
 
 
+splist<-read.csv("master_species_list_updated.csv",h=T) #master list
 
 
 
