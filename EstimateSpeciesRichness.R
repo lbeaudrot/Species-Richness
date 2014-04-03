@@ -29,12 +29,12 @@ write.table(dataCleanTable, file="dataCleanTable.csv", row.names=TRUE, col.names
 table(alldata$Site.Code, alldata$Sampling.Period)
 
 
-######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2012 JAGS code ###############
+######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2006 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
 data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="NAK",]
 
 #subset species to the species in that site and with Include=1
-splist<-read.csv("master_species_list.csv",h=T) #master list
+splist<-read.csv("master_species_list_updated.csv",h=T) #master list
 sitelist<-unique(data.use$bin) #site list
 newsplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
 subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
@@ -45,7 +45,7 @@ subdata<-f.correct.DF(subdata)
 events.use <- subdata[!duplicated(as.character(subdata$grp)),]
 
 
-####### Set up for Dorazio et al. 2006 method for estimating species richness without covariates using WinBUGS #######
+####### Set up for Dorazio et al. 2006 method for estimating species richness without covariates using JAGS #######
 
 # Input data requires a table of the number of sampling events for each species ("bin") at each camera trap ("Sampling.Unit.Name")
 # Input data requires the number of replicates in which each species was detected (i.e. max=nrepls)
@@ -140,7 +140,6 @@ text(100, 3000, paste("Mean", sp.mean, sep=" = "))
 text(100, 2000, paste("Median", sp.median, sep=" = "))
 text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 
-# Need to save model outputs
 
 # Temporarily store site specific outputs
 
@@ -151,10 +150,27 @@ text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 #NAKfit <- fitparallel
 
 
+# Need to save model outputs
 
 
 
 
+# Loop over all sites while measuring time
+
+#mfit<-list()
+#for(i in 1:length(unique(alldata$Site.Code))){}
+# replace with appropriate model code
+#timefit<-system.time(mfit[[i]] <- jags(jags.data[[i]], inits[[i]], params, "fullmodel6.txt", n.chains = nc, n.thin = nt, n.iter = ni, n.burnin = nb))
+
+
+temp<-mfit[[i]]
+save(NAKfit,file=paste("fit-",data.use$Site.Code[1],sep=""))
+print(paste("Done with site ",levels(alldata$Site.Code)[i],"; took ",round(as.numeric(timefit[3]/60))," minutes.",sep=""))
+}
+
+# from db query
+#filename= paste("veg_data",sysdate,".gzip",sep="")
+#save(result, file=filename,compress="gzip")
 
 
 
