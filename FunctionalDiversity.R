@@ -47,7 +47,7 @@ Guild_c <- ifelse(is.na(mammalianTraits$Guild)==TRUE, fam_avg$Guild_m[match(mamm
 
 # Create data frame out of corrected Trait values to use in functional diversity metrics; coerce factors into factors
 Mtraits <- cbind(Mass_c, BodyLength_c, LitterSize_c, GR_Area_c, ActivityCycle_c, HabitatBreadth_c, DietBreadth_c, Guild_c)
-rownames(Mtraits) <- mammalTraits$Bin
+rownames(Mtraits) <- mammalianTraits$Bin
 Mtraits <- as.data.frame(Mtraits)
 Mtraits$ActivityCycle_c <- as.factor(Mtraits$ActivityCycle_c)
 Mtraits$HabitatBreadth_c <- as.factor(Mtraits$HabitatBreadth_c)
@@ -87,13 +87,15 @@ data.use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code
 
 splist<-read.csv("master_species_list_updated.csv",h=T) #master list
 sitelist<-unique(data.use$bin) #site list
-newsplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
-subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
-subdata<-f.correct.DF(subdata)
+Msplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
+Msplist <- Msplist[Msplist$Class=="MAMMALIA",]
+#newsplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
+#subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
+#subdata<-f.correct.DF(subdata)
 
 # Use the subsetted species list for the site to extract the corresponding functional trait data
 
-
+SiteTraits <- Mtraits[match(Msplist$Unique_Name, rownames(Mtraits)),]
 
 
 ####### Calculate Functional Diversity using the FD package (try again once missing values are filled in with family averages)
