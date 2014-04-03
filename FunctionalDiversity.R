@@ -55,11 +55,11 @@ Mtraits$DietBreadth_c <- as.factor(Mtraits$DietBreadth_c)
 Mtraits$Guild_c <- as.factor(Mtraits$Guild_c)
 str(Mtraits)
 
-#rownames(Mtraits) <-paste("sp",1:242, sep=".") #Alternate (shorter) species labels
 
 
 
 ####### PROCESS DATA to subset for various models - time consuming so don't run unless necessary ###########
+## NB processing code copied from EstimateSpeciesRichness.R
 
 #ctdata <- f.teamdb.query(dataset=="camera trap")
 #load(ctdata)
@@ -96,10 +96,18 @@ Msplist <- Msplist[Msplist$Class=="MAMMALIA",]
 # Use the subsetted species list for the site to extract the corresponding functional trait data
 
 SiteTraits <- Mtraits[match(Msplist$Unique_Name, rownames(Mtraits)),]
+#SiteTraits <- SiteTraits[,-6] # Remove Habitat Breadth variable
+#rownames(SiteTraits) <-paste("sp",1:dim(SiteTraits)[1], sep=".") #Alternate (shorter) species labels
+
+## NB For traits that are factors, all levels must be represented in data to obtain results using dbFD()
+#Reclassify SiteTraits list so that only new levels are used
+
+SiteTraits <- cbind(SiteTraits[,1:4], droplevels(SiteTraits[,5:7]))
 
 
-####### Calculate Functional Diversity using the FD package (try again once missing values are filled in with family averages)
+
+####### Calculate Functional Diversity using the FD package
 library(FD)
 
 #gowdis(Mtraits)
-test4 <- dbFD(Mtraits, corr="cailliez")
+traitFD <- dbFD(SiteTraits, corr="cailliez")
