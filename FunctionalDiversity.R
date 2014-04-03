@@ -110,6 +110,8 @@ f.family.avg <- function(data){
 }
 fam_avg <- f.family.avg(mammalianTraits)
 fam_avg <- as.data.frame(fam_avg)
+
+
 # Fill in missing values using family level averages (mode for factors; median for continuous variables)
 # Replace missing values in mammalianTraits with Family-level averages (object "fam_avg") so that they are "corrected" (objects end in "_c")
 
@@ -123,7 +125,7 @@ HabitatBreadth_c <- ifelse(is.na(mammalianTraits$HabitatBreadth)==TRUE, fam_avg$
 DietBreadth_c <- ifelse(is.na(mammalianTraits$DietBreadth)==TRUE, fam_avg$DietBreadth_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$DietBreadth)
 Guild_c <- ifelse(is.na(mammalianTraits$Guild)==TRUE, fam_avg$Guild_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$Guild)
 
-
+# Create data frame out of corrected Trait values to use in functional diversity metrics
 Mtraits <- cbind(Mass_c, BodyLength_c, LitterSize_c, GR_Area_c, ActivityCycle_c, HabitatBreadth_c, DietBreadth_c, Guild_c)
 rownames(Mtraits) <- mammalTraits$Bin
 Mtraits <- as.data.frame(Mtraits)
@@ -133,20 +135,19 @@ Mtraits$DietBreadth_c <- as.factor(Mtraits$DietBreadth_c)
 Mtraits$Guild_c <- as.factor(Mtraits$Guild_c)
 str(Mtraits)
 
+#rownames(Mtraits) <-paste("sp",1:242, sep=".") #Alternate (shorter) species labels
 
-##### CODE FROM EARLIER
-mammalTraits <- cbind(mammals[1:2], mammals$AdultHeadBodyLen_mm, mammals$LitterSize, mammals$GR_Area_km2, as.factor(mammals$ActivityCycle), as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$Guild)
-names(mammalTraits) <- c("Bin", "Mass", "BodyLength", "LitterSize", "GR_Area", "ActivityCycle",  "HabitatBreadth", "DietBreadth", "Guild")
 
-mTraits <- mammalTraits[,2:9]
-mTraits[,1] <- as.numeric(mTraits[,1])
-rownames(mTraits) <- mammalTraits$Bin
-#rownames(mTraits) <-paste("sp",1:242, sep=".") #Alternate (shorter) species labels
+# Subset the species list for each site to calculate the functional diversity metrics
+
+
+
+
 
 
 
 
 ####### Calculate Functional Diversity using the FD package (try again once missing values are filled in with family averages)
 
-gowdis(mTraits)
-dbFD(x=mammalTraits)
+#gowdis(Mtraits)
+test4 <- dbFD(Mtraits, corr="cailliez")
