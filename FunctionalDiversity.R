@@ -33,24 +33,63 @@ Ntraits <- cbind(colnames(mammals), Nspecies)
 mammalianTraits <- cbind(mammals[1:4], mammals$AdultHeadBodyLen_mm, mammals$LitterSize, mammals$GR_Area_km2, as.factor(mammals$ActivityCycle), as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$Guild)
 names(mammalianTraits) <- c("Bin", "Mass", "Class", "Family", "BodyLength", "LitterSize", "GR_Area", "ActivityCycle",  "HabitatBreadth", "DietBreadth", "Guild")
 
+# Use "mammalianTraits" as input data for the f.family.avg function, which uses the following helper functions:
+f.family.AC <- function(data){ #provide only data that are factors as input data
+     hold <- table(data$Family, data$ActivityCycle)
+     ActivityCycle_m <- vector(mode="numeric", length=dim(hold)[1])
+  
+      for(i in 1:dim(hold)[1]){
+        ActivityCycle_m[i] <- ifelse(hold[i,1] > hold[i,2] & hold[i,1] > hold[i,3], 1, 
+                      ifelse(hold[i,2] > hold[i,1] & hold[i,2] > hold[i,3], 2, 
+                             ifelse(hold[i,3] > hold[i,1] & hold[i,3] > hold[i,2], 3, NA)))
+  }
+  ActivityCycle_m
+}
+  
+f.family.HB <- function(data){ #provide only data that are factors as input data
+  hold <- table(data$Family, data$HabitatBreadth)
+  HabitatBreadth_m <- vector(mode="numeric", length=dim(hold)[1])
+  
+  for(i in 1:dim(hold)[1]){
+    HabitatBreadth_m[i] <- ifelse(hold[i,1] > hold[i,2] & hold[i,1] > hold[i,3], 1, 
+                                 ifelse(hold[i,2] > hold[i,1] & hold[i,2] > hold[i,3], 2, 
+                                        ifelse(hold[i,3] > hold[i,1] & hold[i,3] > hold[i,2], 3, NA)))
+  }
+  HabitatBreadth_m
+}
+
+
+f.family.DB <- function(data){ 
+  hold <- table(data$Family, data$DietBreadth)
+  DietBreadth_m <- vector(mode="numeric", length=dim(hold)[1])
+  
+  for(i in 1:dim(hold)[1]){
+    DietBreadth_m[i] <- ifelse(hold[i,1] > hold[i,2] & hold[i,1] > hold[i,3], 1, 
+                                  ifelse(hold[i,2] > hold[i,1] & hold[i,2] > hold[i,3], 2, 
+                                         ifelse(hold[i,3] > hold[i,1] & hold[i,3] > hold[i,2], 3, NA)))
+  }
+  DietBreadth_m
+}
+
 
 
 
 
 f.family.avg <- function(data){
-Mass_m <- tapply(data$Mass, droplevels(data$Family), median, na.rm=TRUE)
-BodyLength_m <- tapply(data$BodyLength, droplevels(data$Family), median, na.rm=TRUE)
-LitterSize_m <-tapply(data$LitterSize, droplevels(data$Family), median, na.rm=TRUE)
-GR_Area_m <- tapply(data$GR_Area, droplevels(data$Family), median, na.rm=TRUE)
-medians <- cbind(Mass_m, BodyLength_m, LitterSize_m, GR_Area_m)
-ActivityCycle_m <- ifelse(apply(table(data$Family, data$ActivityCycle), MARGIN=1, FUN=max)>0,apply(table(data$Family, data$ActivityCycle), MARGIN=1, FUN=max), NA) 
-HabitatBreadth_m <- ifelse(apply(table(data$Family, data$HabitatBreadth), MARGIN=1, FUN=max)>0,apply(table(data$Family, data$HabitatBreadth), MARGIN=1, FUN=max), NA) 
-DietBreadth_m <- ifelse(apply(table(data$Family, data$DietBreadth), MARGIN=1, FUN=max)>0,apply(table(data$Family, data$DietBreadth), MARGIN=1, FUN=max), NA) 
-Guild_m <- ifelse(apply(table(data$Family, data$Guild), MARGIN=1, FUN=max)>0,apply(table(data$Family, data$Guild), MARGIN=1, FUN=max), NA) 
-modes <- cbind(ActivityCycle_m, HabitatBreadth_m, DietBreadth_m)
-modes <- modes[match(rownames(medians), rownames(modes)),]
-fam_avg <- cbind(medians, modes)
-fam_avg
+  Mass_m <- tapply(data$Mass, droplevels(data$Family), median, na.rm=TRUE)
+  BodyLength_m <- tapply(data$BodyLength, droplevels(data$Family), median, na.rm=TRUE)
+  LitterSize_m <-tapply(data$LitterSize, droplevels(data$Family), median, na.rm=TRUE)
+  GR_Area_m <- tapply(data$GR_Area, droplevels(data$Family), median, na.rm=TRUE)
+  medians <- cbind(Mass_m, BodyLength_m, LitterSize_m, GR_Area_m)
+  #medians
+  ActivityCycle_m <- f.family.AC(data)
+  HabitatBreadth_m <- f.family.HB(data)
+  DietBreadth_m <- f.family.HB(data)
+  Guild_m <- f.family.G(data)
+  modes <- cbind(ActivityCycle_m, HabitatBreadth_m, DietBreadth_m, Guild_m)
+  modes <- modes[match(rownames(medians), rownames(modes)),]
+  fam_avg <- cbind(medians, modes)
+  fam_avg
 }
 
 #Mass_m <- tapply(mammalianTraits$Mass, droplevels(mammalianTraits$Family), median, na.rm=TRUE)
@@ -60,20 +99,10 @@ fam_avg
 #medians <- cbind(Mass_m, BodyLength_m, LitterSize_m, GR_Area_m)
 
 
-f.family.mode <- function()
 
-hold <- table(mammalianTraits$Family, mammalianTraits$ActivityCycle)
-temp <- vector(mode="numeric", length=dim(hold)[1])
-
-for(i in 1:dim(hold)[1]){
-  temp[i] <- ifelse(hold[i,1] > hold[i,2] & hold[i,1] > hold[i,3], 1, 
-                    ifelse(hold[i,2] > hold[i,1] & hold[i,2] > hold[i,3], 2, 
-                           ifelse(hold[i,3] > hold[i,1] & hold[i,3] > hold[i,2], 3, NA)))
-  temp
-}
 
 # Figure out how to properly code this ifelse statment, then insert into a function for determining modes; then insert that function into f.family.avg function
-ifelse(hold[i,1]>hold[i,2]&hold[i,1]>hold[i,3], 1, ifelse(hold[i,2]>hold[i,1]&hold[i,2]>hold[i,3], 2, ifelse(hold[i,3]>hold[i,1]&hold[i,3]>hold[i,2], 3, NA))
+#ifelse(hold[i,1]>hold[i,2]&hold[i,1]>hold[i,3], 1, ifelse(hold[i,2]>hold[i,1]&hold[i,2]>hold[i,3], 2, ifelse(hold[i,3]>hold[i,1]&hold[i,3]>hold[i,2], 3, NA))
 
 mammalTraits <- cbind(mammals[1:2], mammals$AdultHeadBodyLen_mm, mammals$LitterSize, mammals$GR_Area_km2, as.factor(mammals$ActivityCycle), as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$Guild)
 names(mammalTraits) <- c("Bin", "Mass", "BodyLength", "LitterSize", "GR_Area", "ActivityCycle",  "HabitatBreadth", "DietBreadth", "Guild")
@@ -85,7 +114,6 @@ rownames(mTraits) <- mammalTraits$Bin
 
 # Fill in missing values using family level averages (mode for factors; median for continuous variables)
 
-table(mamm)
 
 
 # Calculate Functional Diversity using the FD package
