@@ -72,7 +72,18 @@ f.family.DB <- function(data){
 }
 
 
-
+f.family.G <- function(data){ 
+  hold <- table(data$Family, data$Guild)
+  Guild_m <- vector(mode="numeric", length=dim(hold)[1])
+  
+  for(i in 1:dim(hold)[1]){
+    Guild_m[i] <- ifelse(hold[i,2] > hold[i,3] & hold[i,2] > hold[i,4] & hold[i,2] > hold[i,5], 1, 
+                               ifelse(hold[i,3] > hold[i,2] & hold[i,3] > hold[i,4] & hold[i,3] > hold[i,5], 2, 
+                                      ifelse(hold[i,4] > hold[i,2] & hold[i,4] > hold[i,3] & hold[i,4] > hold[i,5], 3, 
+                                             ifelse(hold[i,5] > hold[i,2] & hold[i,5] > hold[i,3] & hold[i,5] > hold[i,4], 3, NA))))
+  }
+  Guild_m
+}
 
 
 f.family.avg <- function(data){
@@ -91,6 +102,7 @@ f.family.avg <- function(data){
   fam_avg <- cbind(medians, modes)
   fam_avg
 }
+f.family.avg(mammalianTraits)
 
 #Mass_m <- tapply(mammalianTraits$Mass, droplevels(mammalianTraits$Family), median, na.rm=TRUE)
 #BodyLength_m <- tapply(mammalianTraits$BodyLength, droplevels(mammalianTraits$Family), median, na.rm=TRUE)
