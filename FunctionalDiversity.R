@@ -92,12 +92,13 @@ f.family.avg <- function(data){
   LitterSize_m <-tapply(data$LitterSize, droplevels(data$Family), median, na.rm=TRUE)
   GR_Area_m <- tapply(data$GR_Area, droplevels(data$Family), median, na.rm=TRUE)
   medians <- cbind(Mass_m, BodyLength_m, LitterSize_m, GR_Area_m)
-  #medians
+  medians
   ActivityCycle_m <- f.family.AC(data)
   HabitatBreadth_m <- f.family.HB(data)
   DietBreadth_m <- f.family.HB(data)
   Guild_m <- f.family.G(data)
   modes <- cbind(ActivityCycle_m, HabitatBreadth_m, DietBreadth_m, Guild_m)
+  rownames(modes) <- levels(data$Family)
   modes <- modes[match(rownames(medians), rownames(modes)),]
   fam_avg <- cbind(medians, modes)
   fam_avg
