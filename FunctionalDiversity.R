@@ -103,20 +103,18 @@ f.family.avg <- function(data){
   fam_avg <- cbind(medians, modes)
   fam_avg
 }
-f.family.avg(mammalianTraits)
+fam_avg <- f.family.avg(mammalianTraits)
 
-#Mass_m <- tapply(mammalianTraits$Mass, droplevels(mammalianTraits$Family), median, na.rm=TRUE)
-#BodyLength_m <- tapply(mammalianTraits$BodyLength, droplevels(mammalianTraits$Family), median, na.rm=TRUE)
-#LitterSize_m <-tapply(mammalianTraits$LitterSize, droplevels(mammalianTraits$Family), median, na.rm=TRUE)
-#GR_Area_m <- tapply(mammalianTraits$GR_Area, droplevels(mammalianTraits$Family), median, na.rm=TRUE)
-#medians <- cbind(Mass_m, BodyLength_m, LitterSize_m, GR_Area_m)
+# Fill in missing values using family level averages (mode for factors; median for continuous variables)
+# Replace missing values in mammalianTraits with Family-level averages (object "fam_avg")
 
 
 
 
-# Figure out how to properly code this ifelse statment, then insert into a function for determining modes; then insert that function into f.family.avg function
-#ifelse(hold[i,1]>hold[i,2]&hold[i,1]>hold[i,3], 1, ifelse(hold[i,2]>hold[i,1]&hold[i,2]>hold[i,3], 2, ifelse(hold[i,3]>hold[i,1]&hold[i,3]>hold[i,2], 3, NA))
 
+
+
+##### CODE FROM EARLIER
 mammalTraits <- cbind(mammals[1:2], mammals$AdultHeadBodyLen_mm, mammals$LitterSize, mammals$GR_Area_km2, as.factor(mammals$ActivityCycle), as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$Guild)
 names(mammalTraits) <- c("Bin", "Mass", "BodyLength", "LitterSize", "GR_Area", "ActivityCycle",  "HabitatBreadth", "DietBreadth", "Guild")
 
@@ -125,11 +123,10 @@ mTraits[,1] <- as.numeric(mTraits[,1])
 rownames(mTraits) <- mammalTraits$Bin
 #rownames(mTraits) <-paste("sp",1:242, sep=".") #Alternate (shorter) species labels
 
-# Fill in missing values using family level averages (mode for factors; median for continuous variables)
 
 
 
-# Calculate Functional Diversity using the FD package
+####### Calculate Functional Diversity using the FD package (try again once missing values are filled in with family averages)
 
 gowdis(mTraits)
 dbFD(x=mammalTraits)
