@@ -105,9 +105,11 @@ SiteTraits <- Mtraits[match(Msplist$Unique_Name, rownames(Mtraits)),]
 SiteTraits <- cbind(SiteTraits[,1:4], droplevels(SiteTraits[,5:7]))
 
 
-
 ####### Calculate Functional Diversity using the FD package
 library(FD)
 
 #gowdis(Mtraits)
-traitFD <- dbFD(SiteTraits, corr="cailliez")
+traitFD <- dbFD(SiteTraits, corr="sqrt")
+
+# Create name for output for each site for loop
+try <- paste(events.use$Site.Code[1], events.use$Sampling.Period[1], "FD", sep=".")
