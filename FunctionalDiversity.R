@@ -12,6 +12,7 @@ splist <- cbind(masterlist, matchedlist)
 
 mammals <- splist[splist$Class=="MAMMALIA",]
 birds <- splist[splist$Class=="AVES",]
+birds <- birds[,1:6]
 
 # Determine the number of species for which data are available for each trait
 Nspecies <- vector(mode = "numeric", length=dim(mammals)[2])
@@ -20,7 +21,7 @@ for(i in 1:length(Nspecies)){
 }
 
 Ntraits <- cbind(colnames(mammals), Nspecies)
-#
+
 # Subset trait data for which >150 mammal species on TEAM list have data
 
 mammalianTraits <- cbind(mammals[1:4], mammals$AdultHeadBodyLen_mm, mammals$LitterSize, mammals$GR_Area_km2, as.factor(mammals$ActivityCycle), as.factor(mammals$HabitatBreadth), as.factor(mammals$DietBreadth), mammals$Guild)
