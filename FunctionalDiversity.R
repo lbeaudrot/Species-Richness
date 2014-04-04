@@ -46,7 +46,9 @@ DietBreadth_c <- ifelse(is.na(mammalianTraits$DietBreadth)==TRUE, fam_avg$DietBr
 Guild_c <- ifelse(is.na(mammalianTraits$Guild)==TRUE, fam_avg$Guild_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$Guild)
 
 # Create data frame out of corrected Trait values to use in functional diversity metrics; coerce factors into factors
-Mtraits <- cbind(Mass_c, BodyLength_c, LitterSize_c, GR_Area_c, HabitatBreadth_c, DietBreadth_c, ActivityCycle_c, Guild_c)
+#Mtraits <- cbind(Mass_c, BodyLength_c, LitterSize_c, GR_Area_c, HabitatBreadth_c, DietBreadth_c, ActivityCycle_c, Guild_c)
+
+Mtraits <- cbind(Mass_c, LitterSize_c, GR_Area_c, ActivityCycle_c, Guild_c)
 rownames(Mtraits) <- mammalianTraits$Bin
 Mtraits <- as.data.frame(Mtraits)
 #Mtraits$HabitatBreadth_c <- as.factor(Mtraits$HabitatBreadth_c)
@@ -102,8 +104,8 @@ SiteTraits <- Mtraits[match(Msplist$Unique_Name, rownames(Mtraits)),]
 ## NB For traits that are factors, all levels must be represented in data to obtain results using dbFD()
 #Reclassify SiteTraits list so that only new levels are used
 
-SiteTraits <- cbind(SiteTraits[,1:6], droplevels(SiteTraits[,7:8]))
-
+SiteTraits <- cbind(SiteTraits[,1:3], droplevels(SiteTraits[,4:5]))
+SiteTraits
 
 ####### Calculate Functional Diversity using the FD package
 library(FD)
