@@ -80,7 +80,7 @@ table(alldata$Site.Code, alldata$Sampling.Period) #Examine which sites have data
 
 ######## Start here to CHANGE INPUT DATA FOR Functional Diversity metrics ###############
 # Use  "Site.Code" to designate which site to include
-data.use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="RNF",]
+data.use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="CAX",]
 
 
 # Subset the species list for each site to calculate the functional diversity metrics
