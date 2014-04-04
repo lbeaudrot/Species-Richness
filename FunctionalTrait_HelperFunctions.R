@@ -61,16 +61,17 @@ f.family.G <- function(data){ # determine mode for each Family for Guild
 
 f.family.avg <- function(data){ # calculate medians for each Family for continuous traits and combine with modes for each categorical trait
   Mass_m <- tapply(data$Mass, droplevels(data$Family), median, na.rm=TRUE)
-  BodyLength_m <- tapply(data$BodyLength, droplevels(data$Family), median, na.rm=TRUE)
   LitterSize_m <-tapply(data$LitterSize, droplevels(data$Family), median, na.rm=TRUE)
   GR_Area_m <- tapply(data$GR_Area, droplevels(data$Family), median, na.rm=TRUE)
-  HB_m <- tapply(data$HabitatBreadth, droplevels(data$Family), median, na.rm=TRUE)
-  DB_m <- tapply(data$DietBreadth, droplevels(data$Family), median, na.rm=TRUE)
-  medians <- cbind(Mass_m, BodyLength_m, LitterSize_m, GR_Area_m, HB_m, DB_m)
+  #BodyLength_m <- tapply(data$BodyLength, droplevels(data$Family), median, na.rm=TRUE)
+  #HB_m <- tapply(data$HabitatBreadth, droplevels(data$Family), median, na.rm=TRUE)
+  #DB_m <- tapply(data$DietBreadth, droplevels(data$Family), median, na.rm=TRUE)
+  medians <- cbind(Mass_m, LitterSize_m, GR_Area_m)
   medians
-  ActivityCycle_m <- f.family.AC(data)
+  
   #HabitatBreadth_m <- f.family.HB(data)
   #DietBreadth_m <- f.family.HB(data)
+  ActivityCycle_m <- f.family.AC(data)
   Guild_m <- f.family.G(data)
   modes <- cbind(ActivityCycle_m, Guild_m)
   rownames(modes) <- levels(data$Family)
