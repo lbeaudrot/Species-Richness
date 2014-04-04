@@ -112,16 +112,6 @@ Msplist <- Msplist[Msplist$Class=="MAMMALIA",]
 
 
 # Apply to bird data 
-Bsplist<-subset(birds,birds$Unique_Name %in% sitelist & birds$Include==1)
-Btraits <- cbind(Bsplist[,1], Bsplist[,5])
-rownames(Btraits) <- Bsplist[,1]
-colnames(Btraits) <- c("Mass", "Guild")
-Btraits <- as.data.frame(Btraits)
-Btraits$Guild <- droplevels(as.factor(Btraits$Guild))
-
-
-#### Experiment below
-
 Bsplist<-subset(Btraits,rownames(Btraits) %in% sitelist & Btraits$V3==1)
 BirdTraits <- cbind(Bsplist[,1], Bsplist[,2])
 rownames(BirdTraits) <- rownames(Bsplist)
