@@ -131,7 +131,7 @@ SiteTraits <- Mtraits[match(Msplist$Unique_Name, rownames(Mtraits)),]
 #Reclassify SiteTraits list so that only new levels are used
 
 SiteTraits <- cbind(SiteTraits[,1:3], droplevels(SiteTraits[,4:5]))
-SiteTraits
+#SiteTraits
 
 ####### Calculate Functional Diversity using the FD package
 
@@ -140,7 +140,7 @@ SiteTraits
 
 birdFD <- dbFD(BirdTraits, corr="sqrt")
 birdFD
-
+BirdTraits
 
 # Create name for output for each site for loop
 # paste(events.use$Site.Code[1], events.use$Sampling.Period[1], "FD", sep=".")
