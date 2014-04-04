@@ -1,5 +1,5 @@
 # Process Trait Data and Calculate Functional Diversity Metrics
-
+library(FD)
 
 # Connect TEAM master species list to the PanTHERIA mammalian trait data
 
@@ -67,7 +67,7 @@ Mtraits$Guild_c <- as.factor(Mtraits$Guild_c)
 str(Mtraits)
 
 # Apply to bird data
-Btraits <- cbind(Mass_c_bird, Guild_c_bird)
+Btraits <- cbind(Mass_c_bird, Guild_c_bird, birds$Include)
 Btraits <- as.data.frame(Btraits)
 Btraits$Guild_c_bird <- as.factor(Btraits$Guild_c_bird)
 rownames(Btraits) <- birds$Unique_Name
@@ -112,9 +112,7 @@ Msplist <- Msplist[Msplist$Class=="MAMMALIA",]
 
 
 # Apply to bird data 
-sitelist<-unique(data.use$bin) #site list
 Bsplist<-subset(birds,birds$Unique_Name %in% sitelist & birds$Include==1)
-rownames(Bsplist) <- Bsplist[,1]
 Btraits <- cbind(Bsplist[,1], Bsplist[,5])
 rownames(Btraits) <- Bsplist[,1]
 colnames(Btraits) <- c("Mass", "Guild")
@@ -122,11 +120,21 @@ Btraits <- as.data.frame(Btraits)
 Btraits$Guild <- droplevels(as.factor(Btraits$Guild))
 
 
+#### Experiment below
+
+Bsplist<-subset(Btraits,rownames(Btraits) %in% sitelist & Btraits$V3==1)
+BirdTraits <- cbind(Bsplist[,1], Bsplist[,2])
+rownames(BirdTraits) <- rownames(Bsplist)
+colnames(BirdTraits) <- c("Mass", "Guild")
+BirdTraits <- as.data.frame(BirdTraits)
+BirdTraits$Guild <- droplevels(as.factor(BirdTraits$Guild))
+
+
 
 # Use the subsetted species list for the site to extract the corresponding functional trait data
 
 SiteTraits <- Mtraits[match(Msplist$Unique_Name, rownames(Mtraits)),]
-#SiteTraits <- SiteTraits[,-6] # Remove Habitat Breadth variable
+
 #rownames(SiteTraits) <-paste("sp",1:dim(SiteTraits)[1], sep=".") #Alternate (shorter) species labels
 
 ## NB For traits that are factors, all levels must be represented in data to obtain results using dbFD()
@@ -136,14 +144,13 @@ SiteTraits <- cbind(SiteTraits[,1:3], droplevels(SiteTraits[,4:5]))
 SiteTraits
 
 ####### Calculate Functional Diversity using the FD package
-library(FD)
 
-#gowdis(Mtraits)
-traitFD <- dbFD(SiteTraits, corr="sqrt")
-traitFD
+#traitFD <- dbFD(SiteTraits, corr="sqrt")
+#traitFD
 
+birdFD <- dbFD(BirdTraits, corr="sqrt")
+birdFD
 
-birdFD <- dbFD(Btraits, corr="sqrt")
 
 # Create name for output for each site for loop
 # paste(events.use$Site.Code[1], events.use$Sampling.Period[1], "FD", sep=".")
