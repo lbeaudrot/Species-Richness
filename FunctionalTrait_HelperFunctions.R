@@ -79,3 +79,10 @@ f.family.avg <- function(data){ # calculate medians for each Family for continuo
   fam_avg <- cbind(medians, modes)
   fam_avg
 }
+
+f.family.avg.bird <- function(data){ # calculate medians for each Family for continuous traits and combine with modes for each categorical trait
+  Mass_m <- tapply(data$Mass, data$Family, median, na.rm=TRUE)
+  Guild_m <- f.family.G(data)
+  fam_avg <- cbind(Mass_m, Guild_m)
+  fam_avg
+}

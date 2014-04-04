@@ -32,6 +32,9 @@ names(mammalianTraits) <- c("Bin", "Mass", "Class", "Family", "BodyLength", "Lit
 fam_avg <- f.family.avg(mammalianTraits)
 fam_avg <- as.data.frame(fam_avg)
 
+# Apply to bird data
+fam_avg_bird <- f.family.avg.bird(birds)
+fam_avg_bird <- as.data.frame(fam_avg_bird)
 
 # Fill in missing values using family level averages (mode for factors; median for continuous variables)
 # Replace missing values in mammalianTraits with Family-level averages (object "fam_avg") so that they are "corrected" (objects end in "_c")
@@ -46,6 +49,11 @@ HabitatBreadth_c <- ifelse(is.na(mammalianTraits$HabitatBreadth)==TRUE, fam_avg$
 DietBreadth_c <- ifelse(is.na(mammalianTraits$DietBreadth)==TRUE, fam_avg$DietBreadth_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$DietBreadth)
 Guild_c <- ifelse(is.na(mammalianTraits$Guild)==TRUE, fam_avg$Guild_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$Guild)
 
+# Apply to bird data
+Mass_c_bird <- ifelse(is.na(birds$Mass)==TRUE, fam_avg_bird$Mass_m[match(birds$Family, rownames(fam_avg_bird))],birds$Mass)
+Guild_c_bird <- ifelse(is.na(birds$Guild)==TRUE, fam_avg_bird$Guild_m[match(birds$Family, rownames(fam_avg_bird))],birds$Guild)
+
+
 # Create data frame out of corrected Trait values to use in functional diversity metrics; coerce factors into factors
 #Mtraits <- cbind(Mass_c, BodyLength_c, LitterSize_c, GR_Area_c, HabitatBreadth_c, DietBreadth_c, ActivityCycle_c, Guild_c)
 
@@ -58,6 +66,12 @@ Mtraits$ActivityCycle_c <- as.factor(Mtraits$ActivityCycle_c)
 Mtraits$Guild_c <- as.factor(Mtraits$Guild_c)
 str(Mtraits)
 
+# Apply to bird data
+Btraits <- cbind(Mass_c_bird, Guild_c_bird)
+Btraits <- as.data.frame(Btraits)
+Btraits$Guild_c_bird <- as.factor(Btraits$Guild_c_bird)
+rownames(Btraits) <- birds$Unique_Name
+str(Btraits)
 
 
 
@@ -96,6 +110,19 @@ Msplist <- Msplist[Msplist$Class=="MAMMALIA",]
 #subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
 #subdata<-f.correct.DF(subdata)
 
+
+# Apply to bird data 
+sitelist<-unique(data.use$bin) #site list
+Bsplist<-subset(birds,birds$Unique_Name %in% sitelist & birds$Include==1)
+rownames(Bsplist) <- Bsplist[,1]
+Btraits <- cbind(Bsplist[,1], Bsplist[,5])
+rownames(Btraits) <- Bsplist[,1]
+colnames(Btraits) <- c("Mass", "Guild")
+Btraits <- as.data.frame(Btraits)
+Btraits$Guild <- droplevels(as.factor(Btraits$Guild))
+
+
+
 # Use the subsetted species list for the site to extract the corresponding functional trait data
 
 SiteTraits <- Mtraits[match(Msplist$Unique_Name, rownames(Mtraits)),]
@@ -114,5 +141,9 @@ library(FD)
 #gowdis(Mtraits)
 traitFD <- dbFD(SiteTraits, corr="sqrt")
 traitFD
+
+
+birdFD <- dbFD(Btraits, corr="sqrt")
+
 # Create name for output for each site for loop
 # paste(events.use$Site.Code[1], events.use$Sampling.Period[1], "FD", sep=".")
