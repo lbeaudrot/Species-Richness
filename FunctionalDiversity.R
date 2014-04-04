@@ -46,12 +46,12 @@ DietBreadth_c <- ifelse(is.na(mammalianTraits$DietBreadth)==TRUE, fam_avg$DietBr
 Guild_c <- ifelse(is.na(mammalianTraits$Guild)==TRUE, fam_avg$Guild_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$Guild)
 
 # Create data frame out of corrected Trait values to use in functional diversity metrics; coerce factors into factors
-Mtraits <- cbind(Mass_c, BodyLength_c, LitterSize_c, GR_Area_c, ActivityCycle_c, HabitatBreadth_c, DietBreadth_c, Guild_c)
+Mtraits <- cbind(Mass_c, BodyLength_c, LitterSize_c, GR_Area_c, HabitatBreadth_c, DietBreadth_c, ActivityCycle_c, Guild_c)
 rownames(Mtraits) <- mammalianTraits$Bin
 Mtraits <- as.data.frame(Mtraits)
+#Mtraits$HabitatBreadth_c <- as.factor(Mtraits$HabitatBreadth_c)
+#Mtraits$DietBreadth_c <- as.factor(Mtraits$DietBreadth_c)
 Mtraits$ActivityCycle_c <- as.factor(Mtraits$ActivityCycle_c)
-Mtraits$HabitatBreadth_c <- as.factor(Mtraits$HabitatBreadth_c)
-Mtraits$DietBreadth_c <- as.factor(Mtraits$DietBreadth_c)
 Mtraits$Guild_c <- as.factor(Mtraits$Guild_c)
 str(Mtraits)
 
@@ -80,7 +80,7 @@ table(alldata$Site.Code, alldata$Sampling.Period) #Examine which sites have data
 
 ######## Start here to CHANGE INPUT DATA FOR Functional Diversity metrics ###############
 # Use  "Site.Code" to designate which site to include
-data.use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="NAK",]
+data.use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="RNF",]
 
 
 # Subset the species list for each site to calculate the functional diversity metrics
@@ -102,7 +102,7 @@ SiteTraits <- Mtraits[match(Msplist$Unique_Name, rownames(Mtraits)),]
 ## NB For traits that are factors, all levels must be represented in data to obtain results using dbFD()
 #Reclassify SiteTraits list so that only new levels are used
 
-SiteTraits <- cbind(SiteTraits[,1:4], droplevels(SiteTraits[,5:7]))
+SiteTraits <- cbind(SiteTraits[,1:6], droplevels(SiteTraits[,7:8]))
 
 
 ####### Calculate Functional Diversity using the FD package
@@ -110,6 +110,6 @@ library(FD)
 
 #gowdis(Mtraits)
 traitFD <- dbFD(SiteTraits, corr="sqrt")
-
+traitFD
 # Create name for output for each site for loop
-try <- paste(events.use$Site.Code[1], events.use$Sampling.Period[1], "FD", sep=".")
+# paste(events.use$Site.Code[1], events.use$Sampling.Period[1], "FD", sep=".")
