@@ -6,9 +6,15 @@
 
 
 # Query vegetation data from database
-#Vdata <- f.teamdb.query("vegetation")
-#Vegdata <- Vdata
+#Vegdata <- f.teamdb.query("vegetation")
+#Vdata <- Vegdata
 
+# Add column with site codes
+Site.CodeT <- substr(Vdata$tree$"1haPlotNumber",4,6)
+Site.CodeL <- substr(Vdata$liana$"1haPlotNumber",4,6)
+
+Vdata <- list(cbind(Vdata$tree, Site.CodeT), cbind(Vdata$liana, Site.CodeL))
+names(Vdata) <- c("tree", "liana")
 # Clean genus names for trees and lianas
 #Vdataclean <- table(V$tree$Genus)
 #write.table(Vdataclean, file="Vdataclean.csv", sep=",")
@@ -70,11 +76,23 @@ Vdata$liana$Genus[Vdata$liana$Genus=="Heteropteris"] <- "Heteropterys"
 Vdata$liana$Genus[Vdata$liana$Genus=="Hiprocatea"] <- "Hippocratea"
 Vdata$liana$Genus[Vdata$liana$Genus=="Prionostema"] <- "Prionostemma"
 Vdata$liana$Genus[Vdata$liana$Genus=="UNKNOWN"] <- "Unknown"
-Vdata$liana$Genus[Vdata$liana$Genus==""] <- ""
-Vdata$liana$Genus[Vdata$liana$Genus==""] <- ""
+
+# Remove stems with DBH below 10 cm
+
+Vtrees <- Vdata$tree[Vdata$tree$Diameter>=10,]
+Vlianas<- Vdata$liana[Vdata$liana$Diameter>=10,]
 
 
+############### END DATA CLEANING ###############
 
+# Data Exploration
+
+# Examine plots at each site
+table(Vtrees$"1haPlotNumber", Vtrees$Site.CodeT)
+table(Vlianas$"1haPlotNumber", Vlianas$Site.CodeL)
+
+
+# Calculate genus richness for each plot at each site (for trees and for lianas)
 
 
 
