@@ -60,10 +60,19 @@ Vdata$tree$Genus[Vdata$tree$Genus=="Mycronychia"] <- "Micronychia"
 Vdata$tree$Genus[Vdata$tree$Genus=="Podo"] <- "Podocarpus"
 Vdata$tree$Genus[Vdata$tree$Genus=="Polycious"] <- "Polyscias"
 Vdata$tree$Genus[Vdata$tree$Genus=="Scheflera"] <- "Schefflera"
-Vdata$tree$Genus[Vdata$tree$Genus==""] <- ""
-Vdata$tree$Genus[Vdata$tree$Genus==""] <- ""
-Vdata$tree$Genus[Vdata$tree$Genus==""] <- ""
-Vdata$tree$Genus[Vdata$tree$Genus==""] <- ""
+
+
+Vdata$liana$Genus[Vdata$liana$Genus=="Adenocalymma"] <- "Adenocalymna"
+Vdata$liana$Genus[Vdata$liana$Genus=="Agleaea"] <- "Agelaea"
+Vdata$liana$Genus[Vdata$liana$Genus=="Arrabidea"] <- "Arrabidaea"
+Vdata$liana$Genus[Vdata$liana$Genus=="Davilia"] <- "Davilla"
+Vdata$liana$Genus[Vdata$liana$Genus=="Heteropteris"] <- "Heteropterys"
+Vdata$liana$Genus[Vdata$liana$Genus=="Hiprocatea"] <- "Hippocratea"
+Vdata$liana$Genus[Vdata$liana$Genus=="Prionostema"] <- "Prionostemma"
+Vdata$liana$Genus[Vdata$liana$Genus=="UNKNOWN"] <- "Unknown"
+Vdata$liana$Genus[Vdata$liana$Genus==""] <- ""
+Vdata$liana$Genus[Vdata$liana$Genus==""] <- ""
+
 
 
 
