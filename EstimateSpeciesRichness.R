@@ -141,7 +141,7 @@ text(100, 2000, paste("Median", sp.median, sep=" = "))
 text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 
 
-# Temporarily store site specific outputs
+ # Temporarily store site specific outputs
 
 #YASfit <- fitparallel
 #CSNfit <- fitparallel

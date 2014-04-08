@@ -82,8 +82,7 @@ Vdata$liana$Genus[Vdata$liana$Genus=="UNKNOWN"] <- "Unknown"
 Vtrees <- Vdata$tree[Vdata$tree$Diameter>=10,]
 Vlianas<- Vdata$liana[Vdata$liana$Diameter>=10,]
 
-# Limit data to one year from each site so that data corresponds to CT metrics
-
+# Limit data to one year from each site so that data correspond to CT metrics
 # 2012 for CAX, YAS, and PSH
 # 2011 for all other sites
 
