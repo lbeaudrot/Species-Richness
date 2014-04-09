@@ -186,13 +186,25 @@ maxD <- maxD[maxD$Genus!="Unknown",]
 WD2 <- WD[match(maxD$Genus, names(WD))]
 
 
-
-
-Vtraits <- cbind(maxD, WD2)
-# Note that CSN and NAK have very low genus trait value richness (17 and 1, respectively)
-
 # Format functional trait data for FD calculations
 # function dbFD requires a data frame of functional traits with genus row names
+# Note that CSN and NAK have very low genus trait value richness (16 and 0, respectively); discard
+
+Vtraits <- cbind(maxD, WD2)
+nsites <- length(levels(Vtraits$Site.CodeT))
+
+
+
+
+#Extract people
+Vsites <-list()
+for(i in 1:nsites)
+  Vsites[[i]]<-f.matrix.creator2(data,year[i])  
+spnames<-names(mat[[1]])
+
+for(i in 1:nsites){
+  Vsites[i] <- Vtraits[Vtraits$Site.CodeT=[i],]
+}
 
 # Calculate GENUS FUNCTIONAL DIVERSITY 
 library(FD)
