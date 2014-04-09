@@ -159,12 +159,27 @@ Genus <- sub(" .*","", Genus)
 WDdata <- cbind(WDdata, Genus)
 
 # Calculate genus and family level wood densities
-genusWD <- aggregate(WDdata$WD, by=list(WDdata$Genus), FUN=mean)
-names(genusWD) <- c("Genus", "WD")
+gWD <- aggregate(WDdata$WD, by=list(WDdata$Genus), FUN=mean)
+names(gWD) <- c("Genus", "WD")
 
-familyWD <- aggregate(WDdata$WD, by=list(WDdata$Family), FUN=mean)
-names(familyWD) <- c("Family", "WD")
+fWD <- aggregate(WDdata$WD, by=list(WDdata$Family), FUN=mean)
+names(fWD) <- c("Family", "WD")
 
+# Extract WD values for genera in TEAM plots
+genusWD <- gWD$WD[match(colnames(PlotGenusStemsT), gWD$Genus)]
+names(genusWD) <- colnames(PlotGenusStemsT)
+
+# Fill in missing genus values with family wood density value
+# Families for each genus
+families <- Trees$Family[match(sort(unique(Trees$Genus)), Trees$Genus)]
+
+# WOOD DENSITY VALUES TO USE
+WD <- ifelse(is.na(genusWD)==TRUE, fWD$WD[match(families, fWD$Family)], genusWD)
+
+
+# Determine the maxium diameter value for a genus at a site from data used in this study
+maxD <- aggregate(Trees$Diameter, by=list(Trees$Site.CodeT, Trees$Genus), FUN=max)
+names(maxD) <- c("Site.CodeT", "Genus", "WD")
 # Calculate GENUS FUNCTIONAL DIVERSITY 
 library(FD)
 TFunc <- dbFD()
