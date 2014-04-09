@@ -142,4 +142,12 @@ LRich <- colSums((ifelse(table(Vlianas$Genus, Vlianas$"1haPlotNumber")>0,1,0)))
 library(vegan)
 
 # Format data with plots as rows and Genera as columns
-TShan <- diversity(x, index="shannon", MARGIN=1, base=exp(1))
+# Remove unknown stems (for diversity calculations only)
+PlotGenusStemsT <- table(Trees$"1haPlotNumber", Trees$Genus)
+PlotGenusStemsT <- PlotGenusStemsT[,colnames(PlotGenusStemsT)!="Unknown"]
+PlotGenusStemsL <- table(Lianas$"1haPlotNumber", Lianas$Genus)
+PlotGenusStemsL <- PlotGenusStemsL[,colnames(PlotGenusStemsL)!="Unknown"]
+
+
+TShan <- diversity(PlotGenusStemsT, index="shannon", MARGIN=1, base=exp(1))
+LShan <- diversity(PlotGenusStemsL, index="shannon", MARGIN=1, base=exp(1))
