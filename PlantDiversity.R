@@ -125,21 +125,12 @@ Lianas <- Lianas[is.na(Lianas$Id)==FALSE,]
 ############### END DATA CLEANING ###############
 
 # Data Exploration
-
 # Examine plots at each site
 table(Vtrees$"1haPlotNumber", Vtrees$Site.CodeT)
 table(Vlianas$"1haPlotNumber", Vlianas$Site.CodeL)
 
 # CALCULATE PLOT-LEVEL PLANT DIVERSITY METRICS
 # Once complete, combine into a dataframe to calculate site averages and site variability
-
-# Calculate GENUS RICHNESS for each plot at each site for trees and for lianas
-
-TRich <- colSums((ifelse(table(Vtrees$Genus, Vtrees$"1haPlotNumber")>0,1,0)))
-LRich <- colSums((ifelse(table(Vlianas$Genus, Vlianas$"1haPlotNumber")>0,1,0)))
-
-# Calculate GENUS DIVERSITY (SHANNON INDEX) for each plot at each site for trees and lianas
-library(vegan)
 
 # Format data with plots as rows and Genera as columns
 # Remove unknown stems (for diversity calculations only)
@@ -148,6 +139,18 @@ PlotGenusStemsT <- PlotGenusStemsT[,colnames(PlotGenusStemsT)!="Unknown"]
 PlotGenusStemsL <- table(Lianas$"1haPlotNumber", Lianas$Genus)
 PlotGenusStemsL <- PlotGenusStemsL[,colnames(PlotGenusStemsL)!="Unknown"]
 
+# Calculate GENUS RICHNESS for each plot at each site for trees and for lianas
+TRich <- rowSums(ifelse(PlotGenusStemsT>0,1,0))
+LRich <- rowSums(ifelse(PlotGenusStemsL>0,1,0))
 
+# Calculate GENUS TAXONOMIC DIVERSITY (SHANNON INDEX) for each plot at each site for trees and lianas
+library(vegan)
 TShan <- diversity(PlotGenusStemsT, index="shannon", MARGIN=1, base=exp(1))
 LShan <- diversity(PlotGenusStemsL, index="shannon", MARGIN=1, base=exp(1))
+
+# Calculate GENUS FUNCTIONAL DIVERSITY 
+library(FD)
+TFunc <- dbFD()
+
+
+
