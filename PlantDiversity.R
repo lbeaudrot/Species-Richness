@@ -102,6 +102,7 @@ Trees <-  rbind(Vtrees[Vtrees$Site.CodeT=="CAX" & Vtrees$SamplingPeriod=="2012.0
           Vtrees[Vtrees$Site.CodeT=="UDZ" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="VB-" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="YAN" & Vtrees$SamplingPeriod=="2011.01",])
+#Remove rows with missing unique identification values (NA rows)
 Trees <- Trees[is.na(Trees$Id)==FALSE,]
 
 Lianas <-  rbind(Vlianas[Vlianas$Site.CodeL=="CAX" & Vlianas$SamplingPeriod=="2012.01",],
@@ -120,10 +121,12 @@ Lianas <-  rbind(Vlianas[Vlianas$Site.CodeL=="CAX" & Vlianas$SamplingPeriod=="20
                  Vlianas[Vlianas$Site.CodeL=="UDZ" & Vlianas$SamplingPeriod=="2011.01",],
                  Vlianas[Vlianas$Site.CodeL=="VB-" & Vlianas$SamplingPeriod=="2011.01",],
                  Vlianas[Vlianas$Site.CodeL=="YAN" & Vlianas$SamplingPeriod=="2011.01",])
+#Remove rows with missing unique identification values (NA rows)
 Lianas <- Lianas[is.na(Lianas$Id)==FALSE,]
 
 ############### END DATA CLEANING ###############
 
+############### BEGIN PLANT DIVERSITY CALCULATIONS ######
 # Data Exploration
 # Examine plots at each site
 table(Vtrees$"1haPlotNumber", Vtrees$Site.CodeT)
@@ -148,9 +151,20 @@ library(vegan)
 TShan <- diversity(PlotGenusStemsT, index="shannon", MARGIN=1, base=exp(1))
 LShan <- diversity(PlotGenusStemsL, index="shannon", MARGIN=1, base=exp(1))
 
+# Format Functional Trait data
+WDdata <- read.csv("GlobalWoodDensityData.csv")
+WDdata <- WDdata[,2:5]
+Genus <- WDdata$Binomial
+Genus <- sub(" .*","", Genus)
+WDdata <- cbind(WDdata, Genus)
+
+# Calculate genus and family level wood densities
+genusWD <- aggregate(WDdata$WD, by=list(WDdata$Genus), FUN=mean)
+names(genusWD) <- c("Genus", "WD")
+
+familyWD <- aggregate(WDdata$WD, by=list(WDdata$Family), FUN=mean)
+names(familyWD) <- c("Family", "WD")
+
 # Calculate GENUS FUNCTIONAL DIVERSITY 
 library(FD)
 TFunc <- dbFD()
-
-
-
