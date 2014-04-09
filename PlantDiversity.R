@@ -102,6 +102,7 @@ Trees <-  rbind(Vtrees[Vtrees$Site.CodeT=="CAX" & Vtrees$SamplingPeriod=="2012.0
           Vtrees[Vtrees$Site.CodeT=="UDZ" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="VB-" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="YAN" & Vtrees$SamplingPeriod=="2011.01",])
+Trees <- Trees[is.na(Trees$Id)==FALSE,]
 
 Lianas <-  rbind(Vlianas[Vlianas$Site.CodeL=="CAX" & Vlianas$SamplingPeriod=="2012.01",],
                  Vlianas[Vlianas$Site.CodeL=="YAS" & Vlianas$SamplingPeriod=="2012.01",],
@@ -119,6 +120,7 @@ Lianas <-  rbind(Vlianas[Vlianas$Site.CodeL=="CAX" & Vlianas$SamplingPeriod=="20
                  Vlianas[Vlianas$Site.CodeL=="UDZ" & Vlianas$SamplingPeriod=="2011.01",],
                  Vlianas[Vlianas$Site.CodeL=="VB-" & Vlianas$SamplingPeriod=="2011.01",],
                  Vlianas[Vlianas$Site.CodeL=="YAN" & Vlianas$SamplingPeriod=="2011.01",])
+Lianas <- Lianas[is.na(Lianas$Id)==FALSE,]
 
 ############### END DATA CLEANING ###############
 
@@ -136,3 +138,8 @@ table(Vlianas$"1haPlotNumber", Vlianas$Site.CodeL)
 TRich <- colSums((ifelse(table(Vtrees$Genus, Vtrees$"1haPlotNumber")>0,1,0)))
 LRich <- colSums((ifelse(table(Vlianas$Genus, Vlianas$"1haPlotNumber")>0,1,0)))
 
+# Calculate GENUS DIVERSITY (SHANNON INDEX) for each plot at each site for trees and lianas
+library(vegan)
+
+# Format data with plots as rows and Genera as columns
+TShan <- diversity(x, index="shannon", MARGIN=1, base=exp(1))
