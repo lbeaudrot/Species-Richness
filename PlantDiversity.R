@@ -151,7 +151,7 @@ library(vegan)
 TShan <- diversity(PlotGenusStemsT, index="shannon", MARGIN=1, base=exp(1))
 LShan <- diversity(PlotGenusStemsL, index="shannon", MARGIN=1, base=exp(1))
 
-# Format Functional Trait data
+# Import wood density data
 WDdata <- read.csv("GlobalWoodDensityData.csv")
 WDdata <- WDdata[,2:5]
 Genus <- WDdata$Binomial
@@ -172,14 +172,28 @@ names(genusWD) <- colnames(PlotGenusStemsT)
 # Fill in missing genus values with family wood density value
 # Families for each genus
 families <- Trees$Family[match(sort(unique(Trees$Genus)), Trees$Genus)]
-
-# WOOD DENSITY VALUES TO USE
 WD <- ifelse(is.na(genusWD)==TRUE, fWD$WD[match(families, fWD$Family)], genusWD)
-
 
 # Determine the maxium diameter value for a genus at a site from data used in this study
 maxD <- aggregate(Trees$Diameter, by=list(Trees$Site.CodeT, Trees$Genus), FUN=max)
 names(maxD) <- c("Site.CodeT", "Genus", "WD")
+
+# Remove unknown genera
+maxD <- maxD[maxD$Genus!="Unknown",]
+
+
+# Match wood density values to site specific maximum diameter values for each genus
+WD2 <- WD[match(maxD$Genus, names(WD))]
+
+
+
+
+Vtraits <- cbind(maxD, WD2)
+# Note that CSN and NAK have very low genus trait value richness (17 and 1, respectively)
+
+# Format functional trait data for FD calculations
+# function dbFD requires a data frame of functional traits with genus row names
+
 # Calculate GENUS FUNCTIONAL DIVERSITY 
 library(FD)
 TFunc <- dbFD()
