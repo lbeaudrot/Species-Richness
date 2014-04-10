@@ -151,6 +151,16 @@ library(vegan)
 TShan <- diversity(PlotGenusStemsT, index="shannon", MARGIN=1, base=exp(1))
 LShan <- diversity(PlotGenusStemsL, index="shannon", MARGIN=1, base=exp(1))
 
+
+# Create dataframe with plot level richness and diversity values
+Richness <- merge(TRich, LRich, by="row.names", all=TRUE)
+names(Richness) <- c("Plot", "TRich", "LRich")
+Diversity <- merge(TShan, LShan, by="row.names", all=TRUE)
+names(Diversity) <- c("Plot", "TShan", "LShan")
+
+Plot.RD <- merge(Richness, Diversity, by="Plot", all=TRUE)
+#write.table(Plot.RD, file="Plot.RD.csv", col.names=TRUE, sep=",")
+
 # Import wood density data
 WDdata <- read.csv("GlobalWoodDensityData.csv")
 WDdata <- WDdata[,2:5]
@@ -176,7 +186,7 @@ WD <- ifelse(is.na(genusWD)==TRUE, fWD$WD[match(families, fWD$Family)], genusWD)
 
 # Determine the maxium diameter value for a genus at a site from data used in this study
 maxD <- aggregate(Trees$Diameter, by=list(Trees$Site.CodeT, Trees$Genus), FUN=max)
-names(maxD) <- c("Site.CodeT", "Genus", "WD")
+names(maxD) <- c("Site.CodeT", "Genus", "maxD")
 
 # Remove unknown genera
 maxD <- maxD[maxD$Genus!="Unknown",]
@@ -196,16 +206,103 @@ nsites <- length(levels(Vtraits$Site.CodeT))
 
 
 
-#Extract people
+#Extract sites by looping (needs work)
 Vsites <-list()
 for(i in 1:nsites)
-  Vsites[[i]]<-f.matrix.creator2(data,year[i])  
-spnames<-names(mat[[1]])
+#  Vsites[[i]]<-f.matrix.creator2(data,year[i])  
+#spnames<-names(mat[[1]])
 
-for(i in 1:nsites){
-  Vsites[i] <- Vtraits[Vtraits$Site.CodeT=[i],]
+for(i in levels(Vtraits$Site.CodeT)){
+  Vsites[[i]] <- Vtraits[Vtraits$Site.CodeT==levels(Vtraits$Site.CodeT)[i],]
+  rownames(Vsites[[i]]) <- Vsites[[i]]$Genus
+           Vsites
 }
 
-# Calculate GENUS FUNCTIONAL DIVERSITY 
+# Extract sites manually
+BBS <- Vtraits[Vtraits$Site.CodeT=="BBS",]
+rownames(BBS) <- BBS$Genus
+BBS <- BBS[,3:4]
+
+BCI <- Vtraits[Vtraits$Site.CodeT=="BCI",]
+rownames(BCI) <- BCI$Genus
+BCI <- BCI[,3:4]
+
+BIF <- Vtraits[Vtraits$Site.CodeT=="BIF",]
+rownames(BIF) <- BIF$Genus
+BIF <- BIF[,3:4]
+
+CAX <- Vtraits[Vtraits$Site.CodeT=="CAX",]
+rownames(CAX) <- CAX$Genus
+CAX <- CAX[,3:4]
+
+COU <- Vtraits[Vtraits$Site.CodeT=="COU",]
+rownames(COU) <- COU$Genus
+COU <- COU[,3:4]
+
+CSN <- Vtraits[Vtraits$Site.CodeT=="CSN",]
+rownames(CSN) <- CSN$Genus
+CSN <- CSN[,3:4]
+
+KRP <- Vtraits[Vtraits$Site.CodeT=="KRP",]
+rownames(KRP) <- KRP$Genus
+KRP <- KRP[,3:4]
+
+MAS <- Vtraits[Vtraits$Site.CodeT=="MAS",]
+rownames(MAS) <- MAS$Genus
+MAS <- MAS[,3:4]
+
+NAK <- Vtraits[Vtraits$Site.CodeT=="NAK",]
+rownames(NAK) <- NAK$Genus
+NAK <- NAK[,3:4]
+
+NNN <- Vtraits[Vtraits$Site.CodeT=="NNN",]
+rownames(NNN) <- NNN$Genus
+NNN <- NNN[,3:4]
+
+PSH <- Vtraits[Vtraits$Site.CodeT=="PSH",]
+rownames(PSH) <- PSH$Genus
+PSH <- PSH[,3:4]
+
+RNF <- Vtraits[Vtraits$Site.CodeT=="RNF",]
+rownames(RNF) <- RNF$Genus
+RNF <- RNF[,3:4]
+
+UDZ <- Vtraits[Vtraits$Site.CodeT=="UDZ",]
+rownames(UDZ) <- UDZ$Genus
+UDZ <- UDZ[,3:4]
+
+VB- <- Vtraits[Vtraits$Site.CodeT=="VB-",]
+rownames(VB-) <- VB-$Genus
+VB- <- VB-[,3:4]
+
+YAN <- Vtraits[Vtraits$Site.CodeT=="YAN",]
+rownames(YAN) <- YAN$Genus
+YAN <- YAN[,3:4]
+
+YAS <- Vtraits[Vtraits$Site.CodeT=="YAS",]
+rownames(YAS) <- YAS$Genus
+YAS <- YAS[,3:4]
+
+[1] "BBS" "BCI" "BIF" "CAX" "COU" "CSN" "KRP" "MAS" "NAK" "NNN" "PSH" "RNF" "UDZ" "VB-" "YAN" "YAS"
+
+# Calculate GENUS FUNCTIONAL DIVERSITY for each site (need to re-run for each plot?)
 library(FD)
-TFunc <- dbFD()
+TFunc.BBS <- dbFD(BBS, corr="cailliez")
+TFunc.BCI <- dbFD(BCI, corr="sqrt")
+TFunc.BIF <- dbFD(BIF, corr="cailliez")
+TFunc.CAX <- dbFD(CAX, corr="sqrt")
+TFunc.COU <- dbFD(COU, corr="cailliez")
+TFunc.CSN <- dbFD(CSN, corr="sqrt")
+TFunc.KRP <- dbFD(KRP, corr="cailliez")
+TFunc.MAS <- dbFD(MAS, corr="sqrt")
+#TFunc.NAK <- dbFD(NAK, corr="sqrt")
+TFunc.NNN <- dbFD(NNN, corr="cailliez")
+TFunc.PSH <- dbFD(PSH, corr="cailliez")
+TFunc.RNF <- dbFD(RNF, corr="sq")
+TFunc.UDZ <- dbFD(UDZ)
+TFunc.VB- <- dbFD(VB-)
+TFunc.YAN <- dbFD(YAN)
+TFunc.YAS <- dbFD(YAS)
+
+
+
