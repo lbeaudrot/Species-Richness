@@ -7,7 +7,7 @@
 
 # Query vegetation data from database
 #Vegdata <- f.teamdb.query("vegetation")
-#Vdata <- Vegdata
+Vdata <- Vegdata
 
 # Add column with site codes
 Site.CodeT <- substr(Vdata$tree$"1haPlotNumber",4,6)
@@ -21,7 +21,7 @@ names(Vdata) <- c("tree", "liana")
 #Vdataclean.liana <- table(Vdata$liana$Genus)
 #write.table(Vdataclean.liana, file="Vdataclean.liana.csv", sep=",")
 
-# Manually clean data (prior to database cleaning)
+# Manually clean data (prior to database cleaning) using corrected spellings from Tropicos
 # Duplicate tree genera 
 Vdata$tree$Genus[Vdata$tree$Genus=="Albizia Durazz."] <- "Albizia"
 Vdata$tree$Genus[Vdata$tree$Genus=="Allophyllus"] <- "Allophylus"
@@ -107,13 +107,6 @@ Vdata$tree$Genus[Vdata$tree$Genus=="Staphyllea"] <- "Staphylea"
 Vdata$tree$Genus[Vdata$tree$Genus=="Ticodendrom"] <- "Ticodendron"
 Vdata$tree$Genus[Vdata$tree$Genus=="Vuguierenthus"] <- "Unknown"
 Vdata$tree$Genus[Vdata$tree$Genus=="Yrianthera"] <- "Iryanthera"
-
-
-
-
-
-
-
 # Duplicate liana genera 
 Vdata$liana$Genus[Vdata$liana$Genus=="Adenocalymna"] <- "Adenocalymma"
 Vdata$liana$Genus[Vdata$liana$Genus=="Agleaea"] <- "Agelaea"
@@ -128,10 +121,9 @@ Vdata$liana$Genus[Vdata$liana$Genus=="Ampleocissus"] <- "Ampelocissus"
 Vdata$liana$Genus[Vdata$liana$Genus=="Williugbeia"] <- "Willughbeia"
 
 
-# Remove stems with DBH below 10 cm
-
-Vtrees <- Vdata$tree[Vdata$tree$Diameter>=10,]
-Vlianas<- Vdata$liana[Vdata$liana$Diameter>=10,]
+# Inspect (but do not remove) stems with DBH below 10 cm
+#Vdata$tree[Vdata$tree$Diameter>=10,]
+#Vdata$liana[Vdata$liana$Diameter>=10,]
 
 # Limit data to one year from each site so that data correspond to CT metrics
 # 2012 for CAX, YAS, and PSH
@@ -144,10 +136,10 @@ Trees <-  rbind(Vtrees[Vtrees$Site.CodeT=="CAX" & Vtrees$SamplingPeriod=="2012.0
           Vtrees[Vtrees$Site.CodeT=="BCI" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="BIF" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="COU" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="CSN" & Vtrees$SamplingPeriod=="2011.01",],
+          #Vtrees[Vtrees$Site.CodeT=="CSN" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="KRP" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="MAS" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="NAK" & Vtrees$SamplingPeriod=="2011.01",],
+          #Vtrees[Vtrees$Site.CodeT=="NAK" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="NNN" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="RNF" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="UDZ" & Vtrees$SamplingPeriod=="2011.01",],
@@ -155,6 +147,9 @@ Trees <-  rbind(Vtrees[Vtrees$Site.CodeT=="CAX" & Vtrees$SamplingPeriod=="2012.0
           Vtrees[Vtrees$Site.CodeT=="YAN" & Vtrees$SamplingPeriod=="2011.01",])
 #Remove rows with missing unique identification values (NA rows)
 Trees <- Trees[is.na(Trees$Id)==FALSE,]
+#Remove dead trees
+aliveT <- grep(pattern="K", x=Trees$ConditionCodes, invert=TRUE)
+Trees <- Trees[aliveT,]
 
 Lianas <-  rbind(Vlianas[Vlianas$Site.CodeL=="CAX" & Vlianas$SamplingPeriod=="2012.01",],
                  Vlianas[Vlianas$Site.CodeL=="YAS" & Vlianas$SamplingPeriod=="2012.01",],
@@ -174,6 +169,9 @@ Lianas <-  rbind(Vlianas[Vlianas$Site.CodeL=="CAX" & Vlianas$SamplingPeriod=="20
                  Vlianas[Vlianas$Site.CodeL=="YAN" & Vlianas$SamplingPeriod=="2011.01",])
 #Remove rows with missing unique identification values (NA rows)
 Lianas <- Lianas[is.na(Lianas$Id)==FALSE,]
+#Remove dead lianas
+aliveL <- grep(pattern="K", x=Lianas$ConditionCodes, invert=TRUE)
+Lianas <- Lianas[aliveL,]
 
 ############### END DATA CLEANING ###############
 
@@ -343,7 +341,7 @@ TFunc.BCI <- dbFD(BCI, corr="sqrt")
 TFunc.BIF <- dbFD(BIF, corr="cailliez")
 TFunc.CAX <- dbFD(CAX, corr="sqrt")
 TFunc.COU <- dbFD(COU, corr="cailliez")
-TFunc.CSN <- dbFD(CSN, corr="sqrt")
+#TFunc.CSN <- dbFD(CSN, corr="sqrt")
 TFunc.KRP <- dbFD(KRP, corr="cailliez")
 TFunc.MAS <- dbFD(MAS, corr="sqrt")
 #TFunc.NAK <- dbFD(NAK, corr="sqrt")
