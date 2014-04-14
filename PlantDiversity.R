@@ -321,15 +321,28 @@ nplots <- length(levels(as.factor(Trees$"1haPlotNumber")))
 
 PlotTrees <- t(PlotGenusStemsT)
 
-
-#Extract sites by looping (needs work)
+# Format functional trait data for FD input
 Vsites <-list()
+VSites <-list()
 
+#Extract site data by looping 
+#for(i in 1:length(levels(Vtraits$Site.CodeT))){
+  #Vsites[[i]] <- Vtraits[grep(pattern=levels(Vtraits$Site.CodeT)[i], x=Vtraits$Site.CodeT),]
+  #rownames(Vsites[[i]]) <- Vsites[[i]]$Genus
+  #names(Vsites)[[i]] <- print(paste("Vsites",levels(Vtraits$Site.CodeT)[[i]],sep="."))
+  #Vsites
+#}
+
+# Reduce to FD input columns only
 for(i in 1:length(levels(Vtraits$Site.CodeT))){
   Vsites[[i]] <- Vtraits[grep(pattern=levels(Vtraits$Site.CodeT)[i], x=Vtraits$Site.CodeT),]
+  #names(Vsites)[[i]] <- print(paste("Vsites",levels(Vtraits$Site.CodeT)[[i]],sep="."))
   #rownames(Vsites[[i]]) <- Vsites[[i]]$Genus
-  names(Vsites)[[i]] <- print(paste("Vsites",levels(Vtraits$Site.CodeT)[[i]],sep="."))
-  Vsites
+  VSites[[i]] <- cbind(Vsites[[i]]$maxD, Vsites[[i]]$WD2)
+  names(VSites)[[i]] <- print(paste(levels(Vtraits$Site.CodeT)[[i]]))
+  rownames(VSites[[i]]) <- Vsites[[i]]$Genus
+  colnames(VSites[[i]]) <- cbind("maxD", "WD2")
+  VSites
 }
 
 
