@@ -201,10 +201,10 @@ Trees <-  rbind(Vtrees[Vtrees$Site.CodeT=="CAX" & Vtrees$SamplingPeriod=="2012.0
           Vtrees[Vtrees$Site.CodeT=="BCI" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="BIF" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="COU" & Vtrees$SamplingPeriod=="2011.01",],
-          #Vtrees[Vtrees$Site.CodeT=="CSN" & Vtrees$SamplingPeriod=="2011.01",],
+          Vtrees[Vtrees$Site.CodeT=="CSN" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="KRP" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="MAS" & Vtrees$SamplingPeriod=="2011.01",],
-          #Vtrees[Vtrees$Site.CodeT=="NAK" & Vtrees$SamplingPeriod=="2011.01",],
+          Vtrees[Vtrees$Site.CodeT=="NAK" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="NNN" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="RNF" & Vtrees$SamplingPeriod=="2011.01",],
           Vtrees[Vtrees$Site.CodeT=="UDZ" & Vtrees$SamplingPeriod=="2011.01",],
@@ -272,7 +272,7 @@ names(Richness) <- c("Plot", "TRich", "LRich")
 Diversity <- merge(TShan, LShan, by="row.names", all=TRUE)
 names(Diversity) <- c("Plot", "TShan", "LShan")
 
-Plot.RD <- merge(Richness, Diversity, by="Plot", all=TRUE)
+Plot.level.RD <- merge(Richness, Diversity, by="Plot", all=TRUE)
 #write.table(Plot.RD, file="Plot.RD.csv", col.names=TRUE, sep=",")
 
 # Import wood density data
@@ -316,8 +316,10 @@ WD2 <- WD[match(maxD$Genus, names(WD))]
 
 Vtraits <- cbind(maxD, WD2)
 nsites <- length(levels(Vtraits$Site.CodeT))
+nplots <- length(levels(as.factor(Trees$"1haPlotNumber")))
 
 
+table(Trees$Genus, Trees$"1haPlotNumber")
 
 
 #Extract sites by looping (needs work)
@@ -419,4 +421,12 @@ TFunc.YAN <- dbFD(YAN)
 TFunc.YAS <- dbFD(YAS)
 
 
+# Assign sites to "dry" (<1500 mm/year precipitation) or "moist" (1500-3500 mm/year) designation for carbon storage calculations
+# UDZ and BIF are dry; all others moist according to TEAM CRU rain data
+
+# Calculate biomass for individual trees using the following equations:
+ABGdry <- WD * exp((-2/3) + 1.794*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
+ABGmoist <- WD * exp(-1.499 + 2.148*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
+
+# For missing values (neither genus nor family available), use plot mean
 
