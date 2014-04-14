@@ -22,6 +22,7 @@ names(Vdata) <- c("tree", "liana")
 #write.table(Vdataclean.liana, file="Vdataclean.liana.csv", sep=",")
 
 # Manually clean data (prior to database cleaning)
+# Duplicate tree genera 
 Vdata$tree$Genus[Vdata$tree$Genus=="Albizia Durazz."] <- "Albizia"
 Vdata$tree$Genus[Vdata$tree$Genus=="Allophyllus"] <- "Allophylus"
 Vdata$tree$Genus[Vdata$tree$Genus=="Cassearea"] <- "Casearia"
@@ -66,9 +67,55 @@ Vdata$tree$Genus[Vdata$tree$Genus=="Mycronychia"] <- "Micronychia"
 Vdata$tree$Genus[Vdata$tree$Genus=="Podo"] <- "Podocarpus"
 Vdata$tree$Genus[Vdata$tree$Genus=="Polycious"] <- "Polyscias"
 Vdata$tree$Genus[Vdata$tree$Genus=="Scheflera"] <- "Schefflera"
+# Tree misspellings
+Vdata$tree$Genus[Vdata$tree$Genus=="Caloxylon"] <- "Merrillia"
+Vdata$tree$Genus[Vdata$tree$Genus=="Cavanalesia"] <- "Cavanillesia"
+Vdata$tree$Genus[Vdata$tree$Genus=="Chysoceton"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Clochidion"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Cytogononia"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Eonimus"] <- "Euonymus"
+Vdata$tree$Genus[Vdata$tree$Genus=="Escalonia"] <- "Escallonia"
+Vdata$tree$Genus[Vdata$tree$Genus=="Euricoma"] <- "Eurycoma"
+Vdata$tree$Genus[Vdata$tree$Genus=="Ferminiana"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Fragraea"] <- "Fagraea"
+Vdata$tree$Genus[Vdata$tree$Genus=="Graffenriedia"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Hyeronima"] <- "Hieronyma"
+Vdata$tree$Genus[Vdata$tree$Genus=="Hynocarpus"] <- "Hydnocarpus"
+Vdata$tree$Genus[Vdata$tree$Genus=="Julbelniadia"] <- "Julbernardia"
+Vdata$tree$Genus[Vdata$tree$Genus=="Lagerstromia"] <- "Lagerstroemia"
+Vdata$tree$Genus[Vdata$tree$Genus=="Lauraceae"] <- "Unknown" #Family not genus
+Vdata$tree$Genus[Vdata$tree$Genus=="Malanochyla"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Mdumbadumba"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Metrododorea"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Meyogine"] <- "Meiogyne"
+Vdata$tree$Genus[Vdata$tree$Genus=="Microsdesmis"] <- "Microdesmis"
+Vdata$tree$Genus[Vdata$tree$Genus=="Mnunganunga"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Mollotus"] <- "Mallotus"
+Vdata$tree$Genus[Vdata$tree$Genus=="Msengela"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Muntinga"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Neouvaria"] <- "Neo-uvaria"
+Vdata$tree$Genus[Vdata$tree$Genus=="Octodes"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Onychapetalum"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Papilionoidea"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Physocalymna"] <- "Physocalymma"
+Vdata$tree$Genus[Vdata$tree$Genus=="Rhinorea"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Rhytigynia"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Rnodostemomodaphne"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Saccopethalum"] <- "Saccopetalum"
+Vdata$tree$Genus[Vdata$tree$Genus=="Schweilera"] <- "Eschweilera"
+Vdata$tree$Genus[Vdata$tree$Genus=="Staphyllea"] <- "Staphylea"
+Vdata$tree$Genus[Vdata$tree$Genus=="Ticodendrom"] <- "Ticodendron"
+Vdata$tree$Genus[Vdata$tree$Genus=="Vuguierenthus"] <- "Unknown"
+Vdata$tree$Genus[Vdata$tree$Genus=="Yrianthera"] <- "Iryanthera"
 
 
-Vdata$liana$Genus[Vdata$liana$Genus=="Adenocalymma"] <- "Adenocalymna"
+
+
+
+
+
+# Duplicate liana genera 
+Vdata$liana$Genus[Vdata$liana$Genus=="Adenocalymna"] <- "Adenocalymma"
 Vdata$liana$Genus[Vdata$liana$Genus=="Agleaea"] <- "Agelaea"
 Vdata$liana$Genus[Vdata$liana$Genus=="Arrabidea"] <- "Arrabidaea"
 Vdata$liana$Genus[Vdata$liana$Genus=="Davilia"] <- "Davilla"
@@ -76,6 +123,10 @@ Vdata$liana$Genus[Vdata$liana$Genus=="Heteropteris"] <- "Heteropterys"
 Vdata$liana$Genus[Vdata$liana$Genus=="Hiprocatea"] <- "Hippocratea"
 Vdata$liana$Genus[Vdata$liana$Genus=="Prionostema"] <- "Prionostemma"
 Vdata$liana$Genus[Vdata$liana$Genus=="UNKNOWN"] <- "Unknown"
+# Liana misspellings
+Vdata$liana$Genus[Vdata$liana$Genus=="Ampleocissus"] <- "Ampelocissus"
+Vdata$liana$Genus[Vdata$liana$Genus=="Williugbeia"] <- "Willughbeia"
+
 
 # Remove stems with DBH below 10 cm
 
