@@ -319,20 +319,24 @@ nsites <- length(levels(Vtraits$Site.CodeT))
 nplots <- length(levels(as.factor(Trees$"1haPlotNumber")))
 
 
-table(Trees$Genus, Trees$"1haPlotNumber")
+PlotTrees <- t(PlotGenusStemsT)
 
 
 #Extract sites by looping (needs work)
 Vsites <-list()
-for(i in 1:nsites)
-#  Vsites[[i]]<-f.matrix.creator2(data,year[i])  
-#spnames<-names(mat[[1]])
 
-for(i in levels(Vtraits$Site.CodeT)){
-  Vsites[[i]] <- Vtraits[Vtraits$Site.CodeT==levels(Vtraits$Site.CodeT)[i],]
-  rownames(Vsites[[i]]) <- Vsites[[i]]$Genus
-           Vsites
+for(i in 1:length(levels(Vtraits$Site.CodeT))){
+  Vsites[[i]] <- Vtraits[grep(pattern=levels(Vtraits$Site.CodeT)[i], x=Vtraits$Site.CodeT),]
+  #rownames(Vsites[[i]]) <- Vsites[[i]]$Genus
+  names(Vsites)[[i]] <- print(paste("Vsites",levels(Vtraits$Site.CodeT)[[i]],sep="."))
+  Vsites
 }
+
+
+
+
+
+
 
 # Extract sites manually
 BBS <- Vtraits[Vtraits$Site.CodeT=="BBS",]
