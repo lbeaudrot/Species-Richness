@@ -406,6 +406,19 @@ for(i in 1:length(VPlots)){
 names(FDplots) <- names(VPlots)
 
 
+# Calculate FD for each plot using abundances as weights
+
+FDplotsW <- list()
+for(i in 1:length(VPlots)){
+  hold1 <- PlotTrees[,i]
+  hold1 <- hold1[hold1>0]
+  FDplotsW[[i]] <- dbFD(x=as.data.frame(VPlots[[i]]), corr="cailliez", a=hold1, w.abun=TRUE, calc.FRic=FALSE)
+  FDplotsW                          
+}
+
+# Create output table from FD calculations
+names(FDplotsW) <- names(VPlots)
+
 
 
 # try using subset or related function to pull out plot specific functional trait data
