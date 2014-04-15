@@ -416,7 +416,33 @@ for(i in 1:length(VPlots)){
   FDplotsW                          
 }
 
+
+
 # Create output table from FD calculations
+nbsp <- vector()
+sing.sp <- vector()
+FEve <- vector()
+FDiv <- vector()
+FDis <- vector()
+RaoQ <- vector()
+CWM.maxD <- vector()
+CWM.WD2 <- vector()
+
+for(i in 1:length(PlotCodes)){
+  nbsp[i] <- FDplotsW[[i]]$nbsp
+  sing.sp[i] <- FDplotsW[[i]]$sing.sp
+  FEve[i] <- FDplotsW[[i]]$FEve
+  FDiv[i] <- FDplotsW[[i]]$FDiv
+  FDis[i] <- FDplotsW[[i]]$FDis
+  RaoQ[i] <- FDplotsW[[i]]$RaoQ
+  CWM.maxD[i] <- FDplotsW[[i]]$CWM$maxD
+  CWM.WD2[i] <- FDplotsW[[i]]$CWM$WD2
+}
+
+FDweighted <- cbind(nbsp, sing.sp, FEve, FDiv, FDis, RaoQ, CWM.maxD, CWM.WD2)
+rownames(FDweighted) <- colnames(PlotTrees)
+
+
 names(FDplotsW) <- names(VPlots)
 
 
