@@ -159,11 +159,6 @@ Vdata$tree$Family[Vdata$tree$Family=="Sapotaceae Juss."] <- "Sapotaceae"
 Vdata$tree$Family[Vdata$tree$Family=="Staphylaceae"] <- "Staphyleaceae"
 Vdata$tree$Family[Vdata$tree$Family=="Torrecilliaceae"] <- "Unknown"
 Vdata$tree$Family[Vdata$tree$Family=="Urticaceae Juss."] <- "Urticaceae"
-
-
-
-
-
 # Duplicate liana genera 
 Vdata$liana$Genus[Vdata$liana$Genus=="Adenocalymna"] <- "Adenocalymma"
 Vdata$liana$Genus[Vdata$liana$Genus=="Agleaea"] <- "Agelaea"
@@ -305,25 +300,19 @@ names(maxD) <- c("Site.CodeT", "Genus", "maxD")
 # Remove unknown genera
 maxD <- maxD[maxD$Genus!="Unknown",]
 
-
 # Match wood density values to site specific maximum diameter values for each genus
 WD2 <- WD[match(maxD$Genus, names(WD))]
 
 
 # Format functional trait data for FD calculations
 # function dbFD requires a data frame of functional traits with genus row names
-# Note that CSN and NAK have very low genus trait value richness (16 and 0, respectively); discard
+# Note that CSN and NAK will be discarded from analysis due to poor data
 
 Vtraits <- cbind(maxD, WD2)
 # Remove unused level for NAK
 Vtraits$Site.CodeT <- factor(Vtraits$Site.CodeT)
 
 nsites <- length(levels(Vtraits$Site.CodeT))
-nplots <- length(levels(as.factor(Trees$"1haPlotNumber")))
-
-
-PlotTrees <- t(PlotGenusStemsT)
-
 # Format functional trait data for FD input
 Vsites <-list()
 VSites <-list()
@@ -349,6 +338,8 @@ for(i in 1:length(levels(Vtraits$Site.CodeT))){
   VSites
 }
 
+# Calculate FD for each site
+library(FD)
 FDsites <- list()
 for(i in 1:length(VSites)){
   FDsites[[i]] <- dbFD(x=as.data.frame(VSites[[i]]), corr="cailliez", calc.FRic=FALSE)
@@ -358,91 +349,32 @@ names(FDsites) <- names(VSites)
 
 
 
-# Extract sites manually
+# Extract sites manually to check values from loop
 BBS <- Vtraits[Vtraits$Site.CodeT=="BBS",]
 rownames(BBS) <- BBS$Genus
 BBS <- BBS[,3:4]
-
-BCI <- Vtraits[Vtraits$Site.CodeT=="BCI",]
-rownames(BCI) <- BCI$Genus
-BCI <- BCI[,3:4]
-
-BIF <- Vtraits[Vtraits$Site.CodeT=="BIF",]
-rownames(BIF) <- BIF$Genus
-BIF <- BIF[,3:4]
 
 CAX <- Vtraits[Vtraits$Site.CodeT=="CAX",]
 rownames(CAX) <- CAX$Genus
 CAX <- CAX[,3:4]
 
-COU <- Vtraits[Vtraits$Site.CodeT=="COU",]
-rownames(COU) <- COU$Genus
-COU <- COU[,3:4]
-
-CSN <- Vtraits[Vtraits$Site.CodeT=="CSN",]
-rownames(CSN) <- CSN$Genus
-CSN <- CSN[,3:4]
-
-KRP <- Vtraits[Vtraits$Site.CodeT=="KRP",]
-rownames(KRP) <- KRP$Genus
-KRP <- KRP[,3:4]
-
-MAS <- Vtraits[Vtraits$Site.CodeT=="MAS",]
-rownames(MAS) <- MAS$Genus
-MAS <- MAS[,3:4]
-
-NAK <- Vtraits[Vtraits$Site.CodeT=="NAK",]
-rownames(NAK) <- NAK$Genus
-NAK <- NAK[,3:4]
-
-NNN <- Vtraits[Vtraits$Site.CodeT=="NNN",]
-rownames(NNN) <- NNN$Genus
-NNN <- NNN[,3:4]
-
-PSH <- Vtraits[Vtraits$Site.CodeT=="PSH",]
-rownames(PSH) <- PSH$Genus
-PSH <- PSH[,3:4]
-
-RNF <- Vtraits[Vtraits$Site.CodeT=="RNF",]
-rownames(RNF) <- RNF$Genus
-RNF <- RNF[,3:4]
-
-UDZ <- Vtraits[Vtraits$Site.CodeT=="UDZ",]
-rownames(UDZ) <- UDZ$Genus
-UDZ <- UDZ[,3:4]
-
-VB- <- Vtraits[Vtraits$Site.CodeT=="VB-",]
-rownames(VB-) <- VB-$Genus
-VB- <- VB-[,3:4]
-
-YAN <- Vtraits[Vtraits$Site.CodeT=="YAN",]
-rownames(YAN) <- YAN$Genus
-YAN <- YAN[,3:4]
-
 YAS <- Vtraits[Vtraits$Site.CodeT=="YAS",]
 rownames(YAS) <- YAS$Genus
 YAS <- YAS[,3:4]
 
-[1] "BBS" "BCI" "BIF" "CAX" "COU" "CSN" "KRP" "MAS" "NAK" "NNN" "PSH" "RNF" "UDZ" "VB-" "YAN" "YAS"
+# Calculate FD at the plot level
+# Need to link Vtraits values to each plot list
+nplots <- length(levels(as.factor(Trees$"1haPlotNumber")))
+PlotTrees <- t(PlotGenusStemsT)
+PlotTrees <- PlotTrees[,colSums(PlotTrees)>0]
+Vplots <- list()
 
-# Calculate GENUS FUNCTIONAL DIVERSITY for each site (need to re-run for each plot?)
-library(FD)
-TFunc.BBS <- dbFD(BBS, corr="cailliez")
-TFunc.BCI <- dbFD(BCI, corr="sqrt")
-TFunc.BIF <- dbFD(BIF, corr="cailliez")
-TFunc.CAX <- dbFD(CAX, corr="sqrt")
-TFunc.COU <- dbFD(COU, corr="cailliez")
-#TFunc.CSN <- dbFD(CSN, corr="sqrt")
-TFunc.KRP <- dbFD(KRP, corr="cailliez")
-TFunc.MAS <- dbFD(MAS, corr="sqrt")
-#TFunc.NAK <- dbFD(NAK, corr="sqrt")
-TFunc.NNN <- dbFD(NNN, corr="cailliez")
-TFunc.PSH <- dbFD(PSH, corr="cailliez")
-TFunc.RNF <- dbFD(RNF, corr="sq")
-TFunc.UDZ <- dbFD(UDZ)
-TFunc.VB- <- dbFD(VB-)
-TFunc.YAN <- dbFD(YAN)
-TFunc.YAS <- dbFD(YAS)
+for (i in 1:dim(PlotTrees)[2]){
+  Vplots[[i]] <- 
+}
+
+
+
 
 
 # Assign sites to "dry" (<1500 mm/year precipitation) or "moist" (1500-3500 mm/year) designation for carbon storage calculations
