@@ -271,6 +271,9 @@ Diversity <- merge(TShan, LShan, by="row.names", all=TRUE)
 names(Diversity) <- c("Plot", "NStemsT", "TShan", "NStemsL", "LShan")
 
 PlotLevelRD <- merge(Richness, Diversity, by="Plot", all=TRUE)
+PlotLevelRD$LRich <- ifelse(is.na(PlotLevelRD$LRich)==TRUE, 0, PlotLevelRD$LRich)
+PlotLevelRD$NStemsL <- ifelse(is.na(PlotLevelRD$NStemsL)==TRUE, 0, PlotLevelRD$NStemsL)
+
 #write.table(Plot.RD, file="Plot.RD.csv", col.names=TRUE, sep=",")
 
 # Import wood density data
@@ -423,5 +426,9 @@ plant.covs <- merge(FDweighted, PlotLevelRD, by.x="plot", by.y="Plot", all=FALSE
 ABGdry <- WD * exp((-2/3) + 1.794*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
 ABGmoist <- WD * exp(-1.499 + 2.148*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
 
+# Need to match WD to all Trees in dataset based on genus names
+
+StemWD <- WD[match(Trees$Genus, names(WD))]
+Trees <- cbind(Trees, StemWD)
 # For missing values (neither genus nor family available), use plot mean
 
