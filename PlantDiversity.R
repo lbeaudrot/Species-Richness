@@ -370,18 +370,31 @@ PlotTrees <- PlotTrees[,colSums(PlotTrees)>0]
 PlotCodes <- substr(colnames(PlotTrees),4,6)
 
 Vplots <- list()
+VPlots <- list()
 hold1 <- vector()
 hold2 <- data.frame()
 
+#Extract plot trait data by looping 
+#for (i in 1:dim(PlotTrees)[2]){
+ # hold1 <- PlotTrees[,i]
+ # hold1 <- hold1[hold1>0]
+ # hold2 <- Vtraits[Vtraits$Site.CodeT==PlotCodes[i],]
+ # Vplots[[i]] <- hold2[match(names(hold1), hold2$Genus),]
+#}
+
+# Reduce to FD input columns only
 for (i in 1:dim(PlotTrees)[2]){
   hold1 <- PlotTrees[,i]
   hold1 <- hold1[hold1>0]
   hold2 <- Vtraits[Vtraits$Site.CodeT==PlotCodes[i],]
   Vplots[[i]] <- hold2[match(names(hold1), hold2$Genus),]
+  VPlots[[i]] <- cbind(Vplots[[i]]$maxD, Vplots[[i]]$WD2)
+  names(VPlots)[[i]] <- colnames(PlotTrees)[i]
+  rownames(VPlots[[i]]) <- Vplots[[i]]$Genus
+  colnames(VPlots[[i]]) <- cbind("maxD", "WD2")
+  VPlots
 }
 
-
-Vtraits[match(names(hold), Vtraits$Genus),]
 
 # try using subset or related function to pull out plot specific functional trait data
 # We want Vtraits where Vtraits$Site.CodeT==PlotCodes[i] and Vtraits[match(names(hold), Vtraits$Genus),]
