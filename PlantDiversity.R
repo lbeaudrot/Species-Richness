@@ -367,13 +367,26 @@ YAS <- YAS[,3:4]
 nplots <- length(levels(as.factor(Trees$"1haPlotNumber")))
 PlotTrees <- t(PlotGenusStemsT)
 PlotTrees <- PlotTrees[,colSums(PlotTrees)>0]
+PlotCodes <- substr(colnames(PlotTrees),4,6)
+
 Vplots <- list()
+hold1 <- vector()
+hold2 <- data.frame()
 
 for (i in 1:dim(PlotTrees)[2]){
-  Vplots[[i]] <- 
+  hold1 <- PlotTrees[,i]
+  hold1 <- hold1[hold1>0]
+  hold2 <- Vtraits[Vtraits$Site.CodeT==PlotCodes[i],]
+  Vplots[[i]] <- hold2[match(names(hold1), hold2$Genus),]
 }
 
 
+Vtraits[match(names(hold), Vtraits$Genus),]
+
+# try using subset or related function to pull out plot specific functional trait data
+# We want Vtraits where Vtraits$Site.CodeT==PlotCodes[i] and Vtraits[match(names(hold), Vtraits$Genus),]
+# instead make subsetting a two step process where step one is to subset based on PlotCodes and step two is to subset based on genera present
+# alternatively, try leaving in genera with no stems and using weights of zero for them
 
 
 
