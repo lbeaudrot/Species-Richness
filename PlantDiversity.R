@@ -238,8 +238,8 @@ Lianas <- Lianas[aliveL,]
 ############### BEGIN PLANT DIVERSITY CALCULATIONS ######
 # Data Exploration
 # Examine plots at each site
-table(Vtrees$"1haPlotNumber", Vtrees$Site.CodeT)
-table(Vlianas$"1haPlotNumber", Vlianas$Site.CodeL)
+#table(Vtrees$"1haPlotNumber", Vtrees$Site.CodeT)
+#table(Vlianas$"1haPlotNumber", Vlianas$Site.CodeL)
 
 # CALCULATE PLOT-LEVEL PLANT DIVERSITY METRICS
 # Once complete, combine into a dataframe to calculate site averages and site variability
@@ -260,14 +260,13 @@ library(vegan)
 TShan <- diversity(PlotGenusStemsT, index="shannon", MARGIN=1, base=exp(1))
 LShan <- diversity(PlotGenusStemsL, index="shannon", MARGIN=1, base=exp(1))
 
-
 # Create dataframe with plot level richness and diversity values
 Richness <- merge(TRich, LRich, by="row.names", all=TRUE)
 names(Richness) <- c("Plot", "TRich", "LRich")
 Diversity <- merge(TShan, LShan, by="row.names", all=TRUE)
 names(Diversity) <- c("Plot", "TShan", "LShan")
 
-Plot.level.RD <- merge(Richness, Diversity, by="Plot", all=TRUE)
+PlotLevelRD <- merge(Richness, Diversity, by="Plot", all=TRUE)
 #write.table(Plot.RD, file="Plot.RD.csv", col.names=TRUE, sep=",")
 
 # Import wood density data
@@ -307,12 +306,12 @@ WD2 <- WD[match(maxD$Genus, names(WD))]
 # Format functional trait data for FD calculations
 # function dbFD requires a data frame of functional traits with genus row names
 # Note that CSN and NAK will be discarded from analysis due to poor data
-
 Vtraits <- cbind(maxD, WD2)
 # Remove unused level for NAK
 Vtraits$Site.CodeT <- factor(Vtraits$Site.CodeT)
-
 nsites <- length(levels(Vtraits$Site.CodeT))
+
+# Calculate UNWEIGHTED FD metrics for each SITE
 # Format functional trait data for FD input
 Vsites <-list()
 VSites <-list()
@@ -324,8 +323,6 @@ VSites <-list()
   #names(Vsites)[[i]] <- print(paste("Vsites",levels(Vtraits$Site.CodeT)[[i]],sep="."))
   #Vsites
 #}
-
-
 # Reduce to FD input columns only
 for(i in 1:length(levels(Vtraits$Site.CodeT))){
   Vsites[[i]] <- Vtraits[grep(pattern=levels(Vtraits$Site.CodeT)[i], x=Vtraits$Site.CodeT),]
@@ -337,8 +334,7 @@ for(i in 1:length(levels(Vtraits$Site.CodeT))){
   colnames(VSites[[i]]) <- cbind("maxD", "WD2")
   VSites
 }
-
-# Calculate FD for each site
+# Calculate unweighted FD for each site
 library(FD)
 FDsites <- list()
 for(i in 1:length(VSites)){
@@ -348,41 +344,16 @@ for(i in 1:length(VSites)){
 names(FDsites) <- names(VSites)
 
 
-
-# Extract sites manually to check values from loop
-BBS <- Vtraits[Vtraits$Site.CodeT=="BBS",]
-rownames(BBS) <- BBS$Genus
-BBS <- BBS[,3:4]
-
-CAX <- Vtraits[Vtraits$Site.CodeT=="CAX",]
-rownames(CAX) <- CAX$Genus
-CAX <- CAX[,3:4]
-
-YAS <- Vtraits[Vtraits$Site.CodeT=="YAS",]
-rownames(YAS) <- YAS$Genus
-YAS <- YAS[,3:4]
-
-# Calculate FD at the plot level
-# Need to link Vtraits values to each plot list
-nplots <- length(levels(as.factor(Trees$"1haPlotNumber")))
+# Calculate unweighted FD at the plot level
 PlotTrees <- t(PlotGenusStemsT)
 PlotTrees <- PlotTrees[,colSums(PlotTrees)>0]
 PlotCodes <- substr(colnames(PlotTrees),4,6)
-
 Vplots <- list()
 VPlots <- list()
 hold1 <- vector()
 hold2 <- data.frame()
 
-#Extract plot trait data by looping 
-#for (i in 1:dim(PlotTrees)[2]){
- # hold1 <- PlotTrees[,i]
- # hold1 <- hold1[hold1>0]
- # hold2 <- Vtraits[Vtraits$Site.CodeT==PlotCodes[i],]
- # Vplots[[i]] <- hold2[match(names(hold1), hold2$Genus),]
-#}
-
-# Reduce to FD input columns only
+#Extract plot trait data by looping & reduce to FD input columns only
 for (i in 1:dim(PlotTrees)[2]){
   hold1 <- PlotTrees[,i]
   hold1 <- hold1[hold1>0]
@@ -394,9 +365,7 @@ for (i in 1:dim(PlotTrees)[2]){
   colnames(VPlots[[i]]) <- cbind("maxD", "WD2")
   VPlots
 }
-
-
-# Calculate FD for each plot
+# Calculate FD for each plot using extracted trait data from VPlots
 library(FD)
 FDplots <- list()
 for(i in 1:length(VPlots)){
@@ -406,8 +375,7 @@ for(i in 1:length(VPlots)){
 names(FDplots) <- names(VPlots)
 
 
-# Calculate FD for each plot using abundances as weights
-
+# CALCULATE WEIGHTED FD for each PLOT using ABUNDANCES AS WEIGHTS - see output from object FDweighted
 FDplotsW <- list()
 for(i in 1:length(VPlots)){
   hold1 <- PlotTrees[,i]
@@ -415,8 +383,6 @@ for(i in 1:length(VPlots)){
   FDplotsW[[i]] <- dbFD(x=as.data.frame(VPlots[[i]]), corr="cailliez", a=hold1, w.abun=TRUE, calc.FRic=FALSE)
   FDplotsW                          
 }
-
-
 
 # Create output table from FD calculations
 nbsp <- vector()
@@ -440,19 +406,11 @@ for(i in 1:length(PlotCodes)){
 }
 
 FDweighted <- cbind(nbsp, sing.sp, FEve, FDiv, FDis, RaoQ, CWM.maxD, CWM.WD2)
-rownames(FDweighted) <- colnames(PlotTrees)
+FDweighted <- as.data.frame(FDweighted)
+plot <- colnames(PlotTrees)
+FDweighted <- cbind(plot, PlotCodes, FDweighted)
 
-
-names(FDplotsW) <- names(VPlots)
-
-
-
-# try using subset or related function to pull out plot specific functional trait data
-# We want Vtraits where Vtraits$Site.CodeT==PlotCodes[i] and Vtraits[match(names(hold), Vtraits$Genus),]
-# instead make subsetting a two step process where step one is to subset based on PlotCodes and step two is to subset based on genera present
-# alternatively, try leaving in genera with no stems and using weights of zero for them
-
-
+plant.covs <- merge(FDweighted, PlotLevelRD, by.x="plot", by.y="Plot", all=FALSE)
 
 # Assign sites to "dry" (<1500 mm/year precipitation) or "moist" (1500-3500 mm/year) designation for carbon storage calculations
 # UDZ and BIF are dry; all others moist according to TEAM CRU rain data
