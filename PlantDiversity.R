@@ -352,10 +352,9 @@ for(i in 1:length(levels(Vtraits$Site.CodeT))){
 FDsites <- list()
 for(i in 1:length(VSites)){
   FDsites[[i]] <- dbFD(x=as.data.frame(VSites[[i]]), corr="cailliez", calc.FRic=FALSE)
-  #names(FDsites)[[i]] <- print(paste(names(VSites[[i]]))
      FDsites                          
 }
-
+names(FDsites) <- names(VSites)
 
 
 
