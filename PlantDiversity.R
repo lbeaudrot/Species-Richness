@@ -247,8 +247,10 @@ Lianas <- Lianas[aliveL,]
 # Format data with plots as rows and Genera as columns
 # Remove unknown stems (for diversity calculations only)
 PlotGenusStemsT <- table(Trees$"1haPlotNumber", Trees$Genus)
+NStemsT <- rowSums(PlotGenusStemsT)
 PlotGenusStemsT <- PlotGenusStemsT[,colnames(PlotGenusStemsT)!="Unknown"]
 PlotGenusStemsL <- table(Lianas$"1haPlotNumber", Lianas$Genus)
+NStemsL <- rowSums(PlotGenusStemsL)
 PlotGenusStemsL <- PlotGenusStemsL[,colnames(PlotGenusStemsL)!="Unknown"]
 
 # Calculate GENUS RICHNESS for each plot at each site for trees and for lianas
@@ -258,13 +260,15 @@ LRich <- rowSums(ifelse(PlotGenusStemsL>0,1,0))
 # Calculate GENUS TAXONOMIC DIVERSITY (SHANNON INDEX) for each plot at each site for trees and lianas
 library(vegan)
 TShan <- diversity(PlotGenusStemsT, index="shannon", MARGIN=1, base=exp(1))
+TShan <- cbind(NStemsT, TShan)
 LShan <- diversity(PlotGenusStemsL, index="shannon", MARGIN=1, base=exp(1))
+LShan <- cbind(NStemsL, LShan)
 
 # Create dataframe with plot level richness and diversity values
 Richness <- merge(TRich, LRich, by="row.names", all=TRUE)
 names(Richness) <- c("Plot", "TRich", "LRich")
 Diversity <- merge(TShan, LShan, by="row.names", all=TRUE)
-names(Diversity) <- c("Plot", "TShan", "LShan")
+names(Diversity) <- c("Plot", "NStemsT", "TShan", "NStemsL", "LShan")
 
 PlotLevelRD <- merge(Richness, Diversity, by="Plot", all=TRUE)
 #write.table(Plot.RD, file="Plot.RD.csv", col.names=TRUE, sep=",")
