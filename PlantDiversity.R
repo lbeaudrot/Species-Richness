@@ -396,6 +396,18 @@ for (i in 1:dim(PlotTrees)[2]){
 }
 
 
+# Calculate FD for each plot
+library(FD)
+FDplots <- list()
+for(i in 1:length(VPlots)){
+  FDplots[[i]] <- dbFD(x=as.data.frame(VPlots[[i]]), corr="cailliez", calc.FRic=FALSE)
+  FDplots                          
+}
+names(FDplots) <- names(VPlots)
+
+
+
+
 # try using subset or related function to pull out plot specific functional trait data
 # We want Vtraits where Vtraits$Site.CodeT==PlotCodes[i] and Vtraits[match(names(hold), Vtraits$Genus),]
 # instead make subsetting a two step process where step one is to subset based on PlotCodes and step two is to subset based on genera present
