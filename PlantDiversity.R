@@ -315,6 +315,9 @@ WD2 <- WD[match(maxD$Genus, names(WD))]
 # Note that CSN and NAK have very low genus trait value richness (16 and 0, respectively); discard
 
 Vtraits <- cbind(maxD, WD2)
+# Remove unused level for NAK
+Vtraits$Site.CodeT <- factor(Vtraits$Site.CodeT)
+
 nsites <- length(levels(Vtraits$Site.CodeT))
 nplots <- length(levels(as.factor(Trees$"1haPlotNumber")))
 
@@ -332,6 +335,7 @@ VSites <-list()
   #names(Vsites)[[i]] <- print(paste("Vsites",levels(Vtraits$Site.CodeT)[[i]],sep="."))
   #Vsites
 #}
+
 
 # Reduce to FD input columns only
 for(i in 1:length(levels(Vtraits$Site.CodeT))){
