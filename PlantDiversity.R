@@ -422,13 +422,21 @@ plant.covs <- merge(FDweighted, PlotLevelRD, by.x="plot", by.y="Plot", all=FALSE
 # Assign sites to "dry" (<1500 mm/year precipitation) or "moist" (1500-3500 mm/year) designation for carbon storage calculations
 # UDZ and BIF are dry; all others moist according to TEAM CRU rain data
 
-# Calculate biomass for individual trees using the following equations:
-ABGdry <- WD * exp((-2/3) + 1.794*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
-ABGmoist <- WD * exp(-1.499 + 2.148*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
-
-# Need to match WD to all Trees in dataset based on genus names
-
+# Match WD to all Trees in dataset based on genus names
 StemWD <- WD[match(Trees$Genus, names(WD))]
 Trees <- cbind(Trees, StemWD)
+
+# Calculate biomass for individual trees using the following equations:
+#ABGdry <- WD * exp((-2/3) + 1.794*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
+#ABGmoist <- WD * exp(-1.499 + 2.148*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
 # For missing values (neither genus nor family available), use plot mean
+
+ABG <- ifelse(Trees$Site.CodeT=="UDZ" | Trees$Site.CodeT=="BIF", 
+              Trees$StemWD * exp((-2/3) + 1.794 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3),
+              Trees$StemWD + exp(-1.499 + 2.148 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3))
+Cstorage <- ABG*0.5
+Trees <- cbind(Trees, ABG, Cstorage)
+
+Cplot <- aggregate(Trees$Cstorage ~ Trees$"1haPlotNumber", FUN=sum, na.omit=TRUE)
+names(Cplot) <- c("Plot", "Cstorage")
 
