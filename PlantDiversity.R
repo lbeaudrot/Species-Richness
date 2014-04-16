@@ -426,12 +426,12 @@ StemWD <- WD[match(Trees$Genus, names(WD))]
 Trees <- cbind(Trees, StemWD)
 
 # Calculate biomass for individual trees using the following equations:
-#ABGdry <- WD * exp((-2/3) + 1.794*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
+#ABGdry <- WD * exp((-2/3) + 1.784*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
 #ABGmoist <- WD * exp(-1.499 + 2.148*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
 # For missing values (neither genus nor family available), use plot mean
 
 ABG <- ifelse(Trees$Site.CodeT=="UDZ" | Trees$Site.CodeT=="BIF", 
-              Trees$StemWD * exp((-2/3) + 1.794 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3),
+              Trees$StemWD * exp((-2/3) + 1.784 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3),
               Trees$StemWD + exp(-1.499 + 2.148 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3))
 Trees <- cbind(Trees, ABG)
 plotABG <- aggregate(Trees$ABG ~ Trees$"1haPlotNumber", FUN=mean, na.omit=TRUE)
@@ -446,3 +446,5 @@ names(Cplot) <- c("Plot", "Cstorage")
 
 plant.covs <- merge(FDweighted, PlotLevelRD, by.x="plot", by.y="Plot", all=FALSE)
 plant.covs <- merge(plant.covs, Cplot, by.x="plot", by.y="Plot", all=FALSE)
+
+aggregate(plant.covs$Cstorage ~ plant.covs$PlotCodes, FUN=mean)
