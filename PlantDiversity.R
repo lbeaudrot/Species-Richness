@@ -417,7 +417,6 @@ FDweighted <- as.data.frame(FDweighted)
 plot <- colnames(PlotTrees)
 FDweighted <- cbind(plot, PlotCodes, FDweighted)
 
-plant.covs <- merge(FDweighted, PlotLevelRD, by.x="plot", by.y="Plot", all=FALSE)
 
 # Assign sites to "dry" (<1500 mm/year precipitation) or "moist" (1500-3500 mm/year) designation for carbon storage calculations
 # UDZ and BIF are dry; all others moist according to TEAM CRU rain data
@@ -434,9 +433,16 @@ Trees <- cbind(Trees, StemWD)
 ABG <- ifelse(Trees$Site.CodeT=="UDZ" | Trees$Site.CodeT=="BIF", 
               Trees$StemWD * exp((-2/3) + 1.794 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3),
               Trees$StemWD + exp(-1.499 + 2.148 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3))
-Cstorage <- ABG*0.5
-Trees <- cbind(Trees, ABG, Cstorage)
+Trees <- cbind(Trees, ABG)
+plotABG <- aggregate(Trees$ABG ~ Trees$"1haPlotNumber", FUN=mean, na.omit=TRUE)
+names(plotABG) <- c("Plot", "ABG")
+allABG <- ifelse(is.na(Trees$ABG)==TRUE, plotABG$ABG[match(Trees$"1haPlotNumber", plotABG$Plot)], Trees$ABG)
+Trees$ABG <- allABG
+Cstorage <- Trees$ABG*0.5
+Trees <- cbind(Trees, Cstorage)
 
 Cplot <- aggregate(Trees$Cstorage ~ Trees$"1haPlotNumber", FUN=sum, na.omit=TRUE)
 names(Cplot) <- c("Plot", "Cstorage")
 
+plant.covs <- merge(FDweighted, PlotLevelRD, by.x="plot", by.y="Plot", all=FALSE)
+plant.covs <- merge(plant.covs, Cplot, by.x="plot", by.y="Plot", all=FALSE)
