@@ -211,6 +211,10 @@ Trees <- Trees[is.na(Trees$Id)==FALSE,]
 aliveT <- grep(pattern="K", x=Trees$ConditionCodes, invert=TRUE)
 Trees <- Trees[aliveT,]
 
+# Add decimal KRP plot with inflated diameters until issue is resolved in the database
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1"] <- Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1"]/10
+
+
 Lianas <-  rbind(Vlianas[Vlianas$Site.CodeL=="CAX" & Vlianas$SamplingPeriod=="2012.01",],
                  Vlianas[Vlianas$Site.CodeL=="YAS" & Vlianas$SamplingPeriod=="2012.01",],
                  Vlianas[Vlianas$Site.CodeL=="PSH" & Vlianas$SamplingPeriod=="2012.01",],
