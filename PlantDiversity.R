@@ -454,4 +454,8 @@ names(Cplot) <- c("Plot", "Cstorage")
 plant.covs <- merge(FDweighted, PlotLevelRD, by.x="plot", by.y="Plot", all=FALSE)
 plant.covs <- merge(plant.covs, Cplot, by.x="plot", by.y="Plot", all=FALSE)
 
+# Exclude plots that have less than 80% of stems identified to family level
+ExcludePlots <- names(ExcludePlots)
+plant.covs <- plant.covs[-na.omit(match(ExcludePlots, plant.covs$plot)),]
+
 aggregate(plant.covs$Cstorage ~ plant.covs$PlotCodes, FUN=mean)
