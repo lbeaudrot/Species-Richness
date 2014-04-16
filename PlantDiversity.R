@@ -241,6 +241,13 @@ Lianas <- Lianas[aliveL,]
 #table(Vtrees$"1haPlotNumber", Vtrees$Site.CodeT)
 #table(Vlianas$"1haPlotNumber", Vlianas$Site.CodeL)
 
+# Inspect % of trees identified to family level in each plot
+PlotFamilyStemsT <- table(Trees$"1haPlotNumber", Trees$Family)
+TotalStems <- rowSums(PlotFamilyStemsT)
+FamilyUnknown <- PlotFamilyStemsT[,colnames(PlotFamilyStemsT)=="Unknown"]
+PercentUnknown <- (FamilyUnknown/TotalStems)*100
+ExcludePlots <- PercentUnknown[PercentUnknown>20]
+
 # CALCULATE PLOT-LEVEL PLANT DIVERSITY METRICS
 # Once complete, combine into a dataframe to calculate site averages and site variability
 
