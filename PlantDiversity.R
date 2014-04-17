@@ -214,6 +214,14 @@ Trees <- Trees[aliveT,]
 # Add decimal KRP plot with inflated diameters until issue is resolved in the database
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1"] <- Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1"]/10
 
+# Add decimal to 6 stems in plot VG-COU-5 that have inflated diameters until issue is resolved in the database
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==392] <- 39.2
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==525] <- 52.5
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==564] <- 56.4
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==603] <- 60.3
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==723] <- 72.3
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==1120] <- 112.0
+
 # Remove duplicated SamplingUnitNames until issue is resolved in the database
 Trees <- Trees[duplicated(Trees$SamplingUnitName)==FALSE,]
 
