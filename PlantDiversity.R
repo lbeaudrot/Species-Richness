@@ -221,9 +221,13 @@ Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==564] <- 56.4
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==603] <- 60.3
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==723] <- 72.3
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==1120] <- 112.0
+# Add decimal to outlier diameter in plot VG-YAS-1
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-YAS-1" & Trees$Diameter==420] <- 42.0
 
 # Remove duplicated SamplingUnitNames until issue is resolved in the database
 Trees <- Trees[duplicated(Trees$SamplingUnitName)==FALSE,]
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==392] <- 39.2
+
 
 Lianas <-  rbind(Vlianas[Vlianas$Site.CodeL=="CAX" & Vlianas$SamplingPeriod=="2012.01",],
                  Vlianas[Vlianas$Site.CodeL=="YAS" & Vlianas$SamplingPeriod=="2012.01",],
@@ -356,24 +360,22 @@ VSites <-list()
   #Vsites
 #}
 # Reduce to FD input columns only
-for(i in 1:length(levels(Vtraits$Site.CodeT))){
-  Vsites[[i]] <- Vtraits[grep(pattern=levels(Vtraits$Site.CodeT)[i], x=Vtraits$Site.CodeT),]
-  #names(Vsites)[[i]] <- print(paste("Vsites",levels(Vtraits$Site.CodeT)[[i]],sep="."))
-  #rownames(Vsites[[i]]) <- Vsites[[i]]$Genus
-  VSites[[i]] <- cbind(Vsites[[i]]$maxD, Vsites[[i]]$WD2)
-  names(VSites)[[i]] <- print(paste(levels(Vtraits$Site.CodeT)[[i]]))
-  rownames(VSites[[i]]) <- Vsites[[i]]$Genus
-  colnames(VSites[[i]]) <- cbind("maxD", "WD2")
-  VSites
+#for(i in 1:length(levels(Vtraits$Site.CodeT))){
+#  Vsites[[i]] <- Vtraits[grep(pattern=levels(Vtraits$Site.CodeT)[i], x=Vtraits$Site.CodeT),]
+#  VSites[[i]] <- cbind(Vsites[[i]]$maxD, Vsites[[i]]$WD2)
+#  names(VSites)[[i]] <- print(paste(levels(Vtraits$Site.CodeT)[[i]]))
+#  rownames(VSites[[i]]) <- Vsites[[i]]$Genus
+#  colnames(VSites[[i]]) <- cbind("maxD", "WD2")
+#  VSites
 }
 # Calculate unweighted FD for each site
-library(FD)
-FDsites <- list()
-for(i in 1:length(VSites)){
-  FDsites[[i]] <- dbFD(x=as.data.frame(VSites[[i]]), corr="cailliez", calc.FRic=FALSE)
-     FDsites                          
-}
-names(FDsites) <- names(VSites)
+#library(FD)
+#FDsites <- list()
+#for(i in 1:length(VSites)){
+#  FDsites[[i]] <- dbFD(x=as.data.frame(VSites[[i]]), corr="cailliez", calc.FRic=FALSE)
+#     FDsites                          
+#}
+#names(FDsites) <- names(VSites)
 
 
 # Calculate unweighted FD at the plot level
@@ -399,12 +401,12 @@ for (i in 1:dim(PlotTrees)[2]){
 }
 # Calculate FD for each plot using extracted trait data from VPlots
 library(FD)
-FDplots <- list()
-for(i in 1:length(VPlots)){
-  FDplots[[i]] <- dbFD(x=as.data.frame(VPlots[[i]]), corr="cailliez", calc.FRic=FALSE)
-  FDplots                          
-}
-names(FDplots) <- names(VPlots)
+#FDplots <- list()
+#for(i in 1:length(VPlots)){
+#  FDplots[[i]] <- dbFD(x=as.data.frame(VPlots[[i]]), corr="cailliez", calc.FRic=FALSE)
+#  FDplots                          
+#}
+#names(FDplots) <- names(VPlots)
 
 
 # CALCULATE WEIGHTED FD for each PLOT using ABUNDANCES AS WEIGHTS - see output from object FDweighted
