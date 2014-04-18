@@ -211,6 +211,20 @@ Trees <- Trees[is.na(Trees$Id)==FALSE,]
 aliveT <- grep(pattern="K", x=Trees$ConditionCodes, invert=TRUE)
 Trees <- Trees[aliveT,]
 
+# Add decimal KRP plot with inflated diameters until issue is resolved in the database
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1"] <- Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1"]/10
+
+# Add decimal to 6 stems in plot VG-COU-5 that have inflated diameters until issue is resolved in the database
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==392] <- 39.2
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==525] <- 52.5
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==564] <- 56.4
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==603] <- 60.3
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==723] <- 72.3
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==1120] <- 112.0
+
+# Remove duplicated SamplingUnitNames until issue is resolved in the database
+Trees <- Trees[duplicated(Trees$SamplingUnitName)==FALSE,]
+
 Lianas <-  rbind(Vlianas[Vlianas$Site.CodeL=="CAX" & Vlianas$SamplingPeriod=="2012.01",],
                  Vlianas[Vlianas$Site.CodeL=="YAS" & Vlianas$SamplingPeriod=="2012.01",],
                  Vlianas[Vlianas$Site.CodeL=="PSH" & Vlianas$SamplingPeriod=="2012.01",],
@@ -233,6 +247,10 @@ Lianas <- Lianas[is.na(Lianas$Id)==FALSE,]
 aliveL <- grep(pattern="K", x=Lianas$ConditionCodes, invert=TRUE)
 Lianas <- Lianas[aliveL,]
 
+# Remove duplicated SamplingUnitNames until issue is resolved in the database
+Lianas <- Lianas[duplicated(Lianas$SamplingUnitName)==FALSE,]
+
+
 ############### END DATA CLEANING ###############
 
 ############### BEGIN PLANT DIVERSITY CALCULATIONS ######
@@ -240,6 +258,13 @@ Lianas <- Lianas[aliveL,]
 # Examine plots at each site
 #table(Vtrees$"1haPlotNumber", Vtrees$Site.CodeT)
 #table(Vlianas$"1haPlotNumber", Vlianas$Site.CodeL)
+
+# Inspect % of trees identified to family level in each plot
+PlotFamilyStemsT <- table(Trees$"1haPlotNumber", Trees$Family)
+TotalStems <- rowSums(PlotFamilyStemsT)
+FamilyUnknown <- PlotFamilyStemsT[,colnames(PlotFamilyStemsT)=="Unknown"]
+PercentUnknown <- (FamilyUnknown/TotalStems)*100
+ExcludePlots <- PercentUnknown[PercentUnknown>20]
 
 # CALCULATE PLOT-LEVEL PLANT DIVERSITY METRICS
 # Once complete, combine into a dataframe to calculate site averages and site variability
@@ -426,13 +451,13 @@ StemWD <- WD[match(Trees$Genus, names(WD))]
 Trees <- cbind(Trees, StemWD)
 
 # Calculate biomass for individual trees using the following equations:
-#ABGdry <- WD * exp((-2/3) + 1.794*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
+#ABGdry <- WD * exp((-2/3) + 1.784*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
 #ABGmoist <- WD * exp(-1.499 + 2.148*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
 # For missing values (neither genus nor family available), use plot mean
 
 ABG <- ifelse(Trees$Site.CodeT=="UDZ" | Trees$Site.CodeT=="BIF", 
-              Trees$StemWD * exp((-2/3) + 1.794 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3),
-              Trees$StemWD + exp(-1.499 + 2.148 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3))
+              Trees$StemWD * exp((-2/3) + 1.784 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3),
+              Trees$StemWD * exp(-1.499 + 2.148 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3))
 Trees <- cbind(Trees, ABG)
 plotABG <- aggregate(Trees$ABG ~ Trees$"1haPlotNumber", FUN=mean, na.omit=TRUE)
 names(plotABG) <- c("Plot", "ABG")
@@ -446,3 +471,9 @@ names(Cplot) <- c("Plot", "Cstorage")
 
 plant.covs <- merge(FDweighted, PlotLevelRD, by.x="plot", by.y="Plot", all=FALSE)
 plant.covs <- merge(plant.covs, Cplot, by.x="plot", by.y="Plot", all=FALSE)
+
+# Exclude plots that have less than 80% of stems identified to family level
+ExcludePlots <- names(ExcludePlots)
+plant.covs <- plant.covs[-na.omit(match(ExcludePlots, plant.covs$plot)),]
+
+aggregate(plant.covs$Cstorage ~ plant.covs$PlotCodes, FUN=mean)
