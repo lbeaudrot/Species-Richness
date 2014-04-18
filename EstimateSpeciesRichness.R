@@ -10,7 +10,7 @@
 
 ####### PROCESS DATA to subset for various models - time consuming so don't run unless necessary ###########
 
-#ctdata <- f.teamdb.query(dataset=="camera trap")
+#ctdata <- f.teamdb.query("camera trap")
 #load(ctdata)
 #alldata <- ctdata
 
@@ -24,17 +24,17 @@
 #eventsdata <- f.separate.events(alldata, thresh=(1440))
 #allevents <- f.separate.events(alldata, thresh=(1))
 #dataCleanTable <- table(allevents$Site.Code, allevents$Sampling.Period, allevents$bin)
-write.table(dataCleanTable, file="dataCleanTable.csv", row.names=TRUE, col.names=TRUE, sep=",")
+#write.table(dataCleanTable, file="dataCleanTable.csv", row.names=TRUE, col.names=TRUE, sep=",")
 
 table(alldata$Site.Code, alldata$Sampling.Period)
 
 
 ######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2006 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
-data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="NAK",]
+data.use <- eventsdata[eventsdata$Sampling.Period=="2012.01" & eventsdata$Site.Code=="CAX",]
 
 #subset species to the species in that site and with Include=1
-splist<-read.csv("master_species_list_updated.csv",h=T) #master list
+splist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
 sitelist<-unique(data.use$bin) #site list
 newsplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
 subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
