@@ -31,7 +31,7 @@ table(alldata$Site.Code, alldata$Sampling.Period)
 
 ######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2006 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
-data.use <- eventsdata[eventsdata$Sampling.Period=="2012.01" & eventsdata$Site.Code=="CAX",]
+data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="COU",]
 
 #subset species to the species in that site and with Include=1
 splist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
@@ -55,6 +55,7 @@ X <- as.matrix(X)
 # Control for the number of sampling day per camera trap
 effortdays <- as.matrix(cbind(data.use$Sampling.Unit.Name, f.start.minus.end(data.use)))
 effortdays <- as.matrix(unique(effortdays))
+effortdays <- effortdays[match(colnames(X), effortdays[,1]),]
 edays <- as.numeric(effortdays[,2])
 X <- round(t(t(X)*(edays/30)))
 
@@ -134,21 +135,20 @@ sp.median
 sp.mode
 
 hist(fitparallel$sims.list$N, breaks=150, xlab="Species Richness", 
-     main=paste(events.use$Site.Name[1], events.use$Sampling.Period[1], sep=" "), 
+     main=paste(events.use$Site.Code[1], substr(events.use$Sampling.Period[1],1,4), sep=" "), 
      sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
-text(100, 3000, paste("Mean", sp.mean, sep=" = "))
-text(100, 2000, paste("Median", sp.median, sep=" = "))
+text(100, 5000, paste("Mean", sp.mean, sep=" = "))
+text(100, 3000, paste("Median", sp.median, sep=" = "))
 text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 
 
  # Temporarily store site specific outputs
-
+#CAXfit <- fitparallel
 #YASfit <- fitparallel
-#CSNfit <- fitparallel
-#COUfit <- fitparallel
-#KRPfit <- fitparallel
-#NAKfit <- fitparallel
-
+#PSHfit <- fitparallel
+#BBSfit <- fitparallel
+#BCIfit <- fitparallel
+COUfit <- fitparallel
 
 # Need to save model outputs
 
