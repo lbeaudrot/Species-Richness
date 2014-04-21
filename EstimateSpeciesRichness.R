@@ -10,7 +10,7 @@
 
 ####### PROCESS DATA to subset for various models - time consuming so don't run unless necessary ###########
 
-#ctdata <- f.teamdb.query(dataset=="camera trap")
+#ctdata <- f.teamdb.query("camera trap")
 #load(ctdata)
 #alldata <- ctdata
 
@@ -24,17 +24,17 @@
 #eventsdata <- f.separate.events(alldata, thresh=(1440))
 #allevents <- f.separate.events(alldata, thresh=(1))
 #dataCleanTable <- table(allevents$Site.Code, allevents$Sampling.Period, allevents$bin)
-write.table(dataCleanTable, file="dataCleanTable.csv", row.names=TRUE, col.names=TRUE, sep=",")
+#write.table(dataCleanTable, file="dataCleanTable.csv", row.names=TRUE, col.names=TRUE, sep=",")
 
 table(alldata$Site.Code, alldata$Sampling.Period)
 
 
 ######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2006 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
-data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="NAK",]
+data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="BIF",]
 
 #subset species to the species in that site and with Include=1
-splist<-read.csv("master_species_list_updated.csv",h=T) #master list
+splist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
 sitelist<-unique(data.use$bin) #site list
 newsplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
 subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
@@ -55,6 +55,7 @@ X <- as.matrix(X)
 # Control for the number of sampling day per camera trap
 effortdays <- as.matrix(cbind(data.use$Sampling.Unit.Name, f.start.minus.end(data.use)))
 effortdays <- as.matrix(unique(effortdays))
+effortdays <- effortdays[match(colnames(X), effortdays[,1]),]
 edays <- as.numeric(effortdays[,2])
 X <- round(t(t(X)*(edays/30)))
 
@@ -134,24 +135,51 @@ sp.median
 sp.mode
 
 hist(fitparallel$sims.list$N, breaks=150, xlab="Species Richness", 
-     main=paste(events.use$Site.Name[1], events.use$Sampling.Period[1], sep=" "), 
+     main=paste(events.use$Site.Code[1], substr(events.use$Sampling.Period[1],1,4), sep=" "), 
      sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
-text(100, 3000, paste("Mean", sp.mean, sep=" = "))
-text(100, 2000, paste("Median", sp.median, sep=" = "))
+text(100, 5000, paste("Mean", sp.mean, sep=" = "))
+text(100, 3000, paste("Median", sp.median, sep=" = "))
 text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 
 
  # Temporarily store site specific outputs
 
-#YASfit <- fitparallel
-#CSNfit <- fitparallel
+#BBSfit <- fitparallel
+#BCIfit <- fitparallel
+BIFfit <- fitparallel
+#CAXfit <- fitparallel
 #COUfit <- fitparallel
 #KRPfit <- fitparallel
-#NAKfit <- fitparallel
+#MASfit <- fitparallel
+#NNNfit <- fitparallel
+#PSHfit <- fitparallel
+#RNFfit <- fitparallel
+#UDZfit <- fitparallel
+#VBfit <- fitparallel
+#YANfit <- fitparallel
+#YASfit <- fitparallel
+
+# Save model outputs
+save(BIFfit, file="BIFfit.gzip",compress="gzip")
 
 
-# Need to save model outputs
+CTresults <- list(BBSfit, BCIfit, CAXfit, COUfit, KRPfit, MASfit, NNNfit, PSHfit, RNFfit, UDZfit, VBfit, YANfit, YASfit)
+CTnames <- c("BBS", "BCI", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB-", "YAN", "YAS")
+cols <- c("mean", "median", "mode")
+CTaverages <- matrix(nrow=length(CTresults), ncol=3, dimnames=list(CTnames, cols))
 
+sp.averages <- function(data) {
+  for(i in 1:length(CTresults)){
+    CTaverages[i,] <- cbind(round(mean(data[[i]]$sims.list$N), digits=2),
+        median(data[[i]]$sims.list$N),
+        as.numeric(names(sort(table(data[[i]]$sims.list$N), decreasing=TRUE))[1]))
+  }
+  CTaverages
+  }
+
+CTaverages <- sp.averages(CTresults)
+
+write.csv(CTaverages, file="CTaverages.csv", row.names=TRUE, col.names=TRUE)
 
 
 

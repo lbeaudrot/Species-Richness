@@ -221,9 +221,13 @@ Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==564] <- 56.4
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==603] <- 60.3
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==723] <- 72.3
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==1120] <- 112.0
+# Add decimal to outlier diameter in plot VG-YAS-1
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-YAS-1" & Trees$Diameter==420] <- 42.0
 
 # Remove duplicated SamplingUnitNames until issue is resolved in the database
 Trees <- Trees[duplicated(Trees$SamplingUnitName)==FALSE,]
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==392] <- 39.2
+
 
 Lianas <-  rbind(Vlianas[Vlianas$Site.CodeL=="CAX" & Vlianas$SamplingPeriod=="2012.01",],
                  Vlianas[Vlianas$Site.CodeL=="YAS" & Vlianas$SamplingPeriod=="2012.01",],
@@ -356,24 +360,22 @@ VSites <-list()
   #Vsites
 #}
 # Reduce to FD input columns only
-for(i in 1:length(levels(Vtraits$Site.CodeT))){
-  Vsites[[i]] <- Vtraits[grep(pattern=levels(Vtraits$Site.CodeT)[i], x=Vtraits$Site.CodeT),]
-  #names(Vsites)[[i]] <- print(paste("Vsites",levels(Vtraits$Site.CodeT)[[i]],sep="."))
-  #rownames(Vsites[[i]]) <- Vsites[[i]]$Genus
-  VSites[[i]] <- cbind(Vsites[[i]]$maxD, Vsites[[i]]$WD2)
-  names(VSites)[[i]] <- print(paste(levels(Vtraits$Site.CodeT)[[i]]))
-  rownames(VSites[[i]]) <- Vsites[[i]]$Genus
-  colnames(VSites[[i]]) <- cbind("maxD", "WD2")
-  VSites
+#for(i in 1:length(levels(Vtraits$Site.CodeT))){
+#  Vsites[[i]] <- Vtraits[grep(pattern=levels(Vtraits$Site.CodeT)[i], x=Vtraits$Site.CodeT),]
+#  VSites[[i]] <- cbind(Vsites[[i]]$maxD, Vsites[[i]]$WD2)
+#  names(VSites)[[i]] <- print(paste(levels(Vtraits$Site.CodeT)[[i]]))
+#  rownames(VSites[[i]]) <- Vsites[[i]]$Genus
+#  colnames(VSites[[i]]) <- cbind("maxD", "WD2")
+#  VSites
 }
 # Calculate unweighted FD for each site
-library(FD)
-FDsites <- list()
-for(i in 1:length(VSites)){
-  FDsites[[i]] <- dbFD(x=as.data.frame(VSites[[i]]), corr="cailliez", calc.FRic=FALSE)
-     FDsites                          
-}
-names(FDsites) <- names(VSites)
+#library(FD)
+#FDsites <- list()
+#for(i in 1:length(VSites)){
+#  FDsites[[i]] <- dbFD(x=as.data.frame(VSites[[i]]), corr="cailliez", calc.FRic=FALSE)
+#     FDsites                          
+#}
+#names(FDsites) <- names(VSites)
 
 
 # Calculate unweighted FD at the plot level
@@ -399,12 +401,12 @@ for (i in 1:dim(PlotTrees)[2]){
 }
 # Calculate FD for each plot using extracted trait data from VPlots
 library(FD)
-FDplots <- list()
-for(i in 1:length(VPlots)){
-  FDplots[[i]] <- dbFD(x=as.data.frame(VPlots[[i]]), corr="cailliez", calc.FRic=FALSE)
-  FDplots                          
-}
-names(FDplots) <- names(VPlots)
+#FDplots <- list()
+#for(i in 1:length(VPlots)){
+#  FDplots[[i]] <- dbFD(x=as.data.frame(VPlots[[i]]), corr="cailliez", calc.FRic=FALSE)
+#  FDplots                          
+#}
+#names(FDplots) <- names(VPlots)
 
 
 # CALCULATE WEIGHTED FD for each PLOT using ABUNDANCES AS WEIGHTS - see output from object FDweighted
@@ -475,5 +477,33 @@ plant.covs <- merge(plant.covs, Cplot, by.x="plot", by.y="Plot", all=FALSE)
 # Exclude plots that have less than 80% of stems identified to family level
 ExcludePlots <- names(ExcludePlots)
 plant.covs <- plant.covs[-na.omit(match(ExcludePlots, plant.covs$plot)),]
+plant.covs <- plant.covs[,-6]
+plant.covs <- plant.covs[,-15]
+
+CV <- function(data){
+  sd(data)/mean(data)
+}
 
 aggregate(plant.covs$Cstorage ~ plant.covs$PlotCodes, FUN=mean)
+aggregate(plant.covs$Cstorage ~ plant.covs$PlotCodes, FUN=CV)
+
+plot.VGmean <- matrix(NA, nrow=length(levels(plant.covs$PlotCodes)), 
+                      ncol=dim(plant.covs)[2]-4, 
+                      dimnames=list(levels(plant.covs$PlotCodes), names(plant.covs)[5:length(names(plant.covs))]))
+plot.VGmean <- plot.VGmean[-6,]
+for(i in 1:dim(plant.covs)[2]-4){
+  plot.VGmean[,i] <- aggregate(plant.covs[,i+4] ~ plant.covs$PlotCodes, FUN=mean, na.rm=TRUE)[,2]
+  plot.VGmean
+}
+
+plot.VGvar <- matrix(NA, nrow=dim(plot.VGmean)[1], 
+                      ncol=dim(plot.VGmean)[2], 
+                      dimnames=list(rownames(plot.VGmean), colnames(plot.VGmean)))
+for(i in 1:dim(plant.covs)[2]-4){
+  plot.VGvar[,i] <- aggregate(plant.covs[,i+4] ~ plant.covs$PlotCodes, FUN=CV)[,2]
+  plot.VGvar
+}
+
+
+
+
