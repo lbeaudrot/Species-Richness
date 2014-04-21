@@ -31,7 +31,7 @@ table(alldata$Site.Code, alldata$Sampling.Period)
 
 ######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2006 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
-data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="COU",]
+data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="BIF",]
 
 #subset species to the species in that site and with Include=1
 splist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
@@ -143,14 +143,41 @@ text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 
 
  # Temporarily store site specific outputs
-#CAXfit <- fitparallel
-#YASfit <- fitparallel
-#PSHfit <- fitparallel
+
 #BBSfit <- fitparallel
 #BCIfit <- fitparallel
-COUfit <- fitparallel
+BIFfit <- fitparallel
+#CAXfit <- fitparallel
+#COUfit <- fitparallel
+#KRPfit <- fitparallel
+#MASfit <- fitparallel
+#NNNfit <- fitparallel
+#PSHfit <- fitparallel
+#RNFfit <- fitparallel
+#UDZfit <- fitparallel
+#VBfit <- fitparallel
+#YANfit <- fitparallel
+#YASfit <- fitparallel
 
-# Need to save model outputs
+# Save model outputs
+save(BIFfit, file="BIFfit.gzip",compress="gzip")
+
+
+CTresults <- list(BBSfit, BCIfit, CAXfit, COUfit, KRPfit, MASfit, NNNfit, PSHfit, RNFfit, UDZfit, VBfit, YANfit, YASfit)
+CTnames <- c("BBSfit", "BCIfit", "CAXfit", "COUfit", "KRPfit", "MASfit", "NNNfit", "PSHfit", "RNFfit", "UDZfit", "VBfit", "YANfit", "YASfit")
+cols <- c("mean", "median", "mode")
+CTaverages <- matrix(nrow=length(CTresults), ncol=3, dimnames=list(CTnames, cols))
+
+sp.averages <- function(data) {
+  for(i in 1:length(CTresults)){
+    CTaverages[i,] <- cbind(round(mean(data[[i]]$sims.list$N), digits=2),
+        median(data[[i]]$sims.list$N),
+        as.numeric(names(sort(table(data[[i]]$sims.list$N), decreasing=TRUE))[1]))
+  }
+  CTaverages
+  }
+
+
 
 
 
