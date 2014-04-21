@@ -477,5 +477,33 @@ plant.covs <- merge(plant.covs, Cplot, by.x="plot", by.y="Plot", all=FALSE)
 # Exclude plots that have less than 80% of stems identified to family level
 ExcludePlots <- names(ExcludePlots)
 plant.covs <- plant.covs[-na.omit(match(ExcludePlots, plant.covs$plot)),]
+plant.covs <- plant.covs[,-6]
+plant.covs <- plant.covs[,-15]
+
+CV <- function(data){
+  sd(data)/mean(data)
+}
 
 aggregate(plant.covs$Cstorage ~ plant.covs$PlotCodes, FUN=mean)
+aggregate(plant.covs$Cstorage ~ plant.covs$PlotCodes, FUN=CV)
+
+plot.VGmean <- matrix(NA, nrow=length(levels(plant.covs$PlotCodes)), 
+                      ncol=dim(plant.covs)[2]-4, 
+                      dimnames=list(levels(plant.covs$PlotCodes), names(plant.covs)[5:length(names(plant.covs))]))
+plot.VGmean <- plot.VGmean[-6,]
+for(i in 1:dim(plant.covs)[2]-4){
+  plot.VGmean[,i] <- aggregate(plant.covs[,i+4] ~ plant.covs$PlotCodes, FUN=mean, na.rm=TRUE)[,2]
+  plot.VGmean
+}
+
+plot.VGvar <- matrix(NA, nrow=dim(plot.VGmean)[1], 
+                      ncol=dim(plot.VGmean)[2], 
+                      dimnames=list(rownames(plot.VGmean), colnames(plot.VGmean)))
+for(i in 1:dim(plant.covs)[2]-4){
+  plot.VGvar[,i] <- aggregate(plant.covs[,i+4] ~ plant.covs$PlotCodes, FUN=CV)[,2]
+  plot.VGvar
+}
+
+
+
+
