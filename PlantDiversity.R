@@ -495,6 +495,7 @@ for(i in 1:dim(plant.covs)[2]-4){
   plot.VGmean[,i] <- aggregate(plant.covs[,i+4] ~ plant.covs$PlotCodes, FUN=mean, na.rm=TRUE)[,2]
   plot.VGmean
 }
+colnames(plot.VGmean) <- paste("V", colnames(plot.VGmean), sep=".")
 
 plot.VGvar <- matrix(NA, nrow=dim(plot.VGmean)[1], 
                       ncol=dim(plot.VGmean)[2], 
@@ -504,6 +505,6 @@ for(i in 1:dim(plant.covs)[2]-4){
   plot.VGvar
 }
 
-
+colnames(plot.VGvar) <- paste("V", colnames(plot.VGvar), sep=".")
 
 
