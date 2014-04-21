@@ -31,14 +31,17 @@ model.data <- merge(CTaverages, plot.VGmean, by.x="Site.Code", by.y="Site.Code",
 
 
 # Calculate precipitation CV and add rainfall data to model.data
-rain <- read.csv(file="Precipitation_Data.csv")
-mo.rain <- as.matrix(rain[,2:13])
+rain.data <- read.csv(file="Precipitation_Data.csv")
+mo.rain <- as.matrix(rain.data[,2:13])
 rain.CV <- vector()
 for(i in 1:dim(mo.rain)[1]){
   rain.CV[i] <- sd(mo.rain[i,])/mean(mo.rain[i,])
   rain.CV
 }
-rain.data <- data.frame(rain$Site.Code, rain$total, rain.CV)
-colnames(rain.data) <- c("Site.Code", "RainTotal", "Rain.CV")
+rain <- data.frame(rain.data$Site.Code, rain.data$total, rain.CV)
+colnames(rain) <- c("Site.Code", "RainTotal", "Rain.CV")
 
-model.data <- merge(model.data, rain.data, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+model.data <- merge(model.data, rain, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+
+# Calculate elevation CV and add elevation to model.data
+elevation.data <- read.csv("CT_edgedist_elevation_final.csv") 
