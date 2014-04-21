@@ -178,7 +178,7 @@ sp.averages <- function(data) {
   }
 
 CTaverages <- sp.averages(CTresults)
-
+colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
 write.csv(CTaverages, file="CTaverages.csv", row.names=TRUE, col.names=TRUE)
 
 
