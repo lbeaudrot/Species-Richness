@@ -164,7 +164,7 @@ save(BIFfit, file="BIFfit.gzip",compress="gzip")
 
 
 CTresults <- list(BBSfit, BCIfit, CAXfit, COUfit, KRPfit, MASfit, NNNfit, PSHfit, RNFfit, UDZfit, VBfit, YANfit, YASfit)
-CTnames <- c("BBS", "BCI", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB", "YAN", "YAS")
+CTnames <- c("BBS", "BCI", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB-", "YAN", "YAS")
 cols <- c("mean", "median", "mode")
 CTaverages <- matrix(nrow=length(CTresults), ncol=3, dimnames=list(CTnames, cols))
 
