@@ -23,12 +23,9 @@ pairs(plot.VGvar, lower.panel = panel.smooth, upper.panel = panel.cor)
 # Merge CT and Veg data into a single table
 CTaverages <- cbind(rownames(CTaverages), CTaverages)
 colnames(CTaverages)[1] <- "Site.Code"
-
 plot.VGmean <- cbind(rownames(plot.VGmean), plot.VGmean)
 colnames(plot.VGmean)[1] <- "Site.Code"
-
 model.data <- merge(CTaverages, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=TRUE)
-
 
 # Calculate precipitation CV and add rainfall data to model.data
 rain.data <- read.csv(file="Precipitation_Data.csv")
@@ -40,8 +37,32 @@ for(i in 1:dim(mo.rain)[1]){
 }
 rain <- data.frame(rain.data$Site.Code, rain.data$total, rain.CV)
 colnames(rain) <- c("Site.Code", "RainTotal", "Rain.CV")
-
 model.data <- merge(model.data, rain, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 # Calculate elevation CV and add elevation to model.data
 elevation.data <- read.csv("CT_edgedist_elevation_final.csv") 
+elevation.mean <- aggregate(elevation.data$Elevation ~ elevation.data$Site.Code, FUN=mean)
+elevation.CV <- aggregate(elevation.data$Elevation ~ elevation.data$Site.Code, FUN=CV)[2]
+elevation <- cbind(elevation.mean, elevation.CV)
+colnames(elevation) <- c("Site.Code", "Elev.Mean", "Elev.CV")
+model.data <- merge(model.data, elevation, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+
+# Add latitude for each TEAM site as a covariate - see EstimateSpeciesRichness.R line 203
+model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+
+
+head(model.data)
+str(model.data)
+ModelData <- model.data
+rownames(ModelData) <- ModelData$Site.Code
+ModelData <- ModelData[,-1]
+
+MData <- matrix(NA, dim(ModelData)[1], dim(ModelData)[2])
+  
+for(i in 1:dim(ModelData)[2])  {
+  MData[,i] <- as.numeric(as.character(ModelData[,i]))
+  MData
+}
+MData <- as.data.frame(MData)
+colnames(MData) <- colnames(ModelData)
+

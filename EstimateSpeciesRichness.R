@@ -163,8 +163,8 @@ BIFfit <- fitparallel
 save(BIFfit, file="BIFfit.gzip",compress="gzip")
 
 
-CTresults <- list(BBSfit, BCIfit, CAXfit, COUfit, KRPfit, MASfit, NNNfit, PSHfit, RNFfit, UDZfit, VBfit, YANfit, YASfit)
-CTnames <- c("BBS", "BCI", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB-", "YAN", "YAS")
+CTresults <- list(BBSfit, BCIfit, BIFfit, CAXfit, COUfit, KRPfit, MASfit, NNNfit, PSHfit, RNFfit, UDZfit, VBfit, YANfit, YASfit)
+CTnames <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB-", "YAN", "YAS")
 cols <- c("mean", "median", "mode")
 CTaverages <- matrix(nrow=length(CTresults), ncol=3, dimnames=list(CTnames, cols))
 
@@ -200,3 +200,7 @@ print(paste("Done with site ",levels(alldata$Site.Code)[i],"; took ",round(as.nu
 #filename= paste("veg_data",sysdate,".gzip",sep="")
 #save(result, file=filename,compress="gzip")
 
+# Extract mean CT latitude for each TEAM site to include as a covariate 
+traps <- eventsdata[!duplicated(eventsdata$Sampling.Unit.Name),]
+Latitude <- aggregate(traps$Latitude ~ traps$Site.Code, FUN=mean)
+colnames(Latitude) <- c("Site.Code", "Latitude")

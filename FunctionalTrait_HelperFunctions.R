@@ -13,6 +13,9 @@ f.family.AC <- function(data){ # determine mode for each Family for Activity Cyc
 }
 
 
+f.family.AC2 <- function(data){
+  as.numeric(names(sort(table(data$Family, data$ActivityCycle), decreasing=TRUE))[1]))
+
 
 f.family.HB <- function(data){ # determine mode for each Family for Habitat Breadth
   hold <- table(data$Family, data$HabitatBreadth)
