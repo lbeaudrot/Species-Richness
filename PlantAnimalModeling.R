@@ -76,16 +76,27 @@ Year <- c(2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011
 Continent <- c("Asia", "America", "America", "America", "Africa", "America", "Africa", "Asia", "Africa", "Africa", "America", "America", "America")
 Mdata <- cbind(MData, Year, Continent)
 
-fit1 <- lm(CT.mode ~ Cstorage + FDis + TRich + TShan + NStemsT + NStemsL + RainTotal + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
+
+###### Model Terrestrial Vertebrate Species Richness
+fit1 <- lm(CT.mode ~ 
+             Cstorage + FDis + TRich + NStemsT + 
+             NStemsL + Rain.CV + Elev.CV + abs(Latitude) + 
+             abs(Latitude)*NStemsT + abs(Latitude)*Elev.CV + TRich*Rain.CV, 
+                data=Mdata)
+
 step1 <- stepAIC(fit1, direction="both")
 
 lmer(CT.mode ~ (1|Year) + (1|Continent) + Cstorage + FDis + TRich + TShan + NStemsT + NStemsL + RainTotal + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
 
+m1 <- lm(CT.mode ~ FDis + TRich + TShan + NStemsT + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
+
+m2 <- lmer(CT.mode ~ (1|Continent)+ FDis + TRich + TShan + NStemsT + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
 
 
+###### Model Terrestrial Vertebrate Functional Diversity
 MammalFD <- read.csv("MammalFD.csv")
 fit2 <- lm(MammalFD$FDis ~ Cstorage + FDis + TRich + TShan + NStemsT + NStemsL + RainTotal + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=MData)
 step2 <- stepAIC(fit2, direction="both")
 
-m1 <- lm(MData$CT.mode ~ MData$Cstorage + MData$FDis + MData$TRich + MData$NStemsT + MData$Rain.CV + MData$Elev.Mean + MData$Latitude)
 
+###### Model Terrestrial Vertebrate Taxonomic Diversity
