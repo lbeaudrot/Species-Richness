@@ -3,7 +3,7 @@ library(FD)
 
 # Connect TEAM master species list to the PanTHERIA mammalian trait data
 
-masterlist<-read.csv("master_species_list_updated.csv",h=T) #master list
+masterlist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
 pantheria <- read.csv("Pantheria_Data_WR05_Aug2008.csv") # PanTHERIA data
 
 #subset TEAM species list from overall PanTHERIA database
