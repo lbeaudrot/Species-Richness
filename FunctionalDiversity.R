@@ -97,7 +97,7 @@ table(alldata$Site.Code, alldata$Sampling.Period) #Examine which sites have data
 
 ######## Start here to CHANGE INPUT DATA FOR Functional Diversity metrics ###############
 # Use  "Site.Code" to designate which site to include
-data.use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="PSH",]
+data.use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="COU",]
 
 # Subset the species list for each site to calculate the functional diversity metrics
 splist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
@@ -130,31 +130,75 @@ SiteTraits <- cbind(SiteTraits[,1:3], droplevels(SiteTraits[,4:5]))
 #Use object wpi_weights to weight functional trait calculations by occupancy estimates (psi.mean or psi.median)
 wpi_use <- wpi_weights[wpi_weights$Site.Code==data.use$Site.Code[1], ]
 psi_weights <- wpi_use$psi.median[match(rownames(SiteTraits), wpi_use$bin)]
-SiteTraits <- cbind(SiteTraits, psi_weights)
-SiteTraits <- na.omit(SiteTraits)
-psi_use <- SiteTraits$psi_weights
-names(psi_use) <- rownames(SiteTraits)
-traitFD_w <- dbFD(SiteTraits, a=psi_use, corr="cailliez", calc.FRic=FALSE)
+names(psi_weights) <- rownames(SiteTraits)
+psi_use <- na.omit(psi_weights)
+SiteTraits <- SiteTraits[match(names(psi_use), rownames(SiteTraits)),]
+SiteTraits <- cbind(SiteTraits[,1:3], droplevels(SiteTraits[,4:5]), psi_use)
+traitFD_w <- dbFD(SiteTraits[,1:dim(SiteTraits)[2]-1], a=psi_use[1:dim(SiteTraits)[1]], corr="cailliez", calc.FRic=FALSE)
 
+# Calculate FD for birds
+birdFD <- dbFD(BirdTraits, corr="cailliez")
+BirdTraits
 
-#BBStraitFD_w <- traitFD_w
-#BCItraitFD_w <- traitFD_w
-#BIFtraitFD_w <- traitFD_w
+B.psi_weights <- wpi_use$psi.median[match(rownames(BirdTraits), wpi_use$bin)]
+names(B.psi_weights) <- rownames(BirdTraits)
+Bpsi_use <- na.omit(B.psi_weights)
+BirdTraits <- BirdTraits[match(names(Bpsi_use), rownames(BirdTraits)),]
+BirdTraits <- cbind(BirdTraits, B.psi_weights)
+BtraitFD_w <- dbFD(BirdTraits[,1:dim(BirdTraits)[2]-1], a=Bpsi_use[1:dim(BirdTraits)[1]], corr="cailliez", calc.FRic=FALSE)
+
+# Store site/year specific values for extraction
+# MAMMALS and BIRDS for each site
+
+# use 2012 data
+
 #CAXtraitFD_w <- traitFD_w
-#COUtraitFD_w <- traitFD_w
-#KRPtraitFD_w <- traitFD_w
-#MAStraitFD_w <- traitFD_w
-#NNNtraitFD_w <- traitFD_w
+#B.CAXtraitFD_w <- BtraitFD_w
+
 #PSHtraitFD_w <- traitFD_w
-#RNFtraitFD_w <- traitFD_w
-#UDZtraitFD_w <- traitFD_w
-#VBtraitFD_w <- traitFD_w
-#YANtraitFD_w <- traitFD_w
+#B.PSHtraitFD_w <- BtraitFD_w
+
 #YAStraitFD_w <- traitFD_w
+#B.YAStraitFD_w <- BtraitFD_w
 
+# use 2011 data
+#BBStraitFD_w <- traitFD_w
+#B.BBStraitFD_w <- BtraitFD_w
+
+#BCItraitFD_w <- traitFD_w
+#B.BCItraitFD_w <- BtraitFD_w
+
+#BIFtraitFD_w <- traitFD_w
+#B.BIFtraitFD_w <- BtraitFD_w
+
+COUtraitFD_w <- traitFD_w
+B.COUtraitFD_w <- BtraitFD_w
+
+#KRPtraitFD_w <- traitFD_w
+#B.KRPtraitFD_w <- BtraitFD_w
+
+#MAStraitFD_w <- traitFD_w
+#B.MAStraitFD_w <- BtraitFD_w
+
+#NNNtraitFD_w <- traitFD_w
+#B.NNNtraitFD_w <- BtraitFD_w
+
+#RNFtraitFD_w <- traitFD_w
+#B.RNFtraitFD_w <- BtraitFD_w
+
+#UDZtraitFD_w <- traitFD_w
+#B.UDZtraitFD_w <- BtraitFD_w
+
+#VBtraitFD_w <- traitFD_w
+#B.VBtraitFD_w <- BtraitFD_w
+
+#YANtraitFD_w <- traitFD_w
+#B.YANtraitFD_w <- BtraitFD_w
+
+
+#Extract Mammal FD data
 CTSite_FD <- list(BBStraitFD_w, BCItraitFD_w, BIFtraitFD_w, CAXtraitFD_w, COUtraitFD_w, KRPtraitFD_w, MAStraitFD_w,
-  NNNtraitFD_w, PSHtraitFD_w, RNFtraitFD_w, UDZtraitFD_w, VBtraitFD_w, YANtraitFD_w, YAStraitFD_w) 
-
+                  NNNtraitFD_w, PSHtraitFD_w, RNFtraitFD_w, UDZtraitFD_w, VBtraitFD_w, YANtraitFD_w, YAStraitFD_w) 
 
 # Create output table from FD calculations
 CT.nbsp <- vector()
@@ -188,39 +232,9 @@ CTweighted <- as.data.frame(CTweighted)
 rownames(CTweighted) <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB", "YAN", "YAS") 
 
 
-
-
-# Calculate FD for birds
-
-birdFD <- dbFD(BirdTraits, corr="cailliez")
-birdFD
-BirdTraits
-
-psi_weights <- wpi_use$psi.median[match(rownames(BirdTraits), wpi_use$bin)]
-BirdTraits <- cbind(BirdTraits, psi_weights)
-BirdTraits <- na.omit(BirdTraits)
-Bpsi_use <- BirdTraits$psi_weights
-names(Bpsi_use) <- rownames(BirdTraits)
-BtraitFD_w <- dbFD(BirdTraits, a=Bpsi_use, corr="cailliez", calc.FRic=FALSE)
-
-#B.BBStraitFD_w <- traitFD_w
-#B.BCItraitFD_w <- traitFD_w
-#B.BIFtraitFD_w <- traitFD_w
-#B.CAXtraitFD_w <- traitFD_w
-#B.COUtraitFD_w <- traitFD_w
-#B.KRPtraitFD_w <- traitFD_w
-#B.MAStraitFD_w <- traitFD_w
-#B.NNNtraitFD_w <- traitFD_w
-#B.PSHtraitFD_w <- traitFD_w
-#B.RNFtraitFD_w <- traitFD_w
-#B.UDZtraitFD_w <- traitFD_w
-#B.VBtraitFD_w <- traitFD_w
-#B.YANtraitFD_w <- traitFD_w
-#B.YAStraitFD_w <- traitFD_w
-
-CTSite_FD <- list(B.BBStraitFD_w, B.BCItraitFD_w, B.BIFtraitFD_w, B.CAXtraitFD_w, B.COUtraitFD_w, B.KRPtraitFD_w, B.MAStraitFD_w,
+#Extract Bird FD data
+B.CTSite_FD <- list(B.BBStraitFD_w, B.BCItraitFD_w, B.BIFtraitFD_w, B.CAXtraitFD_w, B.COUtraitFD_w, B.KRPtraitFD_w, B.MAStraitFD_w,
                   B.NNNtraitFD_w, B.PSHtraitFD_w, B.RNFtraitFD_w, B.UDZtraitFD_w, B.VBtraitFD_w, B.YANtraitFD_w, B.YAStraitFD_w) 
-
 
 # Create output table from FD calculations
 B.CT.nbsp <- vector()
