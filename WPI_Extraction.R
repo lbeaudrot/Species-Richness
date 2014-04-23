@@ -67,8 +67,9 @@ Simplepsi2011median <- aggregate(WPI.simple.2011, by=list(by.5, by.6), FUN=media
 Simplepsi2011 <- cbind(Simplepsi2011mean[,3:6], Simplepsi2011median[,6])
 colnames(Simplepsi2011) <- c("species_id", "site_id", "year", "psi.mean", "psi.median")
 S.species2011 <- taxonomy$bin[match(Simplepsi2011$species_id, taxonomy$id)]
+S.psi2011 <- cbind(Simplepsi2011, S.species2011)
 S.sites2011 <- Combine$Site.Code[match(S.psi2011$site_id, Combine$Site.ID)]
-S.psi2011 <- cbind(Simplepsi2011, S.species2011, S.sites2011)
+S.psi2011 <- cbind(S.psi2011, S.sites2011)
 names(S.psi2011) <- c("species_id", "site_id", "year", "psi.mean", "psi.median", "bin", "Site.Code")
 
 
@@ -80,8 +81,9 @@ Simplepsi2012median <- aggregate(WPI.simple.2012, by=list(by.7, by.8), FUN=media
 Simplepsi2012 <- cbind(Simplepsi2012mean[,3:6], Simplepsi2012median[,6])
 colnames(Simplepsi2012) <- c("species_id", "site_id", "year", "psi.mean", "psi.median")
 S.species2012 <- taxonomy$bin[match(Simplepsi2012$species_id, taxonomy$id)]
+S.psi2012 <- cbind(Simplepsi2012, S.species2012)
 S.sites2012 <- Combine$Site.Code[match(S.psi2012$site_id, Combine$Site.ID)]
-S.psi2012 <- cbind(Simplepsi2012, S.species2012, S.sites2012)
+S.psi2012 <- cbind(S.psi2012, S.sites2012)
 names(S.psi2012) <- c("species_id", "site_id", "year", "psi.mean", "psi.median", "bin", "Site.Code")
 
 wpi_2011 <- rbind(psi2011, S.psi2011)
