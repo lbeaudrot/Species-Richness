@@ -97,11 +97,9 @@ table(alldata$Site.Code, alldata$Sampling.Period) #Examine which sites have data
 
 ######## Start here to CHANGE INPUT DATA FOR Functional Diversity metrics ###############
 # Use  "Site.Code" to designate which site to include
-data.use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="CAX",]
-
+data.use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="YAN",]
 
 # Subset the species list for each site to calculate the functional diversity metrics
-
 splist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
 sitelist<-unique(data.use$bin) #site list
 Msplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
@@ -109,7 +107,6 @@ Msplist <- Msplist[Msplist$Class=="MAMMALIA",]
 #newsplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
 #subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
 #subdata<-f.correct.DF(subdata)
-
 
 # Apply to bird data 
 Bsplist<-subset(Btraits,rownames(Btraits) %in% sitelist & Btraits$V3==1)
@@ -119,24 +116,17 @@ colnames(BirdTraits) <- c("Mass", "Guild")
 BirdTraits <- as.data.frame(BirdTraits)
 BirdTraits$Guild <- droplevels(as.factor(BirdTraits$Guild))
 
-
-
 # Use the subsetted species list for the site to extract the corresponding functional trait data
-
 SiteTraits <- Mtraits[match(Msplist$Unique_Name, rownames(Mtraits)),]
-
 #rownames(SiteTraits) <-paste("sp",1:dim(SiteTraits)[1], sep=".") #Alternate (shorter) species labels
-
 ## NB For traits that are factors, all levels must be represented in data to obtain results using dbFD()
 #Reclassify SiteTraits list so that only new levels are used
-
 SiteTraits <- cbind(SiteTraits[,1:3], droplevels(SiteTraits[,4:5]))
 #SiteTraits
 
 ####### Calculate Functional Diversity using the FD package
 #Calculate unweighted mammal functional diversity
 #traitFD <- dbFD(SiteTraits, corr="cailliez")
-#traitFD
 #Use object wpi_weights to weight functional trait calculations by occupancy estimates (psi.mean or psi.median)
 wpi_use <- wpi_weights[wpi_weights$Site.Code==data.use$Site.Code[1], ]
 psi_weights <- wpi_use$psi.median[match(rownames(SiteTraits), wpi_use$bin)]
@@ -146,7 +136,59 @@ psi_use <- SiteTraits$psi_weights
 names(psi_use) <- rownames(SiteTraits)
 traitFD_w <- dbFD(SiteTraits, a=psi_use, corr="cailliez", calc.FRic=FALSE)
 
+
+#BBStraitFD_w <- traitFD_w
+#BCItraitFD_w <- traitFD_w
+#BIFtraitFD_w <- traitFD_w
 #CAXtraitFD_w <- traitFD_w
+#COUtraitFD_w <- traitFD_w
+#KRPtraitFD_w <- traitFD_w
+#MAStraitFD_w <- traitFD_w
+#NNNtraitFD_w <- traitFD_w
+#PSHtraitFD_w <- traitFD_w
+#RNFtraitFD_w <- traitFD_w
+#UDZtraitFD_w <- traitFD_w
+#VBtraitFD_w <- traitFD_w
+#YANtraitFD_w <- traitFD_w
+#YAStraitFD_w <- traitFD_w
+
+CTSite_FD <- list(BBStraitFD_w, BCItraitFD_w, BIFtraitFD_w, CAXtraitFD_w, COUtraitFD_w, KRPtraitFD_w, MAStraitFD_w,
+  NNNtraitFD_w, PSHtraitFD_w, RNFtraitFD_w, UDZtraitFD_w, VBtraitFD_w, YANtraitFD_w, YAStraitFD_w) 
+
+
+# Create output table from FD calculations
+CT.nbsp <- vector()
+CT.sing.sp <- vector()
+CT.FEve <- vector()
+CT.FDiv <- vector()
+CT.FDis <- vector()
+CT.RaoQ <- vector()
+CWM.Mass <- vector()
+CWM.Litter <- vector()
+CWM.GR <- vector()
+CWM.Activity <- vector()
+CWM.Guild <- vector()
+
+for(i in 1:length(CTSite_FD)){
+  CT.nbsp[i] <- CTSite_FD[[i]]$nbsp
+  CT.sing.sp[i] <- CTSite_FD[[i]]$sing.sp
+  CT.FEve[i] <- CTSite_FD[[i]]$FEve
+  CT.FDiv[i] <- CTSite_FD[[i]]$FDiv
+  CT.FDis[i] <- CTSite_FD[[i]]$FDis
+  CT.RaoQ[i] <- CTSite_FD[[i]]$RaoQ
+  CWM.Mass[i] <- CTSite_FD[[i]]$CWM$Mass_c
+  CWM.Litter[i] <- CTSite_FD[[i]]$CWM$LitterSize_c
+  CWM.GR[i] <- CTSite_FD[[i]]$CWM$GR_Area_c
+  CWM.Activity[i] <- CTSite_FD[[i]]$CWM$ActivityCycle_c
+  CWM.Guild[i] <- CTSite_FD[[i]]$CWM$Guild_c
+}
+
+CTweighted <- cbind(CT.nbsp, CT.sing.sp, CT.FEve, CT.FDiv, CT.FDis, CT.RaoQ, CWM.Mass, CWM.Litter, CWM.GR)
+CTweighted <- as.data.frame(CTweighted)
+
+
+
+
 
 
 birdFD <- dbFD(BirdTraits, corr="cailliez")
