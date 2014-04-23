@@ -1,0 +1,177 @@
+species_id,genus,species,variable_family,site_id,site_name,all_effects
+1177,Cuniculus,paca,Human Presence,1,Caxiuanã,-1.15212360159604
+1177,Cuniculus,paca,Climate,1,Caxiuanã,18.4703032855625
+1237,Dasypus,kappleri,Human Presence,1,Caxiuanã,-0.476751491039926
+1237,Dasypus,kappleri,Climate,1,Caxiuanã,-11.2120391413846
+2545,Mazama,americana,Human Presence,1,Caxiuanã,-0.0329923206668102
+2551,Mazama,nemorivaga,Human Presence,1,Caxiuanã,-0.151389253276668
+2551,Mazama,nemorivaga,Climate,1,Caxiuanã,5.20626675404313
+1238,Dasypus,novemcinctus,Climate,1,Caxiuanã,13.5584394506163
+6980,Psophia,viridis,Human Presence,1,Caxiuanã,0.262601059603825
+1231,Dasyprocta,leporina,Human Presence,1,Caxiuanã,-0.0107106388202946
+1231,Dasyprocta,leporina,Climate,1,Caxiuanã,0.834956496272747
+1238,Dasypus,novemcinctus,Human Presence,2,Central Suriname Nature Reserve,-1.05734544213506
+2545,Mazama,americana,Human Presence,2,Central Suriname Nature Reserve,-8.56105866206533
+5169,Tapirus,terrestris,Human Presence,2,Central Suriname Nature Reserve,-0.183201827901882
+2545,Mazama,americana,Climate,2,Central Suriname Nature Reserve,1.21750889861584
+1231,Dasyprocta,leporina,Human Presence,2,Central Suriname Nature Reserve,-5.67315632089576
+2545,Mazama,americana,Forest Edge,2,Central Suriname Nature Reserve,1.12258723559371
+1317,Didelphis,marsupialis,Human Presence,2,Central Suriname Nature Reserve,0.386935749124628
+5630,Crax,alector,Climate,2,Central Suriname Nature Reserve,-1.27830521358877
+1238,Dasypus,novemcinctus,Climate,2,Central Suriname Nature Reserve,8.06960929058562
+5630,Crax,alector,Human Presence,2,Central Suriname Nature Reserve,-2.21272844985527
+6978,Psophia,crepitans,Human Presence,2,Central Suriname Nature Reserve,4.62805586544326
+3049,Myoprocta,acouchy,Human Presence,2,Central Suriname Nature Reserve,-3.09055104233276
+3049,Myoprocta,acouchy,Climate,2,Central Suriname Nature Reserve,-1.57702202117852
+1177,Cuniculus,paca,Human Presence,3,Manaus,0.173114177865276
+2545,Mazama,americana,Climate,3,Manaus,-1.10748882707103
+2660,Metachirus,nudicaudatus,Human Presence,3,Manaus,0.552575004312713
+1317,Didelphis,marsupialis,Human Presence,3,Manaus,0.834121548653562
+3049,Myoprocta,acouchy,Human Presence,3,Manaus,-0.124129363405699
+1231,Dasyprocta,leporina,Climate,3,Manaus,-1.53793780742051
+1238,Dasypus,novemcinctus,Human Presence,3,Manaus,-0.526841495622487
+1231,Dasyprocta,leporina,Human Presence,3,Manaus,0.506199920767807
+3049,Myoprocta,acouchy,Climate,3,Manaus,-2.38215740768125
+2545,Mazama,americana,Human Presence,3,Manaus,0.280960887068483
+1238,Dasypus,novemcinctus,Climate,3,Manaus,7.1868551349712
+3683,Pecari,tajacu,Human Presence,3,Manaus,0.753846193159798
+1177,Cuniculus,paca,Climate,3,Manaus,-4.85536211010893
+3683,Pecari,tajacu,Climate,3,Manaus,1.02496885291112
+6978,Psophia,crepitans,Climate,3,Manaus,4.56554615978487
+6978,Psophia,crepitans,Human Presence,3,Manaus,0.647397733454889
+2660,Metachirus,nudicaudatus,Climate,3,Manaus,0.921504326156516
+1234,Dasyprocta,punctata,Climate,5,Volcán Barva,-10.4272062054357
+1238,Dasypus,novemcinctus,Climate,5,Volcán Barva,5.75728367017297
+1238,Dasypus,novemcinctus,Human Presence,5,Volcán Barva,8.01540459296952
+1238,Dasypus,novemcinctus,Forest Edge,5,Volcán Barva,-1.85000749241066
+1177,Cuniculus,paca,Climate,5,Volcán Barva,-16.3490293239915
+1177,Cuniculus,paca,Human Presence,5,Volcán Barva,-0.296545223302827
+3683,Pecari,tajacu,Human Presence,5,Volcán Barva,8.14938871467342
+5166,Tapirus,bairdii,Climate,5,Volcán Barva,-2.16833402981167
+3683,Pecari,tajacu,Climate,5,Volcán Barva,-3.98588729300151
+649,Cephalophus,nigrifrons,Climate,7,Bwindi Impenetrable Forest,-0.0612839113929695
+679,Cercopithecus,lhoesti,Human Presence,7,Bwindi Impenetrable Forest,6.92916047180297
+652,Cephalophus,silvicultor,Climate,7,Bwindi Impenetrable Forest,1.12338781933102
+2067,Hystrix,brachyura,Climate,10,Bukit Barisan,-2.82426831320846
+2067,Hystrix,brachyura,Human Presence,10,Bukit Barisan,1.6351481362789
+2403,Macaca,nemestrina,Human Presence,10,Bukit Barisan,-2.03550244932016
+2403,Macaca,nemestrina,Climate,10,Bukit Barisan,2.50414074847624
+2931,Muntiacus,muntjak,Human Presence,10,Bukit Barisan,2.86722846454572
+2931,Muntiacus,muntjak,Climate,10,Bukit Barisan,0.634755131094796
+5016,Sus,scrofa,Human Presence,10,Bukit Barisan,0.390604957242234
+338,Atherurus,macrourus,Human Presence,11,Nam Kading,-0.279180586012655
+338,Atherurus,macrourus,Climate,11,Nam Kading,1.39053545373891
+2931,Muntiacus,muntjak,Climate,11,Nam Kading,-0.728705660965288
+2378,Loxodonta,africana,Human Presence,13,Nouabalé Ndoki,-7.94862155312288
+873,Cricetomys,gambianus,Climate,13,Nouabalé Ndoki,6.92651232964481
+873,Cricetomys,gambianus,Human Presence,13,Nouabalé Ndoki,-4.22590749959181
+3861,Philantomba,monticola,Climate,13,Nouabalé Ndoki,-6.36279865869195
+3861,Philantomba,monticola,Human Presence,13,Nouabalé Ndoki,0.238672444829638
+2378,Loxodonta,africana,Climate,13,Nouabalé Ndoki,-1.34246677544978
+4154,Protoxerus,stangeri,Human Presence,13,Nouabalé Ndoki,0.329215232501809
+652,Cephalophus,silvicultor,Climate,13,Nouabalé Ndoki,4.34627332992475
+643,Cephalophus,dorsalis,Climate,13,Nouabalé Ndoki,7.29327057715031
+643,Cephalophus,dorsalis,Human Presence,13,Nouabalé Ndoki,-6.1746149137371
+652,Cephalophus,silvicultor,Human Presence,13,Nouabalé Ndoki,0.268776698733352
+642,Cephalophus,callipygus,Climate,13,Nouabalé Ndoki,-2.67088234108568
+4154,Protoxerus,stangeri,Climate,13,Nouabalé Ndoki,-3.70924725411888
+4045,Potamochoerus,porcus,Climate,13,Nouabalé Ndoki,8.8563077053916
+4045,Potamochoerus,porcus,Human Presence,13,Nouabalé Ndoki,-7.26116384883689
+3050,Myoprocta,pratti,Climate,19,Yasuni,4.62757481465287
+3050,Myoprocta,pratti,Human Presence,19,Yasuni,0.0363222140604743
+2545,Mazama,americana,Climate,19,Yasuni,2.10552993847675
+4653,Sciurus,igniventris,Climate,19,Yasuni,-1.31095230761449
+2551,Mazama,nemorivaga,Climate,19,Yasuni,-1.16121529312049
+2236,Leopardus,pardalis,Climate,19,Yasuni,-3.40241124483643
+5194,Tayassu,pecari,Human Presence,19,Yasuni,-7.05921432187723
+1228,Dasyprocta,fuliginosa,Climate,19,Yasuni,-2.4596975757701
+1228,Dasyprocta,fuliginosa,Human Presence,19,Yasuni,-0.29815874191943
+5194,Tayassu,pecari,Climate,19,Yasuni,0.845035703514136
+3683,Pecari,tajacu,Human Presence,19,Yasuni,0.698053190126773
+3683,Pecari,tajacu,Climate,19,Yasuni,-3.90726157923798
+5169,Tapirus,terrestris,Climate,19,Yasuni,0.223822777637496
+5169,Tapirus,terrestris,Human Presence,19,Yasuni,0.151170708574017
+5497,Tinamus,major,Climate,19,Yasuni,-3.19365024517225
+5497,Tinamus,major,Human Presence,19,Yasuni,5.62731388760764
+1177,Cuniculus,paca,Human Presence,19,Yasuni,8.34771657481791
+6978,Psophia,crepitans,Climate,19,Yasuni,-4.03529816681467
+6978,Psophia,crepitans,Human Presence,19,Yasuni,0.110432468273538
+4653,Sciurus,igniventris,Human Presence,19,Yasuni,-3.15012096534434
+2236,Leopardus,pardalis,Human Presence,19,Yasuni,0.56550513799005
+1605,Fossa,fossana,Human Presence,25,Ranomafana,8.11016628253321
+669,Cercocebus,sanjei,Human Presence,26,Udzungwa,7.20262212484706
+873,Cricetomys,gambianus,Forest Edge,26,Udzungwa,1.11450890050253
+1666,Genetta,servalina,Climate,26,Udzungwa,5.75361491323689
+669,Cercocebus,sanjei,Climate,26,Udzungwa,10.6319409484516
+873,Cricetomys,gambianus,Human Presence,26,Udzungwa,6.87311491100782
+3670,Paraxerus,vexillarius,Human Presence,26,Udzungwa,-0.388605164917182
+394,Bdeogale,crassicauda,Climate,26,Udzungwa,6.75868872910609
+3670,Paraxerus,vexillarius,Climate,26,Udzungwa,-8.06379778747411
+4549,Rhynchocyon,udzungwensis,Climate,26,Udzungwa,1.9493690993855
+4549,Rhynchocyon,udzungwensis,Human Presence,26,Udzungwa,4.29715694210608
+653,Cephalophus,spadix,Climate,26,Udzungwa,6.05828721266383
+653,Cephalophus,spadix,Human Presence,26,Udzungwa,-0.165168930930232
+644,Cephalophus,harveyi,Human Presence,26,Udzungwa,-7.32904530263026
+5638,Guttera,pucherani,Human Presence,26,Udzungwa,-7.65321433227702
+3307,Nesotragus,moschatus,Climate,26,Udzungwa,10.0427967240326
+1238,Dasypus,novemcinctus,Climate,27,Barro Colorado Nature Monument - Soberania National Park,1.50835992560684
+2554,Mazama,temama,Climate,27,Barro Colorado Nature Monument - Soberania National Park,7.41797748716281
+1177,Cuniculus,paca,Human Presence,27,Barro Colorado Nature Monument - Soberania National Park,8.4888529426578
+1317,Didelphis,marsupialis,Climate,27,Barro Colorado Nature Monument - Soberania National Park,-17.4286875389462
+2554,Mazama,temama,Human Presence,27,Barro Colorado Nature Monument - Soberania National Park,-8.62817374037048
+5497,Tinamus,major,Climate,27,Barro Colorado Nature Monument - Soberania National Park,1.19431233273517
+3470,Odocoileus,virginianus,Climate,27,Barro Colorado Nature Monument - Soberania National Park,-1.09898613837838
+3198,Nasua,narica,Human Presence,27,Barro Colorado Nature Monument - Soberania National Park,3.91868246505956
+3470,Odocoileus,virginianus,Human Presence,27,Barro Colorado Nature Monument - Soberania National Park,8.32928324899661
+5497,Tinamus,major,Forest Edge,27,Barro Colorado Nature Monument - Soberania National Park,5.75848062500536
+1234,Dasyprocta,punctata,Human Presence,27,Barro Colorado Nature Monument - Soberania National Park,0.0166489368195869
+3198,Nasua,narica,Climate,27,Barro Colorado Nature Monument - Soberania National Park,5.06932430721843
+3683,Pecari,tajacu,Forest Edge,27,Barro Colorado Nature Monument - Soberania National Park,1.97385029184196
+1177,Cuniculus,paca,Climate,28,Yanachaga Chimillén National Park,-5.64071904908803
+1177,Cuniculus,paca,Human Presence,28,Yanachaga Chimillén National Park,0.764388498622172
+1238,Dasypus,novemcinctus,Human Presence,28,Yanachaga Chimillén National Park,-0.553803739856698
+5169,Tapirus,terrestris,Climate,28,Yanachaga Chimillén National Park,3.86375028526616
+1228,Dasyprocta,fuliginosa,Climate,28,Yanachaga Chimillén National Park,4.03913378148076
+5169,Tapirus,terrestris,Human Presence,28,Yanachaga Chimillén National Park,-0.11855319611393
+5623,Mitu,tuberosum,Human Presence,28,Yanachaga Chimillén National Park,0.0578959411500171
+1317,Didelphis,marsupialis,Climate,29,Cocha Cashu - Manu National Park,4.61794684676097
+3050,Myoprocta,pratti,Climate,29,Cocha Cashu - Manu National Park,-1.84312748730932
+4101,Proechimys,brevicauda,Climate,29,Cocha Cashu - Manu National Park,-0.791915039317522
+1317,Didelphis,marsupialis,Human Presence,29,Cocha Cashu - Manu National Park,-0.300511021674931
+3683,Pecari,tajacu,Human Presence,29,Cocha Cashu - Manu National Park,-0.427949959839134
+4101,Proechimys,brevicauda,Human Presence,29,Cocha Cashu - Manu National Park,-0.459090148240635
+2236,Leopardus,pardalis,Human Presence,29,Cocha Cashu - Manu National Park,0.156456168920973
+2236,Leopardus,pardalis,Climate,29,Cocha Cashu - Manu National Park,10.917465844868
+3683,Pecari,tajacu,Climate,29,Cocha Cashu - Manu National Park,-11.2019203866005
+5497,Tinamus,major,Climate,29,Cocha Cashu - Manu National Park,11.1407335963251
+5623,Mitu,tuberosum,Human Presence,29,Cocha Cashu - Manu National Park,-0.137827572844457
+5169,Tapirus,terrestris,Climate,29,Cocha Cashu - Manu National Park,8.27207635927915
+5169,Tapirus,terrestris,Human Presence,29,Cocha Cashu - Manu National Park,0.449087881567356
+3050,Myoprocta,pratti,Human Presence,29,Cocha Cashu - Manu National Park,-0.161862159352205
+6979,Psophia,leucoptera,Human Presence,29,Cocha Cashu - Manu National Park,0.115596215882591
+2545,Mazama,americana,Human Presence,29,Cocha Cashu - Manu National Park,-0.518026469779258
+2545,Mazama,americana,Climate,29,Cocha Cashu - Manu National Park,5.66429777910417
+1234,Dasyprocta,punctata,Human Presence,29,Cocha Cashu - Manu National Park,-0.035772898017442
+650,Cephalophus,ogilbyi,Human Presence,30,Korup National Park,-5.65992602005338
+650,Cephalophus,ogilbyi,Climate,30,Korup National Park,10.6345550722659
+872,Cricetomys,emini,Human Presence,30,Korup National Park,-0.177563825331628
+872,Cricetomys,emini,Climate,30,Korup National Park,-0.141557581200503
+1666,Genetta,servalina,Climate,30,Korup National Park,-2.07614223420443
+1618,Funisciurus,leucogenys,Human Presence,30,Korup National Park,11.6887411409723
+3861,Philantomba,monticola,Climate,30,Korup National Park,2.33263011614938
+5635,Agelastes,niger,Human Presence,30,Korup National Park,7.53836374846453
+1618,Funisciurus,leucogenys,Climate,30,Korup National Park,4.51851431388954
+1666,Genetta,servalina,Human Presence,30,Korup National Park,-1.02519971292512
+5635,Agelastes,niger,Climate,30,Korup National Park,-9.04067269198666
+6817,Himantornis,haematopus,Climate,30,Korup National Park,-5.83483176439217
+7495,Turtur,brehmeri,Climate,30,Korup National Park,1.06574966384829
+2243,Leopoldamys,sabanus,Human Presence,32,Pasoh Forest Reserve,-8.63334946893375
+2243,Leopoldamys,sabanus,Climate,32,Pasoh Forest Reserve,10.2919800830055
+2931,Muntiacus,muntjak,Climate,32,Pasoh Forest Reserve,-7.62610123418361
+5016,Sus,scrofa,Forest Edge,32,Pasoh Forest Reserve,2.40632534489586
+5016,Sus,scrofa,Climate,32,Pasoh Forest Reserve,-6.114901085357
+5016,Sus,scrofa,Human Presence,32,Pasoh Forest Reserve,6.86367360746714
+5319,Tragulus,kanchil,Human Presence,32,Pasoh Forest Reserve,-7.56118194550985
+2403,Macaca,nemestrina,Climate,32,Pasoh Forest Reserve,9.45315051705491
+2403,Macaca,nemestrina,Human Presence,32,Pasoh Forest Reserve,2.10673070271495
+(175 rows)
