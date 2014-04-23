@@ -1,0 +1,262 @@
+id,mammal_id,spcrecid,kingdom,phylum,class,order_team,family,genus,species,common_names_eng,red_list_status_id,mass,guild,wpi_include
+1233,6286,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,DASYPROCTIDAE,Dasyprocta,prymnolopha,Black-rumped Agouti,8,3000,Herbivore,t
+1645,8834,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,EUPLERIDAE,Galidictis,grandidieri,"Giant-striped Mongoose, Grandidier's Mongoose",4,1400,Carnivore,t
+5387,12766,NA,ANIMALIA,CHORDATA,MAMMALIA,PHOLIDOTA,MANIDAE,Uromanis,tetradactyla,"Black-bellied Pangolin, Long-tailed Pangolin",8,2250,Insectivore,t
+5433,23036,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,VIVERRIDAE,Viverra,civettina,"Malabar Civet, Malabar Large-spotted Civet",3,6600,Carnivore,t
+5624,NA,100,ANIMALIA,CHORDATA,AVES,GALLIFORMES,CRACIDAE,Mitu,mitu,Alagoas Curassow,2,3860,Herbivore,t
+3307,14604,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Nesotragus,moschatus,Suni,8,6499,Herbivore,t
+5635,NA,307,ANIMALIA,CHORDATA,AVES,GALLIFORMES,NUMIDIDAE,Agelastes,niger,Black Guineafowl,8,1150,Omnivore,t
+7458,NA,2496,ANIMALIA,CHORDATA,AVES,COLUMBIFORMES,COLUMBIDAE,Aplopelia,larvata,Lemon Dove,8,116,Herbivore,t
+271,41690,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,VIVERRIDAE,Arctictis,binturong,"Bearcat, Binturong, Palawan Binturong",5,13000,Carnivore,t
+283,41625,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,MUSTELIDAE,Arctonyx,collaris,Hog Badger,9,6356,Carnivore,t
+5855,NA,112638,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Argusianus,argus,Great Argus,9,2380,Omnivore,t
+336,6924,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,CANIDAE,Atelocynus,microtis,"Short-eared Dog, Short-eared Fox, Small-eared Dog, Small-eared Zorro",9,7750,Carnivore,t
+337,2353,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,HYSTRICIDAE,Atherurus,africanus,African Brush-tailed Porcupine,8,1934,Omnivore,t
+338,2354,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,HYSTRICIDAE,Atherurus,macrourus,Asiatic Brush-tailed Porcupine,8,2000,Omnivore,t
+339,41590,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,HERPESTIDAE,Atilax,paludinosus,"Marsh Mongoose, Water Mongoose",8,3300,Carnivore,t
+9284,NA,1056,ANIMALIA,CHORDATA,AVES,CORACIIFORMES,MOMOTIDAE,Baryphthengus,martii,Rufous Motmot,8,195,Omnivore,t
+394,41591,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,HERPESTIDAE,Bdeogale,crassicauda,"Bushy-tailed Mongoose, Sokoke Bushy-tailed Mongoose",8,1550,Carnivore,t
+396,41592,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,HERPESTIDAE,Bdeogale,nigripes,"Black-footed Mogoose, Black-legged Mongoose",8,2500,Carnivore,t
+9173,NA,1046,ANIMALIA,CHORDATA,AVES,CORACIIFORMES,BRACHYPTERACIIDAE,Brachypteracias,squamiger,Scaly Ground-roller,5,170,Insectivore,t
+475,3412,NA,ANIMALIA,CHORDATA,MAMMALIA,CINGULATA,DASYPODIDAE,Cabassous,centralis,Northern Naked-tailed Armadillo,7,3810,Insectivore,t
+477,3414,NA,ANIMALIA,CHORDATA,MAMMALIA,CINGULATA,DASYPODIDAE,Cabassous,tatouay,Greater Naked-tailed Armadillo,8,5350,Insectivore,t
+478,3415,NA,ANIMALIA,CHORDATA,MAMMALIA,CINGULATA,DASYPODIDAE,Cabassous,unicinctus,Southern Naked-Tailed Armadillo,8,4800,Insectivore,t
+533,3595,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Callosciurus,erythraeus,Pallas's Squirrel,8,280,Herbivore,t
+6819,NA,2820,ANIMALIA,CHORDATA,AVES,GRUIFORMES,RALLIDAE,Canirallus,kioloides,Madagascar Wood Rail,8,269,Omnivore,t
+6818,NA,2819,ANIMALIA,CHORDATA,AVES,GRUIFORMES,RALLIDAE,Canirallus,oculeus,Grey-throated Rail,8,277,Omnivore,t
+571,3753,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,CANIDAE,Canis,adustus,Side-striped Jackal,8,10250,Carnivore,t
+593,3814,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Capricornis,milneedwardsii,"Chinese Serow, Southwest China Serow",9,160000,Herbivore,t
+595,3812,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Capricornis,sumatraensis,"Serow, Sumatran Serow",5,140000,Herbivore,t
+600,18306,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Caracal,aurata,"African Golden Cat, Golden Cat",9,16000,Carnivore,t
+642,4138,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Cephalophus,callipygus,"Peter's Duiker, Peters' Duiker",8,18250,Herbivore,t
+643,4139,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Cephalophus,dorsalis,Bay Duiker,8,20000,Omnivore,t
+644,4154,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Cephalophus,harveyi,"Harvey's Duiker, Harvey's Red Duiker",8,14500,Herbivore,t
+646,4141,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Cephalophus,leucogaster,White-bellied Duiker,8,12700,Herbivore,t
+648,4145,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Cephalophus,niger,Black Duiker,8,20400,Herbivore,t
+649,4146,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Cephalophus,nigrifrons,Black-fronted Duiker,8,13900,Herbivore,t
+650,4148,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Cephalophus,ogilbyi,Ogilby's Duiker,8,20000,Herbivore,t
+652,4150,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Cephalophus,silvicultor,Yellow-backed Duiker,8,72500,Herbivore,t
+653,4151,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Cephalophus,spadix,"Abbott's Duiker, Minde",4,56000,Omnivore,t
+654,4152,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Cephalophus,weynsi,"Weyn's Duiker, Weyns' Duiker",8,2001,Herbivore,t
+665,136615,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Cercocebus,agilis,Agile Mangabey,8,8000,Omnivore,t
+669,4203,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Cercocebus,sanjei,"Sanje Crested Mangabey, Sanje Mangabey, Sanje River Mangabey",4,8000,Omnivore,t
+670,4201,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Cercocebus,torquatus,"Collared Mangabey, Red-capped Mangabey, Sooty Mangabey, White-collared Mangabey",5,7750,Omnivore,t
+679,4220,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Cercopithecus,lhoesti,"L'Hoest's Guenon, Lhoests Monkey, L'Hoest's Monkey, Mountain Monkey",5,5375,Omnivore,t
+680,4221,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Cercopithecus,mitis,"Blue Monkey, Diademed Monkey, Golden Monkey, Samango, Sykes' Monkey",8,5000,Omnivore,t
+683,4224,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Cercopithecus,nictitans,"Greater Spot-nosed Guenon, Greater White-nosed Monkey, Putty-nosed Monkey, Spot-nosed Guenon, White-nosed Guenon",8,5410,Omnivore,t
+7497,NA,2534,ANIMALIA,CHORDATA,AVES,COLUMBIFORMES,COLUMBIDAE,Chalcophaps,indica,Emerald Dove,8,107,Herbivore,t
+818,41695,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,VIVERRIDAE,Civettictis,civetta,African Civet,8,12000,Omnivore,t
+845,41633,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,MEPHITIDAE,Conepatus,semistriatus,"Amazonian Hog-nosed Skunk, Striped Hog-nosed Skunk",8,1200,Carnivore,t
+8251,NA,1265,ANIMALIA,CHORDATA,AVES,CUCULIFORMES,CUCULIDAE,Coua,reynaudii,Red-fronted Coua,8,153,Omnivore,t
+5630,NA,106,ANIMALIA,CHORDATA,AVES,GALLIFORMES,CRACIDAE,Crax,alector,Black Curassow,5,3950,Omnivore,t
+5627,NA,103,ANIMALIA,CHORDATA,AVES,GALLIFORMES,CRACIDAE,Crax,rubra,Great Curassow,5,3950,Omnivore,t
+872,5521,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,NESOMYIDAE,Cricetomys,emini,"Forest Giant Pouched Rat, Giant Rat",8,1300,Omnivore,t
+873,5522,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,NESOMYIDAE,Cricetomys,gambianus,"Gambian Rat, Northern Giant Pouched Rat",8,1285,Omnivore,t
+1056,5674,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,HYAENIDAE,Crocuta,crocuta,Spotted Hyaena,8,63000,Carnivore,t
+1083,5760,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,EUPLERIDAE,Cryptoprocta,ferox,Fossa,5,9500,Carnivore,t
+5500,NA,20,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Crypturellus,cinereus,Cinereous Tinamou,8,575,Omnivore,t
+5504,NA,24,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Crypturellus,cinnamomeus,Thicket Tinamou,8,440,Omnivore,t
+5510,NA,31001,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Crypturellus,erythropus,Red-legged Tinamou,8,384,Omnivore,t
+5501,NA,21,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Crypturellus,soui,Little Tinamou,8,220,Omnivore,t
+5507,NA,27,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Crypturellus,strigulosus,Brazilian Tinamou,8,421,Omnivore,t
+5505,NA,25,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Crypturellus,undulatus,Undulated Tinamou,8,300,Omnivore,t
+5517,NA,36,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Crypturellus,variegatus,Variegated Tinamou,8,384,Omnivore,t
+1177,699,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,CUNICULIDAE,Cuniculus,paca,Spotted Paca,8,8000,Herbivore,t
+1179,5953,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,CANIDAE,Cuon,alpinus,"Asiatic Wild Dog, Dhole, Indian Wild Dog, Red Dog",4,12760,Carnivore,t
+1185,6082,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,VIVERRIDAE,Cynogale,bennettii,"Otter-civet, Otter Civet, Sunda Otter Civet",4,4500,Carnivore,t
+1228,6281,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,DASYPROCTIDAE,Dasyprocta,fuliginosa,Black Agouti,8,3500,Herbivore,t
+1231,6284,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,DASYPROCTIDAE,Dasyprocta,leporina,"Brazilian Agouti, Red-rumped Agouti",8,3020,Herbivore,t
+1234,6277,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,DASYPROCTIDAE,Dasyprocta,punctata,Central American Agouti,8,2675,Herbivore,t
+1237,6289,NA,ANIMALIA,CHORDATA,MAMMALIA,CINGULATA,DASYPODIDAE,Dasypus,kappleri,Greater Long-nosed Armadillo,8,9500,Herbivore,t
+1238,6290,NA,ANIMALIA,CHORDATA,MAMMALIA,CINGULATA,DASYPODIDAE,Dasypus,novemcinctus,"Common Long-nosed Armadillo, Nine-banded Armadillo",8,4204,Herbivore,t
+1261,6409,NA,ANIMALIA,CHORDATA,MAMMALIA,HYRACOIDEA,PROCAVIIDAE,Dendrohyrax,arboreus,"Eastern Tree Dassie, Eastern Tree Hyrax, Southern Tree Dassie, Southern Tree Hyrax",8,2950,Herbivore,t
+1317,40501,NA,ANIMALIA,CHORDATA,MAMMALIA,DIDELPHIMORPHIA,DIDELPHIDAE,Didelphis,marsupialis,"Black-eared Opossum, Common Opossum, Southern Opossum",8,1091,Omnivore,t
+1395,40603,NA,ANIMALIA,CHORDATA,MAMMALIA,EULIPOTYPHLA,ERINACEIDAE,Echinosorex,gymnura,"Gymnure, Moonrat",8,957,Insectivore,t
+1406,41644,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,MUSTELIDAE,Eira,barbara,"Greyheaded Tayra, Tayra",8,3910,Omnivore,t
+1420,7140,NA,ANIMALIA,CHORDATA,MAMMALIA,PROBOSCIDEA,ELEPHANTIDAE,Elephas,maximus,"Asian Elephant, Indian Elephant",4,2720000,Herbivore,t
+1553,136269,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,LEMURIDAE,Eulemur,rufifrons,"Bennett's Brown Lemur, Red-fronted Brown Lemur",9,300,Herbivore,t
+1576,8327,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,EUPLERIDAE,Eupleres,goudotii,"Falanouc, Fanalouc, Malagasy Mongoose, Slender Fanalouc, Small-toothed Mongoose",9,1500,Carnivore,t
+1605,8668,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,EUPLERIDAE,Fossa,fossana,"Fanaloka, Malagasy Civet, Striped Civet",9,218,Carnivore,t
+5724,NA,158,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Francolinus,africanus,Grey-winged Francolin,8,426,Herbivore,t
+5720,NA,154,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Francolinus,lathami,Forest Francolin,8,269,Herbivore,t
+5749,NA,183,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Francolinus,nobilis,Handsome Francolin,8,757,Herbivore,t
+5714,NA,148,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Francolinus,pintadeanus,Chinese Francolin,8,340,Herbivore,t
+5740,NA,174,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Francolinus,squamatus,Scaly Francolin,8,472,Herbivore,t
+1611,8756,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Funisciurus,anerythrus,"Redness Tree Squirrel, Thomas's Rope Squirrel",8,286,Herbivore,t
+1617,8760,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Funisciurus,lemniscatus,Ribboned Rope Squirrel,8,250,Herbivore,t
+1618,8761,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Funisciurus,leucogenys,"Orange Headed Tree Squirrel, Red-cheeked Rope Squirrel",8,297,Herbivore,t
+1619,8762,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Funisciurus,pyrropus,Fire-footed Rope Squirrel,8,3200,Herbivore,t
+1642,41640,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,MUSTELIDAE,Galictis,vittata,Greater Grison,8,3200,Carnivore,t
+1643,39426,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,EUPLERIDAE,Galidia,elegans,"Malagasy Ring-tailed Mongoose, Ring-tailed Mongoose",8,800,Carnivore,t
+1644,8833,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,EUPLERIDAE,Galidictis,fasciata,"Broad-striped Mongoose, Malagasy Broad-striped Mongoose",9,550,Carnivore,t
+5815,NA,246,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Gallus,gallus,Red Junglefowl,8,914,Omnivore,t
+1666,41700,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,VIVERRIDAE,Genetta,servalina,Servaline Genet,8,1055,Carnivore,t
+1668,41702,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,VIVERRIDAE,Genetta,tigrina,"Blotched Genet, Cape Large-spotted Genet, Large-spotted Genet, South African Large-spotted Genet",8,2225,Carnivore,t
+7565,NA,2598,ANIMALIA,CHORDATA,AVES,COLUMBIFORMES,COLUMBIDAE,Geotrygon,frenata,White-throated Quail-dove,8,305,Omnivore,t
+7569,NA,2602,ANIMALIA,CHORDATA,AVES,COLUMBIFORMES,COLUMBIDAE,Geotrygon,montana,Ruddy Quail-dove,8,280,Omnivore,t
+7568,NA,2601,ANIMALIA,CHORDATA,AVES,COLUMBIFORMES,COLUMBIDAE,Geotrygon,violacea,Violaceous Quail-dove,8,190,Omnivore,t
+1782,39994,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,HOMINIDAE,Gorilla,beringei,"Eastern Gorilla, Mountain Gorilla",4,124251,Herbivore,t
+1783,9404,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,HOMINIDAE,Gorilla,gorilla,"Lowland Gorilla, Western Gorilla",3,180000,Herbivore,t
+5637,NA,309,ANIMALIA,CHORDATA,AVES,GALLIFORMES,NUMIDIDAE,Guttera,plumifera,Plumed Guineafowl,8,1200,Omnivore,t
+5638,NA,310,ANIMALIA,CHORDATA,AVES,GALLIFORMES,NUMIDIDAE,Guttera,pucherani,Crested Guineafowl,8,1200,Omnivore,t
+1859,9760,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,URSIDAE,Helarctos,malayanus,"Malayan Sun Bear, Sun Bear",5,47000,Omnivore,t
+1870,62011,NA,ANIMALIA,CHORDATA,MAMMALIA,AFROSORICIDA,TENRECIDAE,Hemicentetes,nigriceps,Highland Streaked Tenrec,8,100000,Carnivore,t
+1871,40593,NA,ANIMALIA,CHORDATA,MAMMALIA,AFROSORICIDA,TENRECIDAE,Hemicentetes,semispinosus,Lowland Streaked Tenrec,8,138,Carnivore,t
+1874,41689,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,VIVERRIDAE,Hemigalus,derbyanus,"Banded Civet, Banded Palm Civet",5,2000,Carnivore,t
+1876,41610,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,HERPESTIDAE,Herpestes,brachyurus,Short-tailed Mongoose,8,2000,Carnivore,t
+1882,41615,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,HERPESTIDAE,Herpestes,naso,Long-nosed Mongoose,8,3000,Omnivore,t
+1888,41618,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,HERPESTIDAE,Herpestes,urva,Crab-eating Mongoose,8,1863,Carnivore,t
+6817,NA,2818,ANIMALIA,CHORDATA,AVES,GRUIFORMES,RALLIDAE,Himantornis,haematopus,Nkulengu Rail,8,390,Omnivore,t
+1999,10259,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,ECHIMYIDAE,Hoplomys,gymnurus,Armored Rat,8,240,Omnivore,t
+2009,136277,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,CAVIIDAE,Hydrochoerus,isthmius,Lesser Capybara,7,10850,Herbivore,t
+2017,10341,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,TRAGULIDAE,Hyemoschus,aquaticus,Water Chevrotain,8,188500,Herbivore,t
+2033,41769,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,SUIDAE,Hylochoerus,meinertzhageni,"Forest Hog, Giant Forest Hog, Western Forest Hog",8,14936,Omnivore,t
+2066,10748,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,HYSTRICIDAE,Hystrix,africaeaustralis,Cape Porcupine,8,8000,Omnivore,t
+2067,10749,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,HYSTRICIDAE,Hystrix,brachyura,"Himalayan Crestless Porcupine, Malayan Porcupine",8,8000,Omnivore,t
+2177,11305,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Lariscus,insignis,Three-striped Ground Squirrel,8,200,Omnivore,t
+2236,11509,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Leopardus,pardalis,Ocelot,8,11900,Carnivore,t
+2237,11510,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Leopardus,tigrinus,"Little Spotted Cat, Little Tiger Cat, Oncilla, Tiger Cat",5,2250,Carnivore,t
+2238,11511,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Leopardus,wiedii,"Margay, Tree Ocelot",9,3250,Carnivore,t
+2243,11520,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,MURIDAE,Leopoldamys,sabanus,"Long-tailed Giant Rat, Noisy Rat",8,391,Insectivore,t
+2271,11638,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Leptailurus,serval,Serval,8,12000,Carnivore,t
+7550,NA,2585,ANIMALIA,CHORDATA,AVES,COLUMBIFORMES,COLUMBIDAE,Leptotila,cassini,Grey-chested Dove,8,156,Omnivore,t
+7547,NA,2582,ANIMALIA,CHORDATA,AVES,COLUMBIFORMES,COLUMBIDAE,Leptotila,rufaxilla,Grey-fronted Dove,8,155,Omnivore,t
+7542,NA,2577,ANIMALIA,CHORDATA,AVES,COLUMBIFORMES,COLUMBIDAE,Leptotila,verreauxi,White-tipped Dove,8,155,Omnivore,t
+6285,NA,3793,ANIMALIA,CHORDATA,AVES,CICONIIFORMES,THRESKIORNITHIDAE,Lophotibis,cristata,Madagascar Crested Ibis,9,NA,Omnivore,t
+5829,NA,260,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Lophura,diardi,Siamese Fireback,8,1041,Omnivore,t
+5820,NA,251,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Lophura,nycthemera,Silver Pheasant,8,1358,Omnivore,t
+2378,12392,NA,ANIMALIA,CHORDATA,MAMMALIA,PROBOSCIDEA,ELEPHANTIDAE,Loxodonta,africana,African Elephant,5,3940034,Herbivore,t
+2382,12419,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,MUSTELIDAE,Lutra,lutra,"Common Otter, Eurasian Otter, European Otter, European River Otter, Old World Otter",9,11000,Carnivore,t
+2393,12548,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Macaca,arctoides,"Bear Macaque, Stump-tailed Macaque, Stumptail Macaque",5,5000,Omnivore,t
+2394,12549,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Macaca,assamensis,"Assamese Macaque, Assam Macaque",9,12000,Omnivore,t
+2396,12551,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Macaca,fascicularis,"Crab-eating Macaque, Cynomolgus Monkey, Long-tailed Macaque",8,4750,Omnivore,t
+2399,39792,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Macaca,leonina,"Northern Pig-tailed Macaque, Northern Pigtail Macaque",5,6093,Omnivore,t
+2403,12555,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Macaca,nemestrina,"Pig-tailed Macaque, Pigtail Macaque, Southern Pig-tailed Macaque, Sundaland Pigtail Macaque, Sunda Pig-tailed Macaque",5,6500,Omnivore,t
+2463,12753,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Mandrillus,leucophaeus,Drill,4,15000,Omnivore,t
+2467,12763,NA,ANIMALIA,CHORDATA,MAMMALIA,PHOLIDOTA,MANIDAE,Manis,javanica,"Malayan Pangolin, Sunda Pangolin",4,5150,Insectivore,t
+2511,41649,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,MUSTELIDAE,Martes,flavigula,"Javan Yellow-throated Marten, Yellow-throated Marten",8,1185,Omnivore,t
+2545,29619,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,CERVIDAE,Mazama,americana,Red Brocket,7,22800,Herbivore,t
+2549,29620,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,CERVIDAE,Mazama,gouazoubira,"Brown Brocket, Gray Brocket",8,8000,Herbivore,t
+2551,136708,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,CERVIDAE,Mazama,nemorivaga,"Amazonian Brown Brocket, Amazonian Brown Brocket Deer, Small Brown Brocket Deer",8,672,Herbivore,t
+2554,136290,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,CERVIDAE,Mazama,temama,Central American Red Brocket,7,2100,Herbivore,t
+2578,41629,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,MUSTELIDAE,Mellivora,capensis,Honey Badger,8,9000,Carnivore,t
+2582,41627,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,MUSTELIDAE,Melogale,personata,"Burmese Ferret-badger, Large-toothed Ferret-badger, Large-toothed Ferret Badger",7,1703,Insectivore,t
+2660,40509,NA,ANIMALIA,CHORDATA,MAMMALIA,DIDELPHIMORPHIA,DIDELPHIDAE,Metachirus,nudicaudatus,Brown Four-eyed Opossum,8,375,Omnivore,t
+5622,NA,98,ANIMALIA,CHORDATA,AVES,GALLIFORMES,CRACIDAE,Mitu,salvini,Salvin's Curassow,8,3100,Omnivore,t
+5623,NA,99,ANIMALIA,CHORDATA,AVES,GALLIFORMES,CRACIDAE,Mitu,tuberosum,Razor-billed Curassow,8,3060,Omnivore,t
+2924,41621,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,HERPESTIDAE,Mungos,mungo,Banded Mongoose,8,1925,Insectivore,t
+2931,42190,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,CERVIDAE,Muntiacus,muntjak,"Barking Deer, Bornean Red Muntjac, Indian Muntjac, Red Muntjac, Southern Red Muntjac, Sundaland Red Muntjac",8,14000,Herbivore,t
+3049,14100,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,DASYPROCTIDAE,Myoprocta,acouchy,Red Acouchi,8,600,Herbivore,t
+3050,136663,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,DASYPROCTIDAE,Myoprocta,pratti,Green Acouchi,8,1880,Herbivore,t
+3175,14224,NA,ANIMALIA,CHORDATA,MAMMALIA,PILOSA,MYRMECOPHAGIDAE,Myrmecophaga,tridactyla,Giant Anteater,5,22333,Insectivore,t
+3190,41589,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,NANDINIIDAE,Nandinia,binotata,"African Palm Civet, Two-spotted Palm Civet",8,2000,Omnivore,t
+3198,41683,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,PROCYONIDAE,Nasua,narica,"Coatimundi, White-nosed Coati",8,4030,Omnivore,t
+3199,41684,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,PROCYONIDAE,Nasua,nasua,South American Coati,8,3794,Omnivore,t
+3241,14519,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Neofelis,nebulosa,Clouded Leopard,5,19852,Carnivore,t
+8297,NA,1330,ANIMALIA,CHORDATA,AVES,CUCULIFORMES,CUCULIDAE,Neomorphus,geoffroyi,Rufous-vented Ground-cuckoo,8,350,Omnivore,t
+3294,14671,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,NESOMYIDAE,Nesomys,rufus,"Eastern Red Forest Rat, Island Mouse",8,163,Herbivore,t
+5492,NA,16,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Nothocercus,bonapartei,Highland Tinamou,8,925,Omnivore,t
+5620,NA,96,ANIMALIA,CHORDATA,AVES,GALLIFORMES,CRACIDAE,Nothocrax,urumutum,Nocturnal Curassow,8,1700,NA,t
+5636,NA,308,ANIMALIA,CHORDATA,AVES,GALLIFORMES,NUMIDIDAE,Numida,meleagris,Helmeted Guineafowl,8,1375,Omnivore,t
+3470,42394,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,CERVIDAE,Odocoileus,virginianus,"Key Deer, Key Deer Toy Deer, White-tailed Deer",8,55509,Herbivore,t
+5653,NA,324,ANIMALIA,CHORDATA,AVES,GALLIFORMES,ODONTOPHORIDAE,Odontophorus,gujanensis,Marbled Wood-quail,9,280,Omnivore,t
+5667,NA,338,ANIMALIA,CHORDATA,AVES,GALLIFORMES,ODONTOPHORIDAE,Odontophorus,guttatus,Spotted Wood-quail,8,300,Omnivore,t
+5664,NA,335,ANIMALIA,CHORDATA,AVES,GALLIFORMES,ODONTOPHORIDAE,Odontophorus,leucolaemus,Black-breasted Wood-quail,8,275,Omnivore,t
+5666,NA,337,ANIMALIA,CHORDATA,AVES,GALLIFORMES,ODONTOPHORIDAE,Odontophorus,stellatus,Starred Wood-quail,8,295,Omnivore,t
+3538,41504,NA,ANIMALIA,CHORDATA,MAMMALIA,TUBULIDENTATA,ORYCTEROPODIDAE,Orycteropus,afer,"Aardvark, Antbear",8,52350,Insectivore,t
+3611,41692,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,VIVERRIDAE,Paguma,larvata,"Gem-faced Civet, Masked Palm Civet",8,4300,Insectivore,t
+3615,15933,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,HOMINIDAE,Pan,troglodytes,"Chimpanzee, Common Chimpanzee, Robust Chimpanzee",4,45000,Omnivore,t
+3617,15953,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Panthera,onca,Jaguar,9,100000,Carnivore,t
+3618,15954,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Panthera,pardus,Leopard,9,55615,Carnivore,t
+3619,15955,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Panthera,tigris,Tiger,4,162564,Carnivore,t
+3623,40647,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Papio,anubis,"Anubis Baboon, Olive Baboon",8,21250,Omnivore,t
+3624,16021,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Papio,cynocephalus,Yellow Baboon,8,18400,Omnivore,t
+3636,41693,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,VIVERRIDAE,Paradoxurus,hermaphroditus,"Common Palm Civet, Mentawai Palm Civet",8,3200,Omnivore,t
+3670,16202,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Paraxerus,vexillarius,Svynnerton's Bush Squirrel,9,675,Herbivore,t
+3673,16218,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Pardofelis,marmorata,Marbled Cat,5,2459,Carnivore,t
+3674,4038,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Pardofelis,temminckii,"Asiatic Golden Cat, Golden Cat, Temminck's Cat",9,12500,Carnivore,t
+3683,41777,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,TAYASSUIDAE,Pecari,tajacu,Collared Peccary,8,21267,Omnivore,t
+5606,NA,82,ANIMALIA,CHORDATA,AVES,GALLIFORMES,CRACIDAE,Penelope,jacquacu,Spix's Guan,8,1460,Herbivore,t
+5608,NA,84,ANIMALIA,CHORDATA,AVES,GALLIFORMES,CRACIDAE,Penelope,pileata,White-crested Guan,5,1260,Herbivore,t
+5603,NA,79,ANIMALIA,CHORDATA,AVES,GALLIFORMES,CRACIDAE,Penelope,purpurascens,Crested Guan,8,1750,Herbivore,t
+5601,NA,77,ANIMALIA,CHORDATA,AVES,GALLIFORMES,CRACIDAE,Penelope,superciliaris,Rusty-margined Guan,8,1075,Herbivore,t
+3800,42679,NA,ANIMALIA,CHORDATA,MAMMALIA,MACROSCELIDEA,MACROSCELIDIDAE,Petrodromus,tetradactylus,"Four-toed Elephant-shrew, Four-toed Elephant Shrew, Four-toed Sengi",8,188,Insectivore,t
+3851,12767,NA,ANIMALIA,CHORDATA,MAMMALIA,PHOLIDOTA,MANIDAE,Phataginus,tricuspis,"African White-bellied Pangolin, Three-cusped Pangolin, Tree Pangolin, White-bellied Pangolin",9,1800,Insectivore,t
+3854,40515,NA,ANIMALIA,CHORDATA,MAMMALIA,DIDELPHIMORPHIA,DIDELPHIDAE,Philander,andersoni,"Anderson's Four-eyed Opossum, Black Four-eyed Opossum",8,325,Omnivore,t
+3859,40516,NA,ANIMALIA,CHORDATA,MAMMALIA,DIDELPHIMORPHIA,DIDELPHIDAE,Philander,opossum,"Gray Four-eyed Opossum, Guaiki",8,421,Omnivore,t
+3861,4143,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Philantomba,monticola,Blue Duiker,8,4600,Herbivore,t
+12282,NA,6264,ANIMALIA,CHORDATA,AVES,PASSERIFORMES,PICATHARTIDAE,Picathartes,oreas,Grey-necked Picathartes,5,225,Omnivore,t
+5848,NA,32657,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Polyplectron,bicalcaratum,Grey Peacock-pheasant,8,737,Omnivore,t
+4044,41770,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,SUIDAE,Potamochoerus,larvatus,Bushpig,8,48781,Omnivore,t
+4045,41771,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,SUIDAE,Potamochoerus,porcus,Red River Hog,8,70000,Omnivore,t
+4077,18134,NA,ANIMALIA,CHORDATA,MAMMALIA,PRIMATES,CERCOPITHECIDAE,Presbytis,siamensis,"Pale-thighed Langur, White-thighed Surili",9,6600,Herbivore,t
+4079,18144,NA,ANIMALIA,CHORDATA,MAMMALIA,CINGULATA,DASYPODIDAE,Priodontes,maximus,Giant Armadillo,5,45360,Insectivore,t
+4080,18146,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Prionailurus,bengalensis,Leopard Cat,8,3300,Carnivore,t
+4084,41705,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,PRIONODONTIDAE,Prionodon,linsang,Banded Linsang,8,700,Carnivore,t
+4098,41685,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,PROCYONIDAE,Procyon,cancrivorus,Crab-eating Raccoon,8,6950,Carnivore,t
+4708,40594,NA,ANIMALIA,CHORDATA,MAMMALIA,AFROSORICIDA,TENRECIDAE,Setifer,setosus,"Greater Hedgehog Tenrec, Large Madagascar Hedgehog",8,213,Insectivore,t
+4099,41686,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,PROCYONIDAE,Procyon,lotor,Northern Raccoon,8,5525,Omnivore,t
+4101,18275,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,ECHIMYIDAE,Proechimys,brevicauda,"Huallaga Spiny Rat, Huallago Spiny Rat",8,285,Omnivore,t
+4104,18279,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,ECHIMYIDAE,Proechimys,cuvieri,Cuvier's Spiny Rat,8,330,Omnivore,t
+4110,18277,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,ECHIMYIDAE,Proechimys,guyannensis,Cayenne Spiny Rat,8,225,Omnivore,t
+4121,18297,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,ECHIMYIDAE,Proechimys,semispinosus,Tome's Spiny Rat,8,361,Omnivore,t
+4123,18300,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,ECHIMYIDAE,Proechimys,steerei,Steere's Spiny Rat,8,250,Omnivore,t
+4154,18386,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Protoxerus,stangeri,"African Giant Squirrel, Forest Giant Squirrel",8,592,Herbivore,t
+6978,NA,2803,ANIMALIA,CHORDATA,AVES,GRUIFORMES,PSOPHIIDAE,Psophia,crepitans,Grey-winged Trumpeter,8,1300,Omnivore,t
+6979,NA,2804,ANIMALIA,CHORDATA,AVES,GRUIFORMES,PSOPHIIDAE,Psophia,leucoptera,Pale-winged Trumpeter,8,1250,Omnivore,t
+6980,NA,2805,ANIMALIA,CHORDATA,AVES,GRUIFORMES,PSOPHIIDAE,Psophia,viridis,Dark-winged Trumpeter,4,1100,Omnivore,t
+4235,18711,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,MUSTELIDAE,Pteronura,brasiliensis,"Giant Brazilian Otter, Giant Otter",4,24000,Carnivore,t
+4304,18868,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Puma,concolor,"Cougar, Deer Tiger, Mountain Lion, Puma, Red Tiger",8,51600,Carnivore,t
+4305,9948,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Puma,yagouaroundi,"Eyra Cat, Jaguarundi",8,8400,Carnivore,t
+4370,19360,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,MURIDAE,Rattus,rattus,"Black Rat, House Rat, Roof Rat, Ship Rat",8,280,Omnivore,t
+4513,42460,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Rhinosciurus,laticaudatus,Shrew-faced Squirrel,9,221,Herbivore,t
+4534,19647,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SPALACIDAE,Rhizomys,sumatrensis,"Indomalayan Bamboo Rat, Large Bamboo Rat",8,250,Herbivore,t
+4547,19709,NA,ANIMALIA,CHORDATA,MAMMALIA,MACROSCELIDEA,MACROSCELIDIDAE,Rhynchocyon,cirnei,"Chequered Elephant-shrew, Chequered Elephant Shrew, Chequered Sengi",9,490,Insectivore,t
+4549,136309,NA,ANIMALIA,CHORDATA,MAMMALIA,MACROSCELIDEA,MACROSCELIDIDAE,Rhynchocyon,udzungwensis,"Grey-faced Elephant-shrew, Grey-faced Sengi",5,750,Insectivore,t
+5799,NA,228,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Rollulus,rouloul,Crested Partridge,9,217,Omnivore,t
+4579,41790,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,CERVIDAE,Rusa,unicolor,"Sambar, Sambar Deer",5,211620,Herbivore,t
+4650,20010,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Sciurus,granatensis,Red-tailed Squirrel,8,250,Herbivore,t
+4652,20012,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Sciurus,ignitus,Bolivian Squirrel,7,190,Herbivore,t
+4653,20013,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Sciurus,igniventris,Northern Amazon Red Squirrel,8,700,Herbivore,t
+4662,20022,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Sciurus,spadiceus,Southern Amazon Red Squirrel,8,403,Herbivore,t
+4759,12762,NA,ANIMALIA,CHORDATA,MAMMALIA,PHOLIDOTA,MANIDAE,Smutsia,gigantea,"Giant Ground Pangolin, Giant Pangolin",9,12500,Insectivore,t
+4863,20468,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,CANIDAE,Speothos,venaticus,"Bush Dog, Savannah Dog, Vinegar Dog",9,6000,Carnivore,t
+4994,21155,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,SCIURIDAE,Sundasciurus,hippurus,Horse-tailed Squirrel,9,500,Herbivore,t
+5016,41775,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,SUIDAE,Sus,scrofa,"Eurasian Wild Pig, Ryukyu Islands Wild Pig, Wild Boar",8,117286,Omnivore,t
+5025,41298,NA,ANIMALIA,CHORDATA,MAMMALIA,LAGOMORPHA,LEPORIDAE,Sylvilagus,brasiliensis,"Forest Rabbit, Tapeti",8,950,Herbivore,t
+5054,21251,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Syncerus,caffer,African Buffalo,8,580003,Herbivore,t
+5117,21349,NA,ANIMALIA,CHORDATA,MAMMALIA,PILOSA,MYRMECOPHAGIDAE,Tamandua,mexicana,Northern Tamandua,8,4210,Insectivore,t
+5118,21350,NA,ANIMALIA,CHORDATA,MAMMALIA,PILOSA,MYRMECOPHAGIDAE,Tamandua,tetradactyla,"Collared Anteater, Lesser Anteater, Northern Tamandua, Southern Tamandua, Tamandua",8,5515,Insectivore,t
+5166,21471,NA,ANIMALIA,CHORDATA,MAMMALIA,PERISSODACTYLA,TAPIRIDAE,Tapirus,bairdii,"Baird's Tapir, Central American Tapir",4,225000,Herbivore,t
+5167,21472,NA,ANIMALIA,CHORDATA,MAMMALIA,PERISSODACTYLA,TAPIRIDAE,Tapirus,indicus,"Asian Tapir, Indian Tapir, Malayan Tapir, Malay Tapir",4,296250,Herbivore,t
+5169,21474,NA,ANIMALIA,CHORDATA,MAMMALIA,PERISSODACTYLA,TAPIRIDAE,Tapirus,terrestris,"Brazilian Tapir, Lowland Tapir, South American Tapir",5,207501,Herbivore,t
+5194,41778,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,TAYASSUIDAE,Tayassu,pecari,White-lipped Peccary,5,32234,Omnivore,t
+5195,40595,NA,ANIMALIA,CHORDATA,MAMMALIA,AFROSORICIDA,TENRECIDAE,Tenrec,ecaudatus,"Common Tenrec, Tailess Tenrec",8,868,Omnivore,t
+5257,21846,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,THRYONOMYIDAE,Thryonomys,gregorianus,Lesser Cane Rat,8,2707,Herbivore,t
+5258,21847,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,THRYONOMYIDAE,Thryonomys,swinderianus,Greater Cane Rat,8,4060,Herbivore,t
+5498,NA,15,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Tinamus,guttatus,White-throated Tinamou,9,689,Omnivore,t
+5497,NA,14,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Tinamus,major,Great Tinamou,9,1100,Omnivore,t
+5494,NA,11,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Tinamus,tao,Grey Tinamou,5,1674,Omnivore,t
+5312,22047,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Tragelaphus,eurycerus,Bongo,9,329003,Herbivore,t
+5315,22051,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Tragelaphus,scriptus,Bushbuck,8,43250,Herbivore,t
+5316,22050,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,BOVIDAE,Tragelaphus,spekii,"Marshbuck, Sitatunga",8,77999,Herbivore,t
+5318,41780,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,TRAGULIDAE,Tragulus,javanicus,"Java Mousedeer, Javan Chevrotain, Javan Mousedeer, Kanchil, Lesser Mouse Deer",7,2250,Herbivore,t
+5319,136297,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,TRAGULIDAE,Tragulus,kanchil,"Lesser Malay Chevrotain, Lesser Mousedeer, Lesser Oriental Chevrotain, Mouse Deer",8,2000,Herbivore,t
+5320,41781,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,TRAGULIDAE,Tragulus,napu,"Balabac Chevrotain, Greater Mousedeer, Greater Oriental Chevrotain, Larger Malay Chevrotain, Larger Mousedeer, Napu",8,4000,Herbivore,t
+5326,22066,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,URSIDAE,Tremarctos,ornatus,"Andean Bear, Spectacled Bear",5,140001,Omnivore,t
+5356,41494,NA,ANIMALIA,CHORDATA,MAMMALIA,SCANDENTIA,TUPAIIDAE,Tupaia,glis,"Common Treeshrew, Common Tree Shrew",8,159,Omnivore,t
+5367,41501,NA,ANIMALIA,CHORDATA,MAMMALIA,SCANDENTIA,TUPAIIDAE,Tupaia,tana,"Large Treeshrew, Large Tree Shrew",8,198,Insectivore,t
+7495,NA,2532,ANIMALIA,CHORDATA,AVES,COLUMBIFORMES,COLUMBIDAE,Turtur,brehmeri,Blue-headed Wood-dove,8,113,Omnivore,t
+5436,41709,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,VIVERRIDAE,Viverra,zibetha,Large Indian Civet,9,9000,Omnivore,t
+5774,NA,187,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Xenoperdix,udzungwensis,Udzungwa Forest-partridge,4,225,Omnivore,t
+5795,NA,31507,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Arborophila,chloropus,Scaly-breasted Partridge,8,270,NA,t
+573,3745,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,CANIDAE,Canis,latrans,"American Jackal, Brush Wolf, Coyote, Prairie Wolf",8,11990,Carnivore,t
+1059,41595,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,HERPESTIDAE,Crossarchus,obscurus,"Common Cusimanse, Cusimanse, Long-nosed Cusimanse",8,1395,Omnivore,t
+5519,NA,38,ANIMALIA,CHORDATA,AVES,TINAMIFORMES,TINAMIDAE,Crypturellus,bartletti,Bartlett's Tinamou,8,241,NA,t
+1319,40502,NA,ANIMALIA,CHORDATA,MAMMALIA,DIDELPHIMORPHIA,DIDELPHIDAE,Didelphis,virginiana,Virginia Opossum,8,2442,Omnivore,t
+2008,10300,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,CAVIIDAE,Hydrochoerus,hydrochaeris,Capybara,8,48145,Herbivore,t
+5828,NA,259,ANIMALIA,CHORDATA,AVES,GALLIFORMES,PHASIANIDAE,Lophura,ignita,Crested Fireback,9,1815,Omnivore,t
+2930,136831,NA,ANIMALIA,CHORDATA,MAMMALIA,CETARTIODACTYLA,CERVIDAE,Muntiacus,montanus,Sumatran Mountain Muntjac,7,18939,Herbivore,t
+4081,18148,NA,ANIMALIA,CHORDATA,MAMMALIA,CARNIVORA,FELIDAE,Prionailurus,planiceps,Flat-headed Cat,4,3533,Omnivore,t
+5337,22132,NA,ANIMALIA,CHORDATA,MAMMALIA,RODENTIA,HYSTRICIDAE,Trichys,fasciculata,Long-tailed Porcupine,8,1750,NA,t
+6890,NA,2884,ANIMALIA,CHORDATA,AVES,GRUIFORMES,RALLIDAE,Aramides,cajaneus,Grey-necked Wood-rail,8,397,Omnivore,t
