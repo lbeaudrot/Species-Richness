@@ -185,11 +185,12 @@ for(i in 1:length(CTSite_FD)){
 
 CTweighted <- cbind(CT.nbsp, CT.sing.sp, CT.FEve, CT.FDiv, CT.FDis, CT.RaoQ, CWM.Mass, CWM.Litter, CWM.GR)
 CTweighted <- as.data.frame(CTweighted)
+rownames(CTweighted) <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB", "YAN", "YAS") 
 
 
 
 
-
+# Calculate FD for birds
 
 birdFD <- dbFD(BirdTraits, corr="cailliez")
 birdFD
