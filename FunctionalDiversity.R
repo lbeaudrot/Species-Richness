@@ -97,7 +97,7 @@ table(alldata$Site.Code, alldata$Sampling.Period) #Examine which sites have data
 
 ######## Start here to CHANGE INPUT DATA FOR Functional Diversity metrics ###############
 # Use  "Site.Code" to designate which site to include
-data.use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="COU",]
+data.use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="YAN",]
 
 # Subset the species list for each site to calculate the functional diversity metrics
 splist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
@@ -171,8 +171,8 @@ BtraitFD_w <- dbFD(BirdTraits[,1:dim(BirdTraits)[2]-1], a=Bpsi_use[1:dim(BirdTra
 #BIFtraitFD_w <- traitFD_w
 #B.BIFtraitFD_w <- BtraitFD_w
 
-COUtraitFD_w <- traitFD_w
-B.COUtraitFD_w <- BtraitFD_w
+#COUtraitFD_w <- traitFD_w
+#B.COUtraitFD_w <- BtraitFD_w
 
 #KRPtraitFD_w <- traitFD_w
 #B.KRPtraitFD_w <- BtraitFD_w
@@ -192,8 +192,8 @@ B.COUtraitFD_w <- BtraitFD_w
 #VBtraitFD_w <- traitFD_w
 #B.VBtraitFD_w <- BtraitFD_w
 
-#YANtraitFD_w <- traitFD_w
-#B.YANtraitFD_w <- BtraitFD_w
+YANtraitFD_w <- traitFD_w
+B.YANtraitFD_w <- BtraitFD_w
 
 
 #Extract Mammal FD data
@@ -244,30 +244,24 @@ B.CT.FDiv <- vector()
 B.CT.FDis <- vector()
 B.CT.RaoQ <- vector()
 B.CWM.Mass <- vector()
-B.CWM.Litter <- vector()
-B.CWM.GR <- vector()
-B.CWM.Activity <- vector()
 B.CWM.Guild <- vector()
 
 for(i in 1:length(CTSite_FD)){
-  B.CT.nbsp[i] <- CTSite_FD[[i]]$nbsp
-  B.CT.sing.sp[i] <- CTSite_FD[[i]]$sing.sp
-  B.CT.FEve[i] <- CTSite_FD[[i]]$FEve
-  B.CT.FDiv[i] <- CTSite_FD[[i]]$FDiv
-  B.CT.FDis[i] <- CTSite_FD[[i]]$FDis
-  B.CT.RaoQ[i] <- CTSite_FD[[i]]$RaoQ
-  B.CWM.Mass[i] <- CTSite_FD[[i]]$CWM$Mass_c
-  B.CWM.Litter[i] <- CTSite_FD[[i]]$CWM$LitterSize_c
-  B.CWM.GR[i] <- CTSite_FD[[i]]$CWM$GR_Area_c
-  B.CWM.Activity[i] <- CTSite_FD[[i]]$CWM$ActivityCycle_c
-  B.CWM.Guild[i] <- CTSite_FD[[i]]$CWM$Guild_c
+  B.CT.nbsp[i] <- B.CTSite_FD[[i]]$nbsp
+  B.CT.sing.sp[i] <- B.CTSite_FD[[i]]$sing.sp
+  B.CT.FEve[i] <- B.CTSite_FD[[i]]$FEve
+  B.CT.FDiv[i] <- B.CTSite_FD[[i]]$FDiv
+  B.CT.FDis[i] <- B.CTSite_FD[[i]]$FDis
+  B.CT.RaoQ[i] <- B.CTSite_FD[[i]]$RaoQ
+  B.CWM.Mass[i] <- B.CTSite_FD[[i]]$CWM$Mass
+  B.CWM.Guild[i] <- B.CTSite_FD[[i]]$CWM$Guild
 }
 
-B.CTweighted <- cbind(CT.nbsp, CT.sing.sp, CT.FEve, CT.FDiv, CT.FDis, CT.RaoQ, CWM.Mass, CWM.Litter, CWM.GR)
-B.CTweighted <- as.data.frame(CTweighted)
+B.CTweighted <- cbind(B.CT.nbsp, B.CT.sing.sp, B.CT.FEve, B.CT.FDiv, B.CT.FDis, B.CT.RaoQ, B.CWM.Mass)
+B.CTweighted <- as.data.frame(B.CTweighted)
 rownames(B.CTweighted) <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB", "YAN", "YAS") 
 
-
-
+CTweighted
+B.CTweighted
 # Create name for output for each site for loop
 # paste(events.use$Site.Code[1], events.use$Sampling.Period[1], "FD", sep=".")
