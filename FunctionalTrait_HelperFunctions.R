@@ -13,9 +13,6 @@ f.family.AC <- function(data){ # determine mode for each Family for Activity Cyc
 }
 
 
-f.family.AC2 <- function(data){
-  as.numeric(names(sort(table(data$Family, data$ActivityCycle), decreasing=TRUE))[1]))
-
 
 f.family.HB <- function(data){ # determine mode for each Family for Habitat Breadth
   hold <- table(data$Family, data$HabitatBreadth)
@@ -53,10 +50,10 @@ f.family.G <- function(data){ # determine mode for each Family for Guild
   Guild_m <- vector(mode="numeric", length=dim(hold)[1])
   
   for(i in 1:dim(hold)[1]){
-    Guild_m[i] <- ifelse(hold[i,2] > hold[i,3] & hold[i,2] > hold[i,4] & hold[i,2] > hold[i,5], 1, 
-                         ifelse(hold[i,3] > hold[i,2] & hold[i,3] > hold[i,4] & hold[i,3] > hold[i,5], 2, 
-                                ifelse(hold[i,4] > hold[i,2] & hold[i,4] > hold[i,3] & hold[i,4] > hold[i,5], 3, 
-                                       ifelse(hold[i,5] > hold[i,2] & hold[i,5] > hold[i,3] & hold[i,5] > hold[i,4], 3, NA))))
+    Guild_m[i] <- ifelse(hold[i,1] > hold[i,2] & hold[i,1] > hold[i,3] & hold[i,1] > hold[i,4], 1, 
+                         ifelse(hold[i,2] > hold[i,1] & hold[i,2] > hold[i,3] & hold[i,2] > hold[i,4], 2, 
+                                ifelse(hold[i,3] > hold[i,1] & hold[i,3] > hold[i,2] & hold[i,3] > hold[i,4], 3, 
+                                       ifelse(hold[i,4] > hold[i,1] & hold[i,4] > hold[i,2] & hold[i,4] > hold[i,3], 4, NA))))
   }
   Guild_m
 }

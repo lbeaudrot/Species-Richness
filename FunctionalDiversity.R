@@ -41,12 +41,12 @@ fam_avg_bird <- as.data.frame(fam_avg_bird)
 
 
 Mass_c <- ifelse(is.na(mammalianTraits$Mass)==TRUE, fam_avg$Mass_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$Mass)
-BodyLength_c <- ifelse(is.na(mammalianTraits$BodyLength)==TRUE, fam_avg$BodyLength_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$BodyLength)
+#BodyLength_c <- ifelse(is.na(mammalianTraits$BodyLength)==TRUE, fam_avg$BodyLength_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$BodyLength)
 LitterSize_c <- ifelse(is.na(mammalianTraits$LitterSize)==TRUE, fam_avg$LitterSize_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$LitterSize)
 GR_Area_c <- ifelse(is.na(mammalianTraits$GR_Area)==TRUE, fam_avg$GR_Area_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$GR_Area)
 ActivityCycle_c <- ifelse(is.na(mammalianTraits$ActivityCycle)==TRUE, fam_avg$ActivityCycle_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$ActivityCycle)
-HabitatBreadth_c <- ifelse(is.na(mammalianTraits$HabitatBreadth)==TRUE, fam_avg$HabitatBreadth_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$HabitatBreadth)
-DietBreadth_c <- ifelse(is.na(mammalianTraits$DietBreadth)==TRUE, fam_avg$DietBreadth_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$DietBreadth)
+#HabitatBreadth_c <- ifelse(is.na(mammalianTraits$HabitatBreadth)==TRUE, fam_avg$HabitatBreadth_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$HabitatBreadth)
+#DietBreadth_c <- ifelse(is.na(mammalianTraits$DietBreadth)==TRUE, fam_avg$DietBreadth_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$DietBreadth)
 Guild_c <- ifelse(is.na(mammalianTraits$Guild)==TRUE, fam_avg$Guild_m[match(mammalianTraits$Family, rownames(fam_avg))],mammalianTraits$Guild)
 
 # Apply to bird data
@@ -102,7 +102,7 @@ data.use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code
 
 # Subset the species list for each site to calculate the functional diversity metrics
 
-splist<-read.csv("master_species_list_updated.csv",h=T) #master list
+splist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
 sitelist<-unique(data.use$bin) #site list
 Msplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
 Msplist <- Msplist[Msplist$Class=="MAMMALIA",]
@@ -134,11 +134,22 @@ SiteTraits <- cbind(SiteTraits[,1:3], droplevels(SiteTraits[,4:5]))
 #SiteTraits
 
 ####### Calculate Functional Diversity using the FD package
-
-#traitFD <- dbFD(SiteTraits, corr="sqrt")
+#Calculate unweighted mammal functional diversity
+#traitFD <- dbFD(SiteTraits, corr="cailliez")
 #traitFD
+#Use object wpi_weights to weight functional trait calculations by occupancy estimates (psi.mean or psi.median)
+wpi_use <- wpi_weights[wpi_weights$Site.Code==data.use$Site.Code[1], ]
+psi_weights <- wpi_use$psi.median[match(rownames(SiteTraits), wpi_use$bin)]
+SiteTraits <- cbind(SiteTraits, psi_weights)
+SiteTraits <- na.omit(SiteTraits)
+psi_use <- SiteTraits$psi_weights
+names(psi_use) <- rownames(SiteTraits)
+traitFD_w <- dbFD(SiteTraits, a=psi_use, corr="cailliez", calc.FRic=FALSE)
 
-birdFD <- dbFD(BirdTraits, corr="sqrt")
+#CAXtraitFD_w <- traitFD_w
+
+
+birdFD <- dbFD(BirdTraits, corr="cailliez")
 birdFD
 BirdTraits
 
