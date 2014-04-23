@@ -87,8 +87,35 @@ S.sites2012 <- Combine$Site.Code[match(S.psi2012$site_id, Combine$Site.ID)]
 S.psi2012 <- cbind(S.psi2012, S.sites2012)
 names(S.psi2012) <- c("species_id", "site_id", "year", "psi.mean", "psi.median", "bin", "Site.Code")
 
-wpi_2011 <- rbind(psi2011, S.psi2011)
-wpi_2012 <- rbind(psi2012, S.psi2012)
+
+WPI.const.2011 <- WPIconst[WPIconst$year=="2011",2:5]
+by.9=WPI.const.2011$species_id
+by.10=WPI.const.2011$site_id
+C.psi2011mean <- aggregate(WPI.const.2011, by=list(by.9, by.10), FUN=mean)
+C.psi2011median <- aggregate(WPI.const.2011, by=list(by.9, by.10), FUN=median)
+C.psi2011 <- cbind(C.psi2011mean[,3:6], C.psi2011median[,6])
+colnames(C.psi2011) <- c("species_id", "site_id", "year", "psi.mean", "psi.median")
+C.species2011 <- taxonomy$bin[match(C.psi2011$species_id, taxonomy$id)]
+C.psi2011 <- cbind(C.psi2011, C.species2011)
+C.sites2011 <- Combine$Site.Code[match(C.psi2011$site_id, Combine$Site.ID)]
+C.psi2011 <- cbind(C.psi2011, C.sites2011)
+names(C.psi2011) <- c("species_id", "site_id", "year", "psi.mean", "psi.median", "bin", "Site.Code")
+
+WPI.const.2012 <- WPIconst[WPIconst$year=="2012",2:5]
+by.11=WPI.const.2012$species_id
+by.12=WPI.const.2012$site_id
+C.psi2012mean <- aggregate(WPI.const.2012, by=list(by.11, by.12), FUN=mean)
+C.psi2012median <- aggregate(WPI.const.2012, by=list(by.11, by.12), FUN=median)
+C.psi2012 <- cbind(C.psi2012mean[,3:6], C.psi2012median[,6])
+colnames(C.psi2012) <- c("species_id", "site_id", "year", "psi.mean", "psi.median")
+C.species2012 <- taxonomy$bin[match(C.psi2012$species_id, taxonomy$id)]
+C.psi2012 <- cbind(C.psi2012, C.species2012)
+C.sites2012 <- Combine$Site.Code[match(C.psi2012$site_id, Combine$Site.ID)]
+C.psi2012 <- cbind(C.psi2012, C.sites2012)
+names(C.psi2012) <- c("species_id", "site_id", "year", "psi.mean", "psi.median", "bin", "Site.Code")
+
+wpi_2011 <- rbind(psi2011, S.psi2011, C.psi2011)
+wpi_2012 <- rbind(psi2012, S.psi2012, C.psi2012)
 
 wpi_weights <- rbind(wpi_2012[wpi_2012$Site.Code=="PSH"|wpi_2012$Site.Code=="CAX"|wpi_2012$Site.Code=="YAS",],
 wpi_2011[wpi_2011$Site.Code!="PSH"&wpi_2011$Site.Code!="CAX"&wpi_2011$Site.Code!="YAS",])
