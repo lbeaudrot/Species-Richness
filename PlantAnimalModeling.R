@@ -25,7 +25,7 @@ CTaverages <- cbind(rownames(CTaverages), CTaverages)
 colnames(CTaverages)[1] <- "Site.Code"
 plot.VGmean <- cbind(rownames(plot.VGmean), plot.VGmean)
 colnames(plot.VGmean)[1] <- "Site.Code"
-model.data <- merge(CTaverages, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=TRUE)
+model.data <- merge(CTaverages, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 # Calculate precipitation CV and add rainfall data to model.data
 rain.data <- read.csv(file="Precipitation_Data.csv")
@@ -65,4 +65,38 @@ for(i in 1:dim(ModelData)[2])  {
 }
 MData <- as.data.frame(MData)
 colnames(MData) <- colnames(ModelData)
+MData <- cbind(MData[,1:3], scale(MData[,4:dim(MData)[2]]))
+rownames(MData) <- model.data$Site.Code
+pairs(MData, lower.panel = panel.smooth, upper.panel = panel.cor)
 
+library(lme4)
+library(MASS)
+
+Year <- c(2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012)
+Continent <- c("Asia", "America", "America", "America", "Africa", "America", "Africa", "Asia", "Africa", "Africa", "America", "America", "America")
+Mdata <- cbind(MData, Year, Continent)
+
+
+###### Model Terrestrial Vertebrate Species Richness
+fit1 <- lm(CT.mode ~ 
+             Cstorage + FDis + TRich + NStemsT + 
+             NStemsL + Rain.CV + Elev.CV + abs(Latitude) + 
+             abs(Latitude)*NStemsT + abs(Latitude)*Elev.CV + TRich*Rain.CV, 
+                data=Mdata)
+
+step1 <- stepAIC(fit1, direction="both")
+
+lmer(CT.mode ~ (1|Year) + (1|Continent) + Cstorage + FDis + TRich + TShan + NStemsT + NStemsL + RainTotal + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
+
+m1 <- lm(CT.mode ~ FDis + TRich + TShan + NStemsT + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
+
+m2 <- lmer(CT.mode ~ (1|Continent)+ FDis + TRich + TShan + NStemsT + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
+
+
+###### Model Terrestrial Vertebrate Functional Diversity
+MammalFD <- read.csv("MammalFD.csv")
+fit2 <- lm(MammalFD$FDis ~ Cstorage + FDis + TRich + TShan + NStemsT + NStemsL + RainTotal + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=MData)
+step2 <- stepAIC(fit2, direction="both")
+
+
+###### Model Terrestrial Vertebrate Taxonomic Diversity
