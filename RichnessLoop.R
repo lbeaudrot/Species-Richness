@@ -68,20 +68,21 @@ subdata1 <- list()
     subdata1
   } # Subset original camera trap data to species to include only
 
-subdata <- subdata1
-  for(i in 1:length(data.use)) {
-    subdata[[i]]$bin <- factor(subdata[[i]]$bin)
-    subdata
-  } # Remove excess species from bin factor levels
-
-
 #### SPECIFY WHETHER SPECIES RICHNESS MODELS SHOULD BE RESTRICTED to MAMMALS or BIRDS
 
-subdata <- subdata
+subdata <- subdata1
 for(i in 1:length(data.use)) {
   subdata[[i]] <- subdata[[i]][subdata[[i]]$Class=="AVES",]
   subdata
 } # Limit species by Class
+
+####### Remove excess factor levels
+
+subdata <- subdata
+for(i in 1:length(data.use)) {
+  subdata[[i]]$bin <- factor(subdata[[i]]$bin)
+  subdata
+} # Remove excess species from bin factor levels
 
 
 events.use <- list()
@@ -163,7 +164,7 @@ sp.median
 sp.mode
 
 hist(fitparallel$sims.list$N, breaks=150, xlab="Species Richness", 
-     main=paste(events.use$Site.Code[1], substr(events.use$Sampling.Period[1],1,4), sep=" "), 
+     main=paste(events.use[[i]]$Site.Code[1], substr(events.use[[i]]$Sampling.Period[1],1,4), sep=" "), 
      sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
 text(100, 5000, paste("Mean", sp.mean, sep=" = "))
 text(100, 3000, paste("Median", sp.median, sep=" = "))
@@ -211,7 +212,7 @@ sp.averages <- function(data) {
 
 CTaverages <- sp.averages(CTresults)
 colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
-write.csv(CTaverages, file="CTaverages.csv", row.names=TRUE, col.names=TRUE)
+#write.csv(CTaverages, file="CTaverages_bird.csv", row.names=TRUE, col.names=TRUE)
 
 
 # Extract mean CT latitude for each TEAM site to include as a covariate 
