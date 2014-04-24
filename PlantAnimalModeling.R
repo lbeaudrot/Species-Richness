@@ -48,6 +48,10 @@ colnames(elevation) <- c("Site.Code", "Elev.Mean", "Elev.CV")
 model.data <- merge(model.data, elevation, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 # Add latitude for each TEAM site as a covariate - see EstimateSpeciesRichness.R line 203
+# Extract mean CT latitude for each TEAM site to include as a covariate 
+traps <- eventsdata[!duplicated(eventsdata$Sampling.Unit.Name),]
+Latitude <- aggregate(traps$Latitude ~ traps$Site.Code, FUN=mean)
+colnames(Latitude) <- c("Site.Code", "Latitude")
 model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 

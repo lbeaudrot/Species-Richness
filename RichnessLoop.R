@@ -215,7 +215,3 @@ colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
 #write.csv(CTaverages, file="CTaverages_bird.csv", row.names=TRUE, col.names=TRUE)
 
 
-# Extract mean CT latitude for each TEAM site to include as a covariate 
-traps <- eventsdata[!duplicated(eventsdata$Sampling.Unit.Name),]
-Latitude <- aggregate(traps$Latitude ~ traps$Site.Code, FUN=mean)
-colnames(Latitude) <- c("Site.Code", "Latitude")
