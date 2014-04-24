@@ -62,15 +62,21 @@ newsplist <- list()
     newsplist
   } # reduce species list and trait data to include only species
 
-subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) 
-
-subdata <- list()
+subdata1 <- list()
   for(i in 1:length(data.use)){
-    subdata[[i]] <- subset(data.use[[i]], data.use[[i]]$bin %in% newsplist[[i]]$Unique_Name) #this is the original camera trap data subsetted to these species
-    subdata
+    subdata1[[i]] <- subset(data.use[[i]], data.use[[i]]$bin %in% newsplist[[i]]$Unique_Name) #this is the original camera trap data subsetted to these species
+    subdata1
   } # subset original camera trap data  to species to include only
 
-subdata<-f.correct.DF(subdata) # have not tested if this works equally well with the list
+#subdata<-f.correct.DF(subdata) # have not tested if this works equally well with the list
+
+subdata <- subdata1
+  for(i in 1:length(data.use)) {
+    subdata[[i]]$bin <- factor(subdata[[i]]$bin)
+    subdata
+  }
+   # have not tested if this works equally well with the list
+
 
 # Extract unique events based on the threshold set in f.separate.events
 events.use <- list()
@@ -79,15 +85,20 @@ events.use <- list()
     events.use
   }
 
+CTresults <- list
+for(i in 1:length(data.use)){
+  
+  CTresults[[i]] <- fitparallel
+  CTresults
+}
 ####### Set up for Dorazio et al. 2006 method for estimating species richness without covariates using JAGS #######
-
 # Input data requires a table of the number of sampling events for each species ("bin") at each camera trap ("Sampling.Unit.Name")
 # Input data requires the number of replicates in which each species was detected (i.e. max=nrepls)
-X <- table(events.use$bin, events.use$Sampling.Unit.Name)
+X <- table(events.use[[i]]$bin, events.use[[i]]$Sampling.Unit.Name)
 X <- as.matrix(X)  
 
 # Control for the number of sampling day per camera trap
-effortdays <- as.matrix(cbind(data.use$Sampling.Unit.Name, f.start.minus.end(data.use)))
+effortdays <- as.matrix(cbind(data.use[[i]]$Sampling.Unit.Name, f.start.minus.end(data.use[[i]])))
 effortdays <- as.matrix(unique(effortdays))
 effortdays <- effortdays[match(colnames(X), effortdays[,1]),]
 edays <- as.numeric(effortdays[,2])
@@ -139,26 +150,8 @@ n.sims <- as.integer(20)
 
 fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", 
                             n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin, n.sims=n.sims, digits=3, program=c("JAGS"))
-#plot.chains(jmodparallel)
-
-
-#fit <- jags.model(file='MultiSpeciesSiteOccModel.txt', data=sp.data, inits=sp.inits, n.chains=3, n.adapt=1000)
-
-#update(fit, n.iter=125000, by=100, progress.bar='text')   # burn in
-
-#post = coda.samples(fit, sp.params, n.iter=125000, thin=3)  # posterior sample
-#mypost = as.matrix(post, chain=TRUE)
-
-#post2 = coda.samples(fit, params, n.iter=125000, thin=3) # another posterior sample
-#mypost2 = as.matrix(post2, chain=TRUE)
-
-
-#fit = bugs(sp.data, sp.inits, sp.params,
-#model.file='MultiSpeciesSiteOccModel.txt',
-#debug=F, n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin)
 
 print(fitparallel, digits=3)
-#plot(fitparallel)
 
 sp.mean <- round(mean(fitparallel$sims.list$N), digits=2)
 sp.median <- median(fitparallel$sims.list$N)
@@ -180,7 +173,7 @@ text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 
 #BBSfit <- fitparallel
 #BCIfit <- fitparallel
-BIFfit <- fitparallel
+#BIFfit <- fitparallel
 #CAXfit <- fitparallel
 #COUfit <- fitparallel
 #KRPfit <- fitparallel
