@@ -9,6 +9,8 @@
 #Vegdata <- f.teamdb.query("vegetation")
 Vdata <- Vegdata
 
+Vdata <- f.teamdb.query("vegetation")
+
 # Add column with site codes
 Site.CodeT <- substr(Vdata$tree$"1haPlotNumber",4,6)
 Site.CodeL <- substr(Vdata$liana$"1haPlotNumber",4,6)
@@ -223,6 +225,9 @@ Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==723] <- 72.3
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==1120] <- 112.0
 # Add decimal to outlier diameter in plot VG-YAS-1
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-YAS-1" & Trees$Diameter==420] <- 42.0
+
+# Check for number of duplicate stems
+dim(Trees[duplicated(Trees$SamplingUnitName)==TRUE,])
 
 # Remove duplicated SamplingUnitNames until issue is resolved in the database
 Trees <- Trees[duplicated(Trees$SamplingUnitName)==FALSE,]
