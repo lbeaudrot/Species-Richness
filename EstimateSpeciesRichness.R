@@ -182,24 +182,6 @@ colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
 write.csv(CTaverages, file="CTaverages.csv", row.names=TRUE, col.names=TRUE)
 
 
-
-# Loop over all sites while measuring time
-
-#mfit<-list()
-#for(i in 1:length(unique(alldata$Site.Code))){}
-# replace with appropriate model code
-#timefit<-system.time(mfit[[i]] <- jags(jags.data[[i]], inits[[i]], params, "fullmodel6.txt", n.chains = nc, n.thin = nt, n.iter = ni, n.burnin = nb))
-
-
-temp<-mfit[[i]]
-save(NAKfit,file=paste("fit-",data.use$Site.Code[1],sep=""))
-print(paste("Done with site ",levels(alldata$Site.Code)[i],"; took ",round(as.numeric(timefit[3]/60))," minutes.",sep=""))
-}
-
-# from db query
-#filename= paste("veg_data",sysdate,".gzip",sep="")
-#save(result, file=filename,compress="gzip")
-
 # Extract mean CT latitude for each TEAM site to include as a covariate 
 traps <- eventsdata[!duplicated(eventsdata$Sampling.Unit.Name),]
 Latitude <- aggregate(traps$Latitude ~ traps$Site.Code, FUN=mean)
