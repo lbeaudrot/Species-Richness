@@ -145,7 +145,7 @@ library(rjags)
 # Load functions from bugsParallel.r 
 n.chains <- 4
 n.iter <- as.integer(250000)
-n.burnin <- as.integer(120000)
+n.burnin <- as.integer(125000)
 n.thin <- 1
 n.sims <- as.integer(20000)
 
