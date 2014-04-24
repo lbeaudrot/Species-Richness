@@ -29,14 +29,14 @@
 table(alldata$Site.Code, alldata$Sampling.Period)
 
 
-######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2006 JAGS code ###############
+######## Start here to EXTRACT INPUT DATA FOR MODELS using Dorazio et al. 2006 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
 CAX.use <- eventsdata[eventsdata$Sampling.Period=="2012.01" & eventsdata$Site.Code=="CAX",]
 PSH.use <- eventsdata[eventsdata$Sampling.Period=="2012.01" & eventsdata$Site.Code=="PSH",]
 YAS.use <- eventsdata[eventsdata$Sampling.Period=="2012.01" & eventsdata$Site.Code=="YAS",]
 BBS.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="BBS",]
 BCI.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="BCI",]
-BIF.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="BIF",]
+#BIF.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="BIF",]
 COU.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="COU",]
 KRP.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="KRP",]
 MAS.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="MAS",]
@@ -46,7 +46,7 @@ UDZ.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Co
 VB.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="VB-",]
 YAN.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="YAN",]
 
-data.use <- list(BBS.use, BCI.use, BIF.use, CAX.use, COU.use, KRP.use, MAS.use, NNN.use, PSH.use, RNF.use, UDZ.use, VB.use, YAN.use, YAS.use)
+data.use <- list(BBS.use, BCI.use, CAX.use, COU.use, KRP.use, MAS.use, NNN.use, PSH.use, RNF.use, UDZ.use, VB.use, YAN.use, YAS.use)
 
 #subset species to the species in that site and with Include=1
 splist <- read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
@@ -54,43 +54,44 @@ sitelist <- list()
   for(i in 1:length(data.use)){
     sitelist[[i]] <- unique(data.use[[i]]$bin)
     sitelist
-  }  #complete species site list
+  }  # Extract all observed CT species list for each site 
 
 newsplist <- list()
   for(i in 1:length(data.use)){ 
     newsplist[[i]] <- subset(splist,splist$Unique_Name %in% sitelist[[i]] & splist$Include==1)
     newsplist
-  } # reduce species list and trait data to include only species
+  } # Reduce species list and trait data to include only species
 
 subdata1 <- list()
   for(i in 1:length(data.use)){
     subdata1[[i]] <- subset(data.use[[i]], data.use[[i]]$bin %in% newsplist[[i]]$Unique_Name) #this is the original camera trap data subsetted to these species
     subdata1
-  } # subset original camera trap data  to species to include only
-
-#subdata<-f.correct.DF(subdata) # have not tested if this works equally well with the list
+  } # Subset original camera trap data to species to include only
 
 subdata <- subdata1
   for(i in 1:length(data.use)) {
     subdata[[i]]$bin <- factor(subdata[[i]]$bin)
     subdata
-  }
-   # have not tested if this works equally well with the list
+  } # Remove excess species from bin factor levels
 
 
-# Extract unique events based on the threshold set in f.separate.events
+#### SPECIFY WHETHER SPECIES RICHNESS MODELS SHOULD BE RESTRICTED to MAMMALS or BIRDS
+
+subdata <- subdata
+for(i in 1:length(data.use)) {
+  subdata[[i]] <- subdata[[i]][subdata[[i]]$Class=="AVES",]
+  subdata
+} # Limit species by Class
+
+
 events.use <- list()
   for(i in 1:length(data.use)){
     events.use[[i]] <- subdata[[i]][!duplicated(as.character(subdata[[i]]$grp)),]
     events.use
-  }
+  } # Extract unique events based on the threshold set in f.separate.events
 
-CTresults <- list
+CTresults <- list()
 for(i in 1:length(data.use)){
-  
-  CTresults[[i]] <- fitparallel
-  CTresults
-}
 ####### Set up for Dorazio et al. 2006 method for estimating species richness without covariates using JAGS #######
 # Input data requires a table of the number of sampling events for each species ("bin") at each camera trap ("Sampling.Unit.Name")
 # Input data requires the number of replicates in which each species was detected (i.e. max=nrepls)
@@ -143,10 +144,10 @@ library(rjags)
 # Parallelize code 
 # Load functions from bugsParallel.r 
 n.chains <- 4
-n.iter <- as.integer(250)
-n.burnin <- as.integer(125)
-n.thin <- 3
-n.sims <- as.integer(20)
+n.iter <- as.integer(25)
+n.burnin <- as.integer(12)
+n.thin <- 1
+n.sims <- as.integer(25)
 
 fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", 
                             n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin, n.sims=n.sims, digits=3, program=c("JAGS"))
@@ -169,6 +170,10 @@ text(100, 3000, paste("Median", sp.median, sep=" = "))
 text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 
 
+CTresults[[i]] <- fitparallel
+CTresults
+}
+
 # Temporarily store site specific outputs
 
 #BBSfit <- fitparallel
@@ -187,10 +192,10 @@ text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 #YASfit <- fitparallel
 
 # Save model outputs
-save(BIFfit, file="BIFfit.gzip",compress="gzip")
+#save(BIFfit, file="BIFfit.gzip",compress="gzip")
 
 
-CTresults <- list(BBSfit, BCIfit, BIFfit, CAXfit, COUfit, KRPfit, MASfit, NNNfit, PSHfit, RNFfit, UDZfit, VBfit, YANfit, YASfit)
+#CTresults <- list(BBSfit, BCIfit, BIFfit, CAXfit, COUfit, KRPfit, MASfit, NNNfit, PSHfit, RNFfit, UDZfit, VBfit, YANfit, YASfit)
 CTnames <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB-", "YAN", "YAS")
 cols <- c("mean", "median", "mode")
 CTaverages <- matrix(nrow=length(CTresults), ncol=3, dimnames=list(CTnames, cols))
