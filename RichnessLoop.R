@@ -162,12 +162,12 @@ sp.mean
 sp.median
 sp.mode
 
-hist(fitparallel$sims.list$N, breaks=150, xlab="Species Richness", 
+hist(fitparallel$sims.list$N, breaks=150, xlab="Bird Species Richness", 
      main=paste(events.use[[i]]$Site.Code[1], substr(events.use[[i]]$Sampling.Period[1],1,4), sep=" "), 
      sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
-text(100, 5000, paste("Mean", sp.mean, sep=" = "))
-text(100, 3000, paste("Median", sp.median, sep=" = "))
-text(100, 1000, paste("Mode", sp.mode, sep=" = "))
+text(40, 10000, paste("Mean", sp.mean, sep=" = "))
+text(40, 7000, paste("Median", sp.median, sep=" = "))
+text(40, 4000, paste("Mode", sp.mode, sep=" = "))
 
 CTresults[[i]] <- fitparallel
 CTresults
@@ -198,6 +198,6 @@ f.sp.averages <- function(data) {
 
 CTaverages <- f.sp.averages(CTresults)
 colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
-#write.csv(CTaverages, file="CTaverages_bird.csv", row.names=TRUE, col.names=TRUE)
+write.csv(CTaverages, file="CTaverages_bird.csv", row.names=TRUE, col.names=TRUE)
 
 
