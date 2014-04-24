@@ -7,7 +7,7 @@
 
 # Query vegetation data from database
 #Vegdata <- f.teamdb.query("vegetation")
-Vdata <- Vegdata
+#Vdata <- Vegdata
 
 Vdata <- f.teamdb.query("vegetation")
 
