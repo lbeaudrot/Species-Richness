@@ -106,7 +106,6 @@ effortdays <- effortdays[match(colnames(X), effortdays[,1]),]
 edays <- as.numeric(effortdays[,2])
 X <- round(t(t(X)*(edays/30)))
 
-
 # augment data matrix with an arbitrarily large number of zero row vectors
 nrepls=30
 nzeroes = 125
@@ -145,10 +144,10 @@ library(rjags)
 # Parallelize code 
 # Load functions from bugsParallel.r 
 n.chains <- 4
-n.iter <- as.integer(25)
-n.burnin <- as.integer(12)
+n.iter <- as.integer(250000)
+n.burnin <- as.integer(120000)
 n.thin <- 1
-n.sims <- as.integer(25)
+n.sims <- as.integer(20000)
 
 fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", 
                             n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin, n.sims=n.sims, digits=3, program=c("JAGS"))
@@ -170,38 +169,25 @@ text(100, 5000, paste("Mean", sp.mean, sep=" = "))
 text(100, 3000, paste("Median", sp.median, sep=" = "))
 text(100, 1000, paste("Mode", sp.mode, sep=" = "))
 
-
 CTresults[[i]] <- fitparallel
 CTresults
 }
 
-# Temporarily store site specific outputs
-
-#BBSfit <- fitparallel
-#BCIfit <- fitparallel
-#BIFfit <- fitparallel
-#CAXfit <- fitparallel
-#COUfit <- fitparallel
-#KRPfit <- fitparallel
-#MASfit <- fitparallel
-#NNNfit <- fitparallel
-#PSHfit <- fitparallel
-#RNFfit <- fitparallel
-#UDZfit <- fitparallel
-#VBfit <- fitparallel
-#YANfit <- fitparallel
-#YASfit <- fitparallel
-
 # Save model outputs
-#save(BIFfit, file="BIFfit.gzip",compress="gzip")
+save(CTresults, file="CTresults.gzip",compress="gzip")
 
+# Create matrix to hold site level averages
+CTnames <- vector(mode="character", length=length(data.use))
+for(i in 1:length(data.use)){
+  CTnames[[i]] <- paste(data.use[[i]]$Site.Code[1])
+  CTnames
+}
 
-#CTresults <- list(BBSfit, BCIfit, BIFfit, CAXfit, COUfit, KRPfit, MASfit, NNNfit, PSHfit, RNFfit, UDZfit, VBfit, YANfit, YASfit)
-CTnames <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB-", "YAN", "YAS")
 cols <- c("mean", "median", "mode")
 CTaverages <- matrix(nrow=length(CTresults), ncol=3, dimnames=list(CTnames, cols))
 
-sp.averages <- function(data) {
+# Function to calculate site level averages
+f.sp.averages <- function(data) {
   for(i in 1:length(CTresults)){
     CTaverages[i,] <- cbind(round(mean(data[[i]]$sims.list$N), digits=2),
                             median(data[[i]]$sims.list$N),
@@ -210,7 +196,7 @@ sp.averages <- function(data) {
   CTaverages
 }
 
-CTaverages <- sp.averages(CTresults)
+CTaverages <- f.sp.averages(CTresults)
 colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
 #write.csv(CTaverages, file="CTaverages_bird.csv", row.names=TRUE, col.names=TRUE)
 
