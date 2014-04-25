@@ -1,0 +1,33 @@
+CI Plant Animals Project
+Goal: Examine the relationship between carbon storage and terrestrial vertebrate diversity at 14 TEAM sites
+Specifically, model animal diversity as a function of site characteristics (plants, elevation, precipitation, latitude):
+    Bird and/or Mammal Sp. Richness ~ Carbon + Plants + Elevation + Precipitation + Latitude + Interactions
+    Bird and/or Mammal Taxonomic Diversity ~ Carbon + Plants + Elevation + Precipitation + Latitude + Interactions
+    Bird and/or Mammal Functional Diversity ~ Carbon + Plants + Elevation + Precipitation + Latitude + Interactions
+
+CARBON & PLANT CALCULATIONS
+Run PlantDiversity.R to calculate plant covariates. 
+  These include stem density, genus richness, genus diversity for trees and lianas
+  Functional diversity (wood density and max genus diameter) for trees
+  Carbon storage for trees
+
+ANIMAL SPECIES RICHNESS ESTIMATES
+Run RichnessLoop.R
+*RichnessLoop.R requires manual specification of whether to limit analysis to AVES and/or MAMMALIA
+  Multiple points at which specification is required are indicated by the full line of # symbols.
+Note that non-looping models for a single site can be run with file EstimateSpeciesRichness.R
+
+ANIMAL FUNCTIONAL DIVERSITY CALCULATIONS
+Load FunctionalTrait_HelperFunctions.R 
+Run WPI_Extraction.R to obtain species and site specific occupancy probabilities to use as abundance weights
+Run FunctionalDiversity.R to calculate animal functional diversity metrics. 
+*FunctionalDiversity.R requires some manual operation for data extraction.
+  Line 100: Designate site and year for data.use object
+  Line 155-195: Save site specific output individually
+
+ANIMAL TAXONOMIC RICHNESS CALCULATIONS
+
+MODELING & CALCULATIONS FOR ELEVATION, PRECIPITATION & LATITUDE 
+Run file PlantAnimalModeling.R
+Note that CT elevation code may need to be re-worked (renaming of objects in RichnessLoop.R from EstimateSpeciesRichness.R)
+Note that models are not finalized and require manual operation
