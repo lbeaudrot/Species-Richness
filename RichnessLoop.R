@@ -68,14 +68,14 @@ subdata1 <- list()
     subdata1
   } # Subset original camera trap data to species to include only
 
+#######################################################################################
 #### SPECIFY WHETHER SPECIES RICHNESS MODELS SHOULD BE RESTRICTED to MAMMALS or BIRDS
-
 subdata <- subdata1
 for(i in 1:length(data.use)) {
   subdata[[i]] <- subdata[[i]][subdata[[i]]$Class=="AVES",]
   subdata
 } # Limit species by Class
-
+#######################################################################################
 ####### Remove excess factor levels
 
 subdata <- subdata
@@ -91,11 +91,14 @@ events.use <- list()
     events.use
   } # Extract unique events based on the threshold set in f.separate.events
 
-CTresults <- list()
-for(i in 1:length(data.use)){
+
 ####### Set up for Dorazio et al. 2006 method for estimating species richness without covariates using JAGS #######
 # Input data requires a table of the number of sampling events for each species ("bin") at each camera trap ("Sampling.Unit.Name")
 # Input data requires the number of replicates in which each species was detected (i.e. max=nrepls)
+
+CTresults <- list()
+for(i in 1:length(data.use)){
+  
 X <- table(events.use[[i]]$bin, events.use[[i]]$Sampling.Unit.Name)
 X <- as.matrix(X)  
 
@@ -146,7 +149,7 @@ library(rjags)
 n.chains <- 4
 n.iter <- as.integer(250000)
 n.burnin <- as.integer(125000)
-n.thin <- 1
+n.thin <- 3
 n.sims <- as.integer(20000)
 
 fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", 
@@ -165,17 +168,14 @@ sp.mode
 hist(fitparallel$sims.list$N, breaks=150, xlab="Bird Species Richness", 
      main=paste(events.use[[i]]$Site.Code[1], substr(events.use[[i]]$Sampling.Period[1],1,4), sep=" "), 
      sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
-text(40, 10000, paste("Mean", sp.mean, sep=" = "))
-text(40, 7000, paste("Median", sp.median, sep=" = "))
-text(40, 4000, paste("Mode", sp.mode, sep=" = "))
+legend("bottomright", legend=c(paste("Mean", sp.mean, sep=" = "), 
+                               paste("Median", sp.median, sep=" = "), 
+                               paste("Mode", sp.mode, sep=" = "), ""), bty="n")
 
 CTresults[[i]] <- fitparallel
 CTresults
 }
 
-# Save model outputs
-#save(CTresults, file="CTresults_bird.gzip",compress="gzip")
-#save(CTresults, file="CTresults_mammal.gzip",compress="gzip")
 
 
 # Create matrix to hold site level averages
@@ -201,8 +201,10 @@ f.sp.averages <- function(data) {
 CTaverages <- f.sp.averages(CTresults)
 colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
 
+#######################################################################################
+#### SPECIFY WHETHER PLOTS ARE MAMMALS or BIRDS
 # Re-graph plots using results
-pdf(file="PosteriorDistributions_SpeciesRichness_Birds.pdf")
+#pdf(file="PosteriorDistributions_SpeciesRichness_Birds.pdf")
 #pdf(file="PosteriorDistributions_SpeciesRichness_Mammals.pdf")
 for(i in 1:length(data.use)){
   hist(CTresults[[i]]$sims.list$N, breaks=150, xlab="Bird Species Richness", 
@@ -213,7 +215,13 @@ for(i in 1:length(data.use)){
                                  paste("Mode", CTaverages[i,3], sep=" = "), ""), bty="n")
 }
 dev.off()
+#######################################################################################
+#### SPECIFY WHETHER RESULTS ARE MAMMALS or BIRDS
 # Write output table to use in modeling
 #write.csv(CTaverages, file="CTaverages_bird.csv", row.names=TRUE, col.names=TRUE)
 #write.csv(CTaverages, file="CTaverages_mammal.csv", row.names=TRUE, col.names=TRUE)
 
+# Save model outputs
+#save(CTresults, file="CTresults_bird.gzip",compress="gzip")
+#save(CTresults, file="CTresults_mammal.gzip",compress="gzip")
+#######################################################################################
