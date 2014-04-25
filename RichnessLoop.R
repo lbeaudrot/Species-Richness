@@ -174,7 +174,9 @@ CTresults
 }
 
 # Save model outputs
-save(CTresults, file="CTresults.gzip",compress="gzip")
+#save(CTresults, file="CTresults_bird.gzip",compress="gzip")
+#save(CTresults, file="CTresults_mammal.gzip",compress="gzip")
+
 
 # Create matrix to hold site level averages
 CTnames <- vector(mode="character", length=length(data.use))
@@ -198,6 +200,19 @@ f.sp.averages <- function(data) {
 
 CTaverages <- f.sp.averages(CTresults)
 colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
-write.csv(CTaverages, file="CTaverages_bird.csv", row.names=TRUE, col.names=TRUE)
 
+# Re-graph plots using results
+
+for(i in 1:length(data.use)){
+  hist(CTresults[[i]]$sims.list$N, breaks=150, xlab="Bird Species Richness", 
+       main=paste(events.use[[i]]$Site.Code[1], substr(events.use[[i]]$Sampling.Period[1],1,4), sep=" "), 
+       sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
+  legend("bottomright", legend=c(paste("Mean", CTaverages[i,1], sep=" = "), 
+                                 paste("Median", CTaverages[i,2], sep=" = "), 
+                                 paste("Mode", CTaverages[i,3], sep=" = ")), bty="n")
+}
+
+# Write output table to use in modeling
+#write.csv(CTaverages, file="CTaverages_bird.csv", row.names=TRUE, col.names=TRUE)
+#write.csv(CTaverages, file="CTaverages_mammal.csv", row.names=TRUE, col.names=TRUE)
 
