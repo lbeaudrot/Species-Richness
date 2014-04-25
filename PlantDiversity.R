@@ -515,6 +515,6 @@ for(i in 1:dim(plant.covs)[2]-4){
   plot.VGvar
 }
 
-colnames(plot.VGvar) <- paste("V", colnames(plot.VGvar), sep=".")
+#colnames(plot.VGvar) <- paste("V", colnames(plot.VGvar), sep=".")
 
 
