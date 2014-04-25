@@ -29,5 +29,4 @@ ANIMAL TAXONOMIC RICHNESS CALCULATIONS
 
 MODELING & CALCULATIONS FOR ELEVATION, PRECIPITATION & LATITUDE 
 Run file PlantAnimalModeling.R
-Note that CT elevation code may need to be re-worked (renaming of objects in RichnessLoop.R from EstimateSpeciesRichness.R)
 Note that models are not finalized and require manual operation
