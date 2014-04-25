@@ -9,7 +9,7 @@
 #Vegdata <- f.teamdb.query("vegetation")
 #Vdata <- Vegdata
 
-Vdata <- f.teamdb.query("vegetation")
+#Vdata <- f.teamdb.query("vegetation")
 
 # Add column with site codes
 Site.CodeT <- substr(Vdata$tree$"1haPlotNumber",4,6)
@@ -233,7 +233,7 @@ Trees <- Trees[duplicated(Trees$SamplingUnitName)==FALSE,]
 
 Lianas <- Vdata$liana 
   
-  Lianas <- subset(Lianas,
+Lianas <- subset(Lianas,
                      Site.CodeL=="CAX" & SamplingPeriod=="2012.01"|
                      Site.CodeL=="YAS" & SamplingPeriod=="2012.01"|
                      Site.CodeL=="PSH" & SamplingPeriod=="2012.01"|
@@ -414,11 +414,17 @@ library(FD)
 
 
 # CALCULATE WEIGHTED FD for each PLOT using ABUNDANCES AS WEIGHTS - see output from object FDweighted
+# Exclude genera with missing maxD values (because they cause dbFD to fail)
 FDplotsW <- list()
+hold3 <- vector()
 for(i in 1:length(VPlots)){
   hold1 <- PlotTrees[,i]
   hold1 <- hold1[hold1>0]
-  FDplotsW[[i]] <- dbFD(x=as.data.frame(VPlots[[i]]), corr="cailliez", a=hold1, w.abun=TRUE, calc.FRic=FALSE)
+  hold2 <- cbind(VPlots[[i]], hold1)
+  hold2 <- na.omit(hold2)
+  hold3 <- hold2[,3]
+  names(hold3) <- rownames(hold2)
+  FDplotsW[[i]] <- dbFD(x=as.data.frame(hold2[,1:2]), corr="cailliez", a=hold3, w.abun=TRUE, calc.FRic=FALSE)
   FDplotsW                          
 }
 
