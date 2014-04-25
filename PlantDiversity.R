@@ -180,35 +180,33 @@ Vdata$liana$Family[Vdata$liana$Family=="Cheiloclinium"] <- "Celastraceae"
 Vdata$liana$Family[Vdata$liana$Family=="Menispermecae"] <- "Menispermaceae"
 Vdata$liana$Family[Vdata$liana$Family=="UNKNOWN"] <- "Unknown"
 
-
-
-
 # Inspect (but do not remove) stems with DBH below 10 cm
 #Vdata$tree[Vdata$tree$Diameter>=10,]
 #Vdata$liana[Vdata$liana$Diameter>=10,]
 
+Trees <- Vdata$tree
+
 # Limit data to one year from each site so that data correspond to CT metrics
 # 2012 for CAX, YAS, and PSH
 # 2011 for all other sites
+Trees <- subset(Trees,
+      Site.CodeT=="CAX" & SamplingPeriod=="2012.01"|
+      Site.CodeT=="YAS" & SamplingPeriod=="2012.01"|
+      Site.CodeT=="PSH" & SamplingPeriod=="2012.01"|
+      Site.CodeT=="BBS" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="BCI" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="BIF" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="COU" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="CSN" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="KRP" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="MAS" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="NAK" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="NNN" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="RNF" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="UDZ" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="VB-" & SamplingPeriod=="2011.01"|
+      Site.CodeT=="YAN" & SamplingPeriod=="2011.01")
 
-Trees <-  rbind(Vtrees[Vtrees$Site.CodeT=="CAX" & Vtrees$SamplingPeriod=="2012.01",],
-          Vtrees[Vtrees$Site.CodeT=="YAS" & Vtrees$SamplingPeriod=="2012.01",],
-          Vtrees[Vtrees$Site.CodeT=="PSH" & Vtrees$SamplingPeriod=="2012.01",],
-          Vtrees[Vtrees$Site.CodeT=="BBS" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="BCI" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="BIF" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="COU" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="CSN" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="KRP" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="MAS" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="NAK" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="NNN" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="RNF" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="UDZ" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="VB-" & Vtrees$SamplingPeriod=="2011.01",],
-          Vtrees[Vtrees$Site.CodeT=="YAN" & Vtrees$SamplingPeriod=="2011.01",])
-#Remove rows with missing unique identification values (NA rows)
-Trees <- Trees[is.na(Trees$Id)==FALSE,]
 #Remove dead trees
 aliveT <- grep(pattern="K", x=Trees$ConditionCodes, invert=TRUE)
 Trees <- Trees[aliveT,]
@@ -231,27 +229,28 @@ dim(Trees[duplicated(Trees$SamplingUnitName)==TRUE,])
 
 # Remove duplicated SamplingUnitNames until issue is resolved in the database
 Trees <- Trees[duplicated(Trees$SamplingUnitName)==FALSE,]
-Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==392] <- 39.2
 
 
-Lianas <-  rbind(Vlianas[Vlianas$Site.CodeL=="CAX" & Vlianas$SamplingPeriod=="2012.01",],
-                 Vlianas[Vlianas$Site.CodeL=="YAS" & Vlianas$SamplingPeriod=="2012.01",],
-                 Vlianas[Vlianas$Site.CodeL=="PSH" & Vlianas$SamplingPeriod=="2012.01",],
-                 Vlianas[Vlianas$Site.CodeL=="BBS" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="BCI" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="BIF" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="COU" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="CSN" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="KRP" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="MAS" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="NAK" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="NNN" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="RNF" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="UDZ" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="VB-" & Vlianas$SamplingPeriod=="2011.01",],
-                 Vlianas[Vlianas$Site.CodeL=="YAN" & Vlianas$SamplingPeriod=="2011.01",])
-#Remove rows with missing unique identification values (NA rows)
-Lianas <- Lianas[is.na(Lianas$Id)==FALSE,]
+Lianas <- Vdata$liana 
+  
+  Lianas <- subset(Lianas,
+                     Site.CodeL=="CAX" & SamplingPeriod=="2012.01"|
+                     Site.CodeL=="YAS" & SamplingPeriod=="2012.01"|
+                     Site.CodeL=="PSH" & SamplingPeriod=="2012.01"|
+                     Site.CodeL=="BBS" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="BCI" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="BIF" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="COU" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="CSN" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="KRP" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="MAS" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="NAK" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="NNN" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="RNF" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="UDZ" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="VB-" & SamplingPeriod=="2011.01"|
+                     Site.CodeL=="YAN" & SamplingPeriod=="2011.01")
+
 #Remove dead lianas
 aliveL <- grep(pattern="K", x=Lianas$ConditionCodes, invert=TRUE)
 Lianas <- Lianas[aliveL,]
