@@ -202,7 +202,7 @@ CTaverages <- f.sp.averages(CTresults)
 colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
 
 # Re-graph plots using results
-#pdf(file="PosteriorDistributions_SpeciesRichness_Birds.pdf")
+pdf(file="PosteriorDistributions_SpeciesRichness_Birds.pdf")
 #pdf(file="PosteriorDistributions_SpeciesRichness_Mammals.pdf")
 for(i in 1:length(data.use)){
   hist(CTresults[[i]]$sims.list$N, breaks=150, xlab="Bird Species Richness", 
@@ -210,7 +210,7 @@ for(i in 1:length(data.use)){
        sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
   legend("bottomright", legend=c(paste("Mean", CTaverages[i,1], sep=" = "), 
                                  paste("Median", CTaverages[i,2], sep=" = "), 
-                                 paste("Mode", CTaverages[i,3], sep=" = ")), bty="n")
+                                 paste("Mode", CTaverages[i,3], sep=" = "), ""), bty="n")
 }
 dev.off()
 # Write output table to use in modeling
