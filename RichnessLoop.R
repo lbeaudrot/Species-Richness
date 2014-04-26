@@ -72,7 +72,7 @@ subdata1 <- list()
 #### SPECIFY WHETHER SPECIES RICHNESS MODELS SHOULD BE RESTRICTED to MAMMALS or BIRDS
 subdata <- subdata1
 for(i in 1:length(data.use)) {
-  subdata[[i]] <- subdata[[i]][subdata[[i]]$Class=="AVES",]
+  subdata[[i]] <- subdata[[i]][subdata[[i]]$Class=="MAMMALIA",]
   subdata
 } # Limit species by Class
 #######################################################################################
@@ -157,7 +157,7 @@ fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.
 
 print(fitparallel, digits=3)
 
-sp.mean <- round(mean(fitparallel$sims.list$N), digits=2)
+sp.mean <- round(mean(fitparallel$sims.list$N), digits=0)
 sp.median <- median(fitparallel$sims.list$N)
 sp.mode <- as.numeric(names(sort(table(fitparallel$sims.list$N), decreasing=TRUE))[1])
 
@@ -204,8 +204,8 @@ colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
 #######################################################################################
 #### SPECIFY WHETHER PLOTS ARE MAMMALS or BIRDS
 # Re-graph plots using results
-pdf(file="PosteriorDistributions_SpeciesRichness_Birds.pdf")
-#pdf(file="PosteriorDistributions_SpeciesRichness_Mammals.pdf")
+#pdf(file="PosteriorDistributions_SpeciesRichness_Birds.pdf")
+pdf(file="PosteriorDistributions_SpeciesRichness_Mammals.pdf")
 for(i in 1:length(data.use)){
   hist(CTresults[[i]]$sims.list$N, breaks=150, xlab="Bird Species Richness", 
        main=paste(events.use[[i]]$Site.Code[1], substr(events.use[[i]]$Sampling.Period[1],1,4), sep=" "), 
@@ -218,10 +218,10 @@ dev.off()
 #######################################################################################
 #### SPECIFY WHETHER RESULTS ARE MAMMALS or BIRDS
 # Write output table to use in modeling
-write.csv(CTaverages, file="CTaverages_bird.csv", row.names=TRUE, col.names=TRUE)
-#write.csv(CTaverages, file="CTaverages_mammal.csv", row.names=TRUE, col.names=TRUE)
+#write.csv(CTaverages, file="CTaverages_bird.csv", row.names=TRUE, col.names=TRUE)
+write.csv(CTaverages, file="CTaverages_mammal.csv", row.names=TRUE, col.names=TRUE)
 
 # Save model outputs
-save(CTresults, file="CTresults_bird.gzip",compress="gzip")
-#save(CTresults, file="CTresults_mammal.gzip",compress="gzip")
+#save(CTresults, file="CTresults_bird.gzip",compress="gzip")
+save(CTresults, file="CTresults_mammal.gzip",compress="gzip")
 #######################################################################################
