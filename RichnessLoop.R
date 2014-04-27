@@ -191,7 +191,7 @@ CTaverages <- matrix(nrow=length(CTresults), ncol=3, dimnames=list(CTnames, cols
 # Function to calculate site level averages
 f.sp.averages <- function(data) {
   for(i in 1:length(CTresults)){
-    CTaverages[i,] <- cbind(round(mean(data[[i]]$sims.list$N), digits=2),
+    CTaverages[i,] <- cbind(round(mean(data[[i]]$sims.list$N), digits=0),
                             median(data[[i]]$sims.list$N),
                             as.numeric(names(sort(table(data[[i]]$sims.list$N), decreasing=TRUE))[1]))
   }
@@ -207,7 +207,7 @@ colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
 #pdf(file="PosteriorDistributions_SpeciesRichness_Birds.pdf")
 pdf(file="PosteriorDistributions_SpeciesRichness_Mammals.pdf")
 for(i in 1:length(data.use)){
-  hist(CTresults[[i]]$sims.list$N, breaks=150, xlab="Bird Species Richness", 
+  hist(CTresults[[i]]$sims.list$N, breaks=150, xlab="Mammal Species Richness", 
        main=paste(events.use[[i]]$Site.Code[1], substr(events.use[[i]]$Sampling.Period[1],1,4), sep=" "), 
        sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
   legend("bottomright", legend=c(paste("Mean", CTaverages[i,1], sep=" = "), 

@@ -1,4 +1,4 @@
-
+# File output to save from 4/27/2014
 data.use <- list(BBS.use, BCI.use, CAX.use, COU.use, KRP.use, MAS.use, NNN.use, PSH.use, RNF.use, UDZ.use, VB.use, YAN.use, YAS.use)
 
 > #######################################################################################
