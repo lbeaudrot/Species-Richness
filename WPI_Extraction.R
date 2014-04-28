@@ -119,3 +119,5 @@ wpi_2012 <- rbind(psi2012, S.psi2012, C.psi2012)
 
 wpi_weights <- rbind(wpi_2012[wpi_2012$Site.Code=="PSH"|wpi_2012$Site.Code=="CAX"|wpi_2012$Site.Code=="YAS",],
 wpi_2011[wpi_2011$Site.Code!="PSH"&wpi_2011$Site.Code!="CAX"&wpi_2011$Site.Code!="YAS",])
+
+write.csv(wpi_weights, file="wpi_weights.csv", row.names=FALSE)
