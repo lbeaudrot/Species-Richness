@@ -23,15 +23,22 @@ pairs(plot.VGvar, lower.panel = panel.smooth, upper.panel = panel.cor)
 # Merge CT and Veg data into a single table
 #CTaverages <- cbind(rownames(CTaverages), CTaverages)
 #colnames(CTaverages)[1] <- "Site.Code"
-plot.VGmean <- cbind(rownames(plot.VGmean), plot.VGmean)
-colnames(plot.VGmean)[1] <- "Site.Code"
+#plot.VGmean <- cbind(rownames(plot.VGmean), plot.VGmean)
+#colnames(plot.VGmean)[1] <- "Site.Code"
+
+plot.VGmean <- read.csv(file="PlantDiversityCalculations.csv")
 
 ################################################################################
 # DESIGNATE DATA AS MAMMAL OR BIRD
 CTaverages <- read.csv("CTaverages_mammal.csv")
-#CTaverages <- read.csv("CTaverages_bird.csv")
+MammalFD <- read.csv("FunctionalDiversity_Mammals_28April2014.csv")
 
-model.data <- merge(CTaverages, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+#CTaverages <- read.csv("CTaverages_bird.csv")
+#BirdFD <- read.csv("FunctionalDiversity_Birds_28April2014.csv")
+
+
+model.data <- merge(CTaverages, MammalFD, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+model.data <- merge(model.data, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 # Calculate precipitation CV and add rainfall data to model.data
 rain.data <- read.csv(file="Precipitation_Data.csv")
@@ -75,7 +82,7 @@ for(i in 1:dim(ModelData)[2])  {
 }
 MData <- as.data.frame(MData)
 colnames(MData) <- colnames(ModelData)
-MData <- cbind(MData[,1:3], scale(MData[,4:dim(MData)[2]]))
+MData <- cbind(MData[,1:13], scale(MData[,14:dim(MData)[2]]))
 rownames(MData) <- model.data$Site.Code
 pairs(MData, lower.panel = panel.smooth, upper.panel = panel.cor)
 
@@ -112,23 +119,33 @@ set.panel()
 
 ###### Model Terrestrial Vertebrate Species Richness
 fit1 <- lm(CT.mode ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=Mdata)
-fit2 <- lm(CT.median ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=Mdata)
-
 step1 <- stepAIC(fit1, direction="both")
+bestfit1 <- lm(CT.mode ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + Rain.CV + 
+                 abs(Latitude) + Elev.CV + V.NStemsT:abs(Latitude), data=Mdata)
+summary(bestfit1)
+
+fit2 <- lm(CT.median ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=Mdata)
 step2 <- stepAIC(fit2, direction="both")
+bestfit2 <- lm(CT.median ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + Rain.CV + 
+                 abs(Latitude) + V.TRich + V.NStemsT:abs(Latitude), data=Mdata)
+summary(bestfit2)
 
+fit3 <- lmer(CT.mode ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
+fit4 <- lmer(CT.median ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
 
-fit3 <- lmer(CT.mode ~ (1|Continent) + V.Cstorage + V.FDis + V.TRich + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
-
-m1 <- lm(CT.mode ~ FDis + TRich + TShan + NStemsT + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
-
-m2 <- lmer(CT.mode ~ (1|Continent)+ FDis + TRich + TShan + NStemsT + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
-
+AIC(fit1, fit2, fit3, fit4)
 
 ###### Model Terrestrial Vertebrate Functional Diversity
-MammalFD <- read.csv("MammalFD.csv")
-fit2 <- lm(MammalFD$FDis ~ Cstorage + FDis + TRich + TShan + NStemsT + NStemsL + RainTotal + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=MData)
-step2 <- stepAIC(fit2, direction="both")
 
+
+
+fit5 <- lm(CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=MData)
+step5 <- stepAIC(fit5, direction="both")
+bestfit5 <- lm(CT.FDis ~ V.Cstorage + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + 
+                 Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude) + Elev.CV:abs(Latitude), data=Mdata)
+
+fit6 <- lmer(CT.mode ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
+
+AIC(bestfit5, fit6)
 
 ###### Model Terrestrial Vertebrate Taxonomic Diversity
