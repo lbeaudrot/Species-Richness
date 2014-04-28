@@ -5,6 +5,9 @@
 #See object CTaverages for species richness estimates
 
 #Use PlantDiversity.R to obtain TEAM site level plant covariates. 
+#Alternatively, load covariates from csv file
+plot.VGmean <- read.csv(file="PlantDiversityCalculations.csv")
+
 #See objects plot.VGmean and plot.VGvar for mean and variance of plant covariates
 
 panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
@@ -26,18 +29,19 @@ pairs(plot.VGvar, lower.panel = panel.smooth, upper.panel = panel.cor)
 #plot.VGmean <- cbind(rownames(plot.VGmean), plot.VGmean)
 #colnames(plot.VGmean)[1] <- "Site.Code"
 
-plot.VGmean <- read.csv(file="PlantDiversityCalculations.csv")
 
 ################################################################################
-# DESIGNATE DATA AS MAMMAL OR BIRD
+# MERGE MAMMAL AND BIRD DATA
 CTaverages <- read.csv("CTaverages_mammal.csv")
 MammalFD <- read.csv("FunctionalDiversity_Mammals_28April2014.csv")
-
-#CTaverages <- read.csv("CTaverages_bird.csv")
-#BirdFD <- read.csv("FunctionalDiversity_Birds_28April2014.csv")
-
-
 model.data <- merge(CTaverages, MammalFD, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+
+CTaveragesB <- read.csv("CTaverages_bird.csv")
+BirdFD <- read.csv("FunctionalDiversity_Birds_28April2014.csv")
+model.data <- merge(model.data, CTaveragesB, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+model.data <- merge(model.data, BirdFD, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+
+# MERGE ANIMAL DATA WITH PLANT DATA
 model.data <- merge(model.data, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 # Calculate precipitation CV and add rainfall data to model.data
@@ -52,6 +56,10 @@ rain <- data.frame(rain.data$Site.Code, rain.data$total, rain.CV)
 colnames(rain) <- c("Site.Code", "RainTotal", "Rain.CV")
 model.data <- merge(model.data, rain, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
+CV <- function(data){
+  sd(data)/mean(data)
+}
+
 # Calculate elevation CV and add elevation to model.data
 elevation.data <- read.csv("CT_edgedist_elevation_final.csv") 
 elevation.mean <- aggregate(elevation.data$Elevation ~ elevation.data$Site.Code, FUN=mean)
@@ -62,9 +70,11 @@ model.data <- merge(model.data, elevation, by.x="Site.Code", by.y="Site.Code", a
 
 # Add latitude for each TEAM site as a covariate - see EstimateSpeciesRichness.R line 203
 # Extract mean CT latitude for each TEAM site to include as a covariate 
-traps <- eventsdata[!duplicated(eventsdata$Sampling.Unit.Name),]
-Latitude <- aggregate(traps$Latitude ~ traps$Site.Code, FUN=mean)
-colnames(Latitude) <- c("Site.Code", "Latitude")
+#traps <- eventsdata[!duplicated(eventsdata$Sampling.Unit.Name),]
+#Latitude <- aggregate(traps$Latitude ~ traps$Site.Code, FUN=mean)
+#colnames(Latitude) <- c("Site.Code", "Latitude")
+
+Latitude <- read.csv("Latitude_MeanSiteCT.csv")
 model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 
@@ -82,7 +92,7 @@ for(i in 1:dim(ModelData)[2])  {
 }
 MData <- as.data.frame(MData)
 colnames(MData) <- colnames(ModelData)
-MData <- cbind(MData[,1:13], scale(MData[,14:dim(MData)[2]]))
+MData <- cbind(MData[,1:23], scale(MData[,24:dim(MData)[2]]))
 rownames(MData) <- model.data$Site.Code
 pairs(MData, lower.panel = panel.smooth, upper.panel = panel.cor)
 
@@ -118,6 +128,10 @@ boxplot(Mdata$CT.mode~Mdata$Continent2, ylim=c(0,40))
 set.panel()
 
 ###### Model Terrestrial Vertebrate Species Richness
+
+library(lme4)
+library(MASS)
+
 fit1 <- lm(CT.mode ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=Mdata)
 step1 <- stepAIC(fit1, direction="both")
 bestfit1 <- lm(CT.mode ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + Rain.CV + 
@@ -136,8 +150,16 @@ fit4 <- lmer(CT.median ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NSte
 AIC(fit1, fit2, fit3, fit4)
 
 ###### Model Terrestrial Vertebrate Functional Diversity
-
-
+# MAMMALS
+set.panel(3,2)
+par(mar=c(3,2,2,1))
+hist(Mdata$CT.FDis, main="Mammal Functional Dispersion")
+hist(Mdata$CT.RaoQ, main="Mammal Rao's Quadratic Entropy")
+boxplot(Mdata$CT.FDis~Mdata$Continent1, ylim=c(0,0.5))
+boxplot(Mdata$CT.RaoQ~Mdata$Continent1, ylim=c(0,0.5))
+boxplot(Mdata$CT.FDis~Mdata$Continent2, ylim=c(0,0.5))
+boxplot(Mdata$CT.RaoQ~Mdata$Continent2, ylim=c(0,0.5))
+set.panel()
 
 fit5 <- lm(CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=MData)
 step5 <- stepAIC(fit5, direction="both")
@@ -147,5 +169,26 @@ bestfit5 <- lm(CT.FDis ~ V.Cstorage + V.TRich + V.NStemsT + V.NStemsL + Rain.CV 
 fit6 <- lmer(CT.mode ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
 
 AIC(bestfit5, fit6)
+
+
+# BIRDS
+set.panel(3,2)
+par(mar=c(3,2,2,1))
+hist(Mdata$B.CT.FDis, main="Bird Functional Dispersion")
+hist(Mdata$B.CT.RaoQ, main="Bird Rao's Quadratic Entropy")
+boxplot(Mdata$B.CT.FDis~Mdata$Continent1, ylim=c(0,0.5))
+boxplot(Mdata$B.CT.RaoQ~Mdata$Continent1, ylim=c(0,0.5))
+boxplot(Mdata$B.CT.FDis~Mdata$Continent2, ylim=c(0,0.5))
+boxplot(Mdata$B.CT.RaoQ~Mdata$Continent2, ylim=c(0,0.5))
+set.panel()
+
+fit7 <- lm(B.CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=MData)
+step7 <- stepAIC(fit7, direction="both")
+bestfit7 <- lm(B.CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+                 Rain.CV + Elev.CV, data=Mdata)
+
+fit8 <- lmer(B.CT.RaoQ ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
+
+AIC(bestfit7, fit8)
 
 ###### Model Terrestrial Vertebrate Taxonomic Diversity
