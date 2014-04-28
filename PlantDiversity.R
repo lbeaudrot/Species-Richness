@@ -507,7 +507,7 @@ for(i in 1:dim(plant.covs)[2]-4){
 }
 colnames(plot.VGmean) <- paste("V", colnames(plot.VGmean), sep=".")
 plot.VGmean.backup <- plot.VGmean
-
+write.csv(plot.VGmean, file="PlantDiversityCalculations.csv")
 
 plot.VGvar <- matrix(NA, nrow=dim(plot.VGmean)[1], 
                       ncol=dim(plot.VGmean)[2], 
