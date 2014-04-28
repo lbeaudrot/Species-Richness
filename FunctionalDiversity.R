@@ -263,5 +263,5 @@ rownames(B.CTweighted) <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NN
 
 CTweighted
 B.CTweighted
-# Create name for output for each site for loop
-# paste(events.use$Site.Code[1], events.use$Sampling.Period[1], "FD", sep=".")
+#write.csv(CTweighted, file="FunctionalDiversity_Mammals_28April2014.csv")
+#write.csv(B.CTweighted, file="FunctionalDiversity_Birds_28April2014.csv")
