@@ -186,3 +186,4 @@ write.csv(CTaverages, file="CTaverages.csv", row.names=TRUE, col.names=TRUE)
 traps <- eventsdata[!duplicated(eventsdata$Sampling.Unit.Name),]
 Latitude <- aggregate(traps$Latitude ~ traps$Site.Code, FUN=mean)
 colnames(Latitude) <- c("Site.Code", "Latitude")
+write.csv(Latitude, file="Latitude_MeanSiteCT.csv", rownames=FALSE)
