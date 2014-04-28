@@ -90,19 +90,24 @@ library(lme4)
 library(MASS)
 
 Year <- c(2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012)
-Continent <- c("Asia", "America", "America", "America", "Africa", "America", "Africa", "Asia", "Africa", "Africa", "America", "America", "America")
-Mdata <- cbind(MData, Year, Continent)
+Continent1 <- c("Asia", "America", "America", "America", "Africa", "America", "Africa", "Asia", "Africa", "Africa", "America", "America", "America")
+Continent2 <- c("Asia", "America", "America", "America", "Africa", "America", "Africa", "Asia", "Madagascar", "Africa", "America", "America", "America")
+
+Mdata <- cbind(MData, Year, Continent1, Continent2)
 
 # Visualize species richness across sites
 library("fields")
-set.panel(2,3)
+set.panel(3,3)
 par(mar=c(2,2,1,1))
 hist(Mdata$CT.mean, main="Mean")
 hist(Mdata$CT.median, main="Median")
 hist(Mdata$CT.mode, main="Mode")
-boxplot(Mdata$CT.mean~Mdata$Continent)
-boxplot(Mdata$CT.median~Mdata$Continent)
-boxplot(Mdata$CT.mode~Mdata$Continent)
+boxplot(Mdata$CT.mean~Mdata$Continent1, ylim=c(0,40))
+boxplot(Mdata$CT.median~Mdata$Continent1, ylim=c(0,40))
+boxplot(Mdata$CT.mode~Mdata$Continent1, ylim=c(0,40))
+boxplot(Mdata$CT.mean~Mdata$Continent2, ylim=c(0,40))
+boxplot(Mdata$CT.median~Mdata$Continent2, ylim=c(0,40))
+boxplot(Mdata$CT.mode~Mdata$Continent2, ylim=c(0,40))
 set.panel()
 
 ###### Model Terrestrial Vertebrate Species Richness
@@ -113,7 +118,7 @@ step1 <- stepAIC(fit1, direction="both")
 step2 <- stepAIC(fit2, direction="both")
 
 
-lmer(CT.mode ~ (1|Continent) + V.Cstorage + V.FDis + V.TRich + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
+fit3 <- lmer(CT.mode ~ (1|Continent) + V.Cstorage + V.FDis + V.TRich + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
 
 m1 <- lm(CT.mode ~ FDis + TRich + TShan + NStemsT + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
 
