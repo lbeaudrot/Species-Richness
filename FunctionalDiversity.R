@@ -97,7 +97,7 @@ table(alldata$Site.Code, alldata$Sampling.Period) #Examine which sites have data
 
 ######## Start here to CHANGE INPUT DATA FOR Functional Diversity metrics ###############
 # Use  "Site.Code" to designate which site to include
-data.use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="YAN",]
+data.use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="CAX",]
 
 # Subset the species list for each site to calculate the functional diversity metrics
 splist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
