@@ -79,6 +79,13 @@ MData <- cbind(MData[,1:3], scale(MData[,4:dim(MData)[2]]))
 rownames(MData) <- model.data$Site.Code
 pairs(MData, lower.panel = panel.smooth, upper.panel = panel.cor)
 
+PairsCOR <- round(cor(Mdata[,1:19]), digits=2)
+PairsCOR[lower.tri(PairsCOR)] <- NA
+diag(PairsCOR) <- NA
+PairsCOR
+ifelse(abs(PairsCOR)>0.5, PairsCOR, NA)
+
+
 library(lme4)
 library(MASS)
 
@@ -86,17 +93,27 @@ Year <- c(2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011
 Continent <- c("Asia", "America", "America", "America", "Africa", "America", "Africa", "Asia", "Africa", "Africa", "America", "America", "America")
 Mdata <- cbind(MData, Year, Continent)
 
+# Visualize species richness across sites
+library("fields")
+set.panel(2,3)
+par(mar=c(2,2,1,1))
+hist(Mdata$CT.mean, main="Mean")
+hist(Mdata$CT.median, main="Median")
+hist(Mdata$CT.mode, main="Mode")
+boxplot(Mdata$CT.mean~Mdata$Continent)
+boxplot(Mdata$CT.median~Mdata$Continent)
+boxplot(Mdata$CT.mode~Mdata$Continent)
+set.panel()
 
 ###### Model Terrestrial Vertebrate Species Richness
-fit1 <- lm(CT.mode ~ 
-             Cstorage + FDis + TRich + NStemsT + 
-             NStemsL + Rain.CV + Elev.CV + abs(Latitude) + 
-             abs(Latitude)*NStemsT + abs(Latitude)*Elev.CV + TRich*Rain.CV, 
-                data=Mdata)
+fit1 <- lm(CT.mode ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=Mdata)
+fit2 <- lm(CT.median ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=Mdata)
 
 step1 <- stepAIC(fit1, direction="both")
+step2 <- stepAIC(fit2, direction="both")
 
-lmer(CT.mode ~ (1|Year) + (1|Continent) + Cstorage + FDis + TRich + TShan + NStemsT + NStemsL + RainTotal + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
+
+lmer(CT.mode ~ (1|Continent) + V.Cstorage + V.FDis + V.TRich + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
 
 m1 <- lm(CT.mode ~ FDis + TRich + TShan + NStemsT + Rain.CV + Elev.Mean + Elev.CV + abs(Latitude), data=Mdata)
 
