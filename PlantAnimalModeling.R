@@ -21,10 +21,16 @@ pairs(plot.VGmean, lower.panel = panel.smooth, upper.panel = panel.cor)
 pairs(plot.VGvar, lower.panel = panel.smooth, upper.panel = panel.cor)
 
 # Merge CT and Veg data into a single table
-CTaverages <- cbind(rownames(CTaverages), CTaverages)
-colnames(CTaverages)[1] <- "Site.Code"
+#CTaverages <- cbind(rownames(CTaverages), CTaverages)
+#colnames(CTaverages)[1] <- "Site.Code"
 plot.VGmean <- cbind(rownames(plot.VGmean), plot.VGmean)
 colnames(plot.VGmean)[1] <- "Site.Code"
+
+################################################################################
+# DESIGNATE DATA AS MAMMAL OR BIRD
+CTaverages <- read.csv("CTaverages_mammal.csv")
+#CTaverages <- read.csv("CTaverages_bird.csv")
+
 model.data <- merge(CTaverages, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 # Calculate precipitation CV and add rainfall data to model.data
