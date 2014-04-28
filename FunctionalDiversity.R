@@ -128,6 +128,8 @@ SiteTraits <- cbind(SiteTraits[,1:3], droplevels(SiteTraits[,4:5]))
 #Calculate unweighted mammal functional diversity
 #traitFD <- dbFD(SiteTraits, corr="cailliez")
 #Use object wpi_weights to weight functional trait calculations by occupancy estimates (psi.mean or psi.median)
+#Alternatively, read in wpi weights from csv file
+wpi_weights <- read.csv(file="wpi_weights.csv")
 wpi_use <- wpi_weights[wpi_weights$Site.Code==data.use$Site.Code[1], ]
 psi_weights <- wpi_use$psi.median[match(rownames(SiteTraits), wpi_use$bin)]
 names(psi_weights) <- rownames(SiteTraits)
