@@ -286,7 +286,6 @@ for(i in 1:length(Data.Use)){
 # Calculate bird FD and Shannon diversity indices 
   B.CTSite_FD[[i]] <- dbFD(BirdTraits[[i]][,1:dim(BirdTraits[[i]])[2]-1], a=Bpsi_use[[i]][1:dim(BirdTraits[[i]])[1]], corr="cailliez", calc.FRic=FALSE)
   B.CT.Shannon[i] <- diversity(Bpsi_use[[i]], index="shannon")
-  
 } 
 
 
@@ -343,7 +342,7 @@ for(i in 1:length(CTSite_FD)){
   B.CWM.Guild[i] <- B.CTSite_FD[[i]]$CWM$Guild
 }
 
-B.CTweighted <- cbind(B.CT.nbsp, B.CT.sing.sp, B.CT.FEve, B.CT.FDiv, B.CT.FDis, B.CT.RaoQ, B.CWM.Mass)
+B.CTweighted <- cbind(B.CT.nbsp, B.CT.sing.sp, B.CT.FEve, B.CT.FDiv, B.CT.FDis, B.CT.RaoQ, B.CWM.Mass, B.CT.Shannon)
 B.CTweighted <- as.data.frame(B.CTweighted)
 rownames(B.CTweighted) <- c("BBS", "BCI", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB", "YAN", "YAS") 
 
