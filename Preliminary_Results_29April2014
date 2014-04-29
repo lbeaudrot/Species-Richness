@@ -1,0 +1,579 @@
+PRELIMINARY RESULTS FOR MEETING w/JORGE on 4/30/2014
+
+> ###### MODEL Terrestrial Vertebrate SPECIES RICHNESS
+
+> fit1 <- lm(CT.mode ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=Mdata)
+> step1 <- stepAIC(fit1, direction="both")
+Start:  AIC=32.21
+CT.mode ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude) * V.NStemsT + 
+    abs(Latitude) * Elev.CV
+
+                          Df Sum of Sq    RSS    AIC
+- Elev.CV:abs(Latitude)    1     3.736 32.240 31.808
+- V.TRich                  1     4.594 33.098 32.149
+<none>                                 28.504 32.206
+- V.NStemsL                1     5.319 33.824 32.431
+- Rain.CV                  1     8.531 37.035 33.610
+- V.NStemsT:abs(Latitude)  1    16.038 44.543 36.009
+- V.FDis                   1    40.701 69.206 41.738
+- V.Cstorage               1    58.340 86.845 44.689
+
+Step:  AIC=31.81
+CT.mode ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude)
+
+                          Df Sum of Sq    RSS    AIC
+- V.TRich                  1     2.255 34.496 30.687
+- Elev.CV                  1     2.923 35.164 30.936
+<none>                                 32.240 31.808
++ Elev.CV:abs(Latitude)    1     3.736 28.504 32.206
+- V.NStemsT:abs(Latitude)  1    12.553 44.793 34.082
+- V.NStemsL                1    14.465 46.705 34.626
+- Rain.CV                  1    32.494 64.734 38.869
+- V.Cstorage               1    55.461 87.701 42.817
+- V.FDis                   1    60.006 92.246 43.474
+
+Step:  AIC=30.69
+CT.mode ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + Rain.CV + 
+    Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude)
+
+                          Df Sum of Sq    RSS    AIC
+<none>                                 34.496 30.687
++ V.TRich                  1     2.255 32.240 31.808
+- Elev.CV                  1     9.695 44.191 31.906
++ Elev.CV:abs(Latitude)    1     1.398 33.098 32.149
+- V.NStemsT:abs(Latitude)  1    11.617 46.113 32.460
+- V.NStemsL                1    15.268 49.763 33.450
+- Rain.CV                  1    37.710 72.205 38.289
+- V.Cstorage               1    59.832 94.328 41.764
+- V.FDis                   1    62.593 97.088 42.139
+> bestfit1 <- lm(CT.mode ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + Rain.CV + 
++                  abs(Latitude) + Elev.CV + V.NStemsT:abs(Latitude), data=Mdata)
+> summary(bestfit1)
+
+Call:
+lm(formula = CT.mode ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + 
+    Rain.CV + abs(Latitude) + Elev.CV + V.NStemsT:abs(Latitude), 
+    data = Mdata)
+
+Residuals:
+     BBS      BCI      CAX      COU      KRP      MAS      NNN      PSH      RNF      UDZ      VB-      YAN      YAS 
+-1.88569 -1.97217 -1.59202  0.21554  0.44027  3.22184  1.00580  2.35670  0.02489 -0.59867  0.64267  0.62439 -2.48354 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(>|t|)   
+(Intercept)               21.516      2.612   8.238  0.00118 **
+V.Cstorage                -5.413      2.055  -2.634  0.05794 . 
+V.FDis                    -6.802      2.525  -2.694  0.05443 . 
+V.NStemsT                 -9.462      3.708  -2.552  0.06319 . 
+V.NStemsL                  2.365      1.778   1.331  0.25412   
+Rain.CV                   -4.095      1.958  -2.091  0.10470   
+abs(Latitude)              2.491      2.932   0.850  0.44338   
+Elev.CV                   -1.209      1.140  -1.060  0.34880   
+V.NStemsT:abs(Latitude)    2.841      2.448   1.161  0.31034   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.937 on 4 degrees of freedom
+Multiple R-squared:  0.918,  Adjusted R-squared:  0.7541 
+F-statistic: 5.599 on 8 and 4 DF,  p-value: 0.05685
+
+> 
+> fit2 <- lm(CT.median ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=Mdata)
+> step2 <- stepAIC(fit2, direction="both")
+Start:  AIC=35.54
+CT.median ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude) * V.NStemsT + 
+    abs(Latitude) * Elev.CV
+
+                          Df Sum of Sq     RSS    AIC
+- V.TRich                  1     6.014  42.847 35.505
+<none>                                  36.833 35.539
+- Elev.CV:abs(Latitude)    1     6.226  43.059 35.569
+- V.NStemsL                1     9.930  46.763 36.642
+- Rain.CV                  1    11.603  48.436 37.099
+- V.NStemsT:abs(Latitude)  1    27.825  64.658 40.854
+- V.FDis                   1    62.076  98.909 46.380
+- V.Cstorage               1    93.593 130.426 49.976
+
+Step:  AIC=35.51
+CT.median ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + Rain.CV + 
+    Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude) + Elev.CV:abs(Latitude)
+
+                          Df Sum of Sq     RSS    AIC
+- Elev.CV:abs(Latitude)    1     2.760  45.608 34.317
+<none>                                  42.847 35.505
++ V.TRich                  1     6.014  36.833 35.539
+- V.NStemsL                1    15.122  57.970 37.435
+- Rain.CV                  1    23.182  66.029 39.127
+- V.NStemsT:abs(Latitude)  1    25.875  68.722 39.647
+- V.FDis                   1    56.551  99.398 44.444
+- V.Cstorage               1    95.790 138.638 48.770
+
+Step:  AIC=34.32
+CT.median ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + Rain.CV + 
+    Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude)
+
+                          Df Sum of Sq     RSS    AIC
+- Elev.CV                  1     6.279  51.887 33.994
+<none>                                  45.608 34.317
++ Elev.CV:abs(Latitude)    1     2.760  42.847 35.505
++ V.TRich                  1     2.548  43.059 35.569
+- V.NStemsT:abs(Latitude)  1    23.804  69.412 37.776
+- V.NStemsL                1    27.290  72.898 38.414
+- Rain.CV                  1    54.062  99.670 42.480
+- V.FDis                   1    99.026 144.634 47.320
+- V.Cstorage               1    99.339 144.947 47.348
+
+Step:  AIC=33.99
+CT.median ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + Rain.CV + 
+    abs(Latitude) + V.NStemsT:abs(Latitude)
+
+                          Df Sum of Sq     RSS    AIC
++ V.TRich                  1     7.492  44.395 33.966
+<none>                                  51.887 33.994
++ Elev.CV                  1     6.279  45.608 34.317
+- V.NStemsL                1    35.404  87.291 38.756
+- V.NStemsT:abs(Latitude)  1    37.025  88.913 38.995
+- Rain.CV                  1    77.400 129.288 43.862
+- V.Cstorage               1   125.972 177.860 48.009
+- V.FDis                   1   157.659 209.546 50.140
+
+Step:  AIC=33.97
+CT.median ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + Rain.CV + 
+    abs(Latitude) + V.TRich + V.NStemsT:abs(Latitude)
+
+                          Df Sum of Sq     RSS    AIC
+<none>                                  44.395 33.966
+- V.TRich                  1     7.492  51.887 33.994
++ Elev.CV                  1     1.336  43.059 35.569
+- V.NStemsL                1    28.581  72.976 38.427
+- V.NStemsT:abs(Latitude)  1    44.073  88.468 40.930
+- Rain.CV                  1    51.259  95.654 41.945
+- V.Cstorage               1   132.774 177.170 49.958
+- V.FDis                   1   164.758 209.154 52.116
+> bestfit2 <- lm(CT.median ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + Rain.CV + 
++                  abs(Latitude) + V.TRich + V.NStemsT:abs(Latitude), data=Mdata)
+> summary(bestfit2)
+
+Call:
+lm(formula = CT.median ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + 
+    Rain.CV + abs(Latitude) + V.TRich + V.NStemsT:abs(Latitude), 
+    data = Mdata)
+
+Residuals:
+     BBS      BCI      CAX      COU      KRP      MAS      NNN      PSH      RNF      UDZ      VB-      YAN      YAS 
+-1.61915 -1.79526 -2.56049 -0.27156  0.43104  3.70275  2.69445  1.10417  0.01409 -0.76343  0.38255  1.33366 -2.65282 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(>|t|)   
+(Intercept)               21.786      3.170   6.873  0.00235 **
+V.Cstorage                -8.086      2.338  -3.459  0.02585 * 
+V.FDis                    -9.906      2.571  -3.853  0.01826 * 
+V.NStemsT                -15.313      5.237  -2.924  0.04307 * 
+V.NStemsL                  3.206      1.998   1.605  0.18383   
+Rain.CV                   -4.810      2.238  -2.149  0.09809 . 
+abs(Latitude)              3.380      3.413   0.990  0.37809   
+V.TRich                    1.741      2.119   0.822  0.45745   
+V.NStemsT:abs(Latitude)    6.010      3.016   1.993  0.11709   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.331 on 4 degrees of freedom
+Multiple R-squared:  0.9216,	Adjusted R-squared:  0.7648 
+F-statistic: 5.878 on 8 and 4 DF,  p-value: 0.05238
+
+> 
+> fit3 <- lmer(CT.mode ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
+> fit4 <- lmer(CT.median ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
+> 
+> AIC(fit1, fit3)
+     df      AIC
+fit1 12 71.09872
+fit3 12 56.10240
+> AIC(fit2, fit4)
+     df      AIC
+fit2 12 74.43117
+fit4 12 56.97049
+
+
+
+
+> ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
+
+> fit5 <- lm(CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=MData)
+> step5 <- stepAIC(fit5, direction="both")
+Start:  AIC=-120.16
+CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude) * V.NStemsT + 
+    abs(Latitude) * Elev.CV
+
+                          Df  Sum of Sq        RSS     AIC
+- V.FDis                   1 0.00000635 0.00023804 -121.80
+- V.NStemsL                1 0.00002100 0.00025269 -121.03
+<none>                                  0.00023169 -120.16
+- Elev.CV:abs(Latitude)    1 0.00008253 0.00031422 -118.19
+- Rain.CV                  1 0.00014476 0.00037645 -115.85
+- V.NStemsT:abs(Latitude)  1 0.00031100 0.00054269 -111.09
+- V.Cstorage               1 0.00042669 0.00065838 -108.58
+- V.TRich                  1 0.00100418 0.00123588 -100.39
+
+Step:  AIC=-121.8
+CT.FDis ~ V.Cstorage + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + 
+    Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude) + Elev.CV:abs(Latitude)
+
+                          Df  Sum of Sq        RSS     AIC
+<none>                                  0.00023804 -121.80
+- V.NStemsL                1 0.00006456 0.00030260 -120.69
++ V.FDis                   1 0.00000635 0.00023169 -120.16
+- Elev.CV:abs(Latitude)    1 0.00011951 0.00035754 -118.52
+- V.NStemsT:abs(Latitude)  1 0.00031145 0.00054949 -112.93
+- Rain.CV                  1 0.00039012 0.00062815 -111.19
+- V.Cstorage               1 0.00066337 0.00090140 -106.50
+- V.TRich                  1 0.00102017 0.00125821 -102.16
+> bestfit5 <- lm(CT.FDis ~ V.Cstorage + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + 
++                  Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude) + Elev.CV:abs(Latitude), data=Mdata)
+> summary(bestfit5)
+
+Call:
+lm(formula = CT.FDis ~ V.Cstorage + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude) + 
+    Elev.CV:abs(Latitude), data = Mdata)
+
+Residuals:
+       BBS        BCI        CAX        COU        KRP        MAS        NNN        PSH        RNF        UDZ        VB-        YAN        YAS 
+-0.0008902  0.0059084  0.0059581  0.0019351 -0.0119758 -0.0011026 -0.0025556  0.0010781 -0.0002758  0.0029938  0.0005513 -0.0010349 -0.0005900 
+
+Coefficients:
+                         Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              0.272624   0.006631  41.111 3.17e-05 ***
+V.Cstorage              -0.015459   0.005347  -2.891   0.0629 .  
+V.TRich                  0.026184   0.007302   3.586   0.0371 *  
+V.NStemsT               -0.051860   0.017369  -2.986   0.0583 .  
+V.NStemsL               -0.004350   0.004822  -0.902   0.4335    
+Rain.CV                  0.012729   0.005741   2.217   0.1133    
+Elev.CV                 -0.007895   0.010123  -0.780   0.4923    
+abs(Latitude)           -0.001251   0.008506  -0.147   0.8924    
+V.NStemsT:abs(Latitude)  0.023284   0.011752   1.981   0.1419    
+Elev.CV:abs(Latitude)    0.012167   0.009914   1.227   0.3072    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.008908 on 3 degrees of freedom
+Multiple R-squared:  0.9428,	Adjusted R-squared:  0.7713 
+F-statistic: 5.497 on 9 and 3 DF,  p-value: 0.09399
+
+> fit6 <- lmer(CT.mode ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
+> 
+> AIC(bestfit5, fit6)
+         df       AIC
+bestfit5 11 -82.91204
+fit6     12  56.10240
+
+
+> ###### MODEL BIRD Vertebrate FUNCTIONAL DIVERSITY
+> 
+> fit7 <- lm(B.CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=MData)
+> step7 <- stepAIC(fit7, direction="both")
+Start:  AIC=-79.64
+B.CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude) * V.NStemsT + 
+    abs(Latitude) * Elev.CV
+
+                          Df Sum of Sq      RSS     AIC
+- V.NStemsT:abs(Latitude)  1 0.0004683 0.005696 -80.527
+<none>                                 0.005228 -79.643
+- Elev.CV:abs(Latitude)    1 0.0008752 0.006103 -79.631
+- V.Cstorage               1 0.0055198 0.010748 -72.274
+- V.NStemsL                1 0.0108622 0.016090 -67.028
+- V.FDis                   1 0.0149352 0.020163 -64.095
+- Rain.CV                  1 0.0241280 0.029356 -59.212
+- V.TRich                  1 0.0287057 0.033934 -57.328
+
+Step:  AIC=-80.53
+B.CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV + abs(Latitude) + Elev.CV:abs(Latitude)
+
+                          Df Sum of Sq      RSS     AIC
+- Elev.CV:abs(Latitude)    1  0.000436 0.006132 -81.569
+<none>                                 0.005696 -80.527
++ V.NStemsT:abs(Latitude)  1  0.000468 0.005228 -79.643
+- V.NStemsT                1  0.002445 0.008142 -77.884
+- V.NStemsL                1  0.011039 0.016736 -68.517
+- V.FDis                   1  0.017930 0.023626 -64.034
+- V.Cstorage               1  0.020512 0.026209 -62.686
+- Rain.CV                  1  0.024296 0.029992 -60.933
+- V.TRich                  1  0.050136 0.055832 -52.855
+
+Step:  AIC=-81.57
+B.CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV + abs(Latitude)
+
+                          Df Sum of Sq      RSS     AIC
+- abs(Latitude)            1  0.000024 0.006156 -83.519
+<none>                                 0.006132 -81.569
+- Elev.CV                  1  0.001212 0.007344 -81.224
++ Elev.CV:abs(Latitude)    1  0.000436 0.005696 -80.527
+- V.NStemsT                1  0.002010 0.008142 -79.883
++ V.NStemsT:abs(Latitude)  1  0.000029 0.006103 -79.631
+- V.NStemsL                1  0.014461 0.020593 -67.821
+- V.Cstorage               1  0.027421 0.033553 -61.474
+- V.FDis                   1  0.028938 0.035070 -60.899
+- Rain.CV                  1  0.034720 0.040852 -58.916
+- V.TRich                  1  0.050779 0.056911 -54.606
+
+Step:  AIC=-83.52
+B.CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV
+
+                Df Sum of Sq      RSS     AIC
+<none>                       0.006156 -83.519
+- Elev.CV        1  0.001290 0.007446 -83.046
++ abs(Latitude)  1  0.000024 0.006132 -81.569
+- V.NStemsT      1  0.003674 0.009830 -79.434
+- V.NStemsL      1  0.020771 0.026927 -66.335
+- V.Cstorage     1  0.032373 0.038529 -61.677
+- V.FDis         1  0.039434 0.045590 -59.489
+- Rain.CV        1  0.044361 0.050516 -58.155
+- V.TRich        1  0.050946 0.057102 -56.562
+> bestfit7 <- lm(B.CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
++                  Rain.CV + Elev.CV, data=Mdata)
+> summary(bestfit7)
+
+Call:
+lm(formula = B.CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + 
+    V.NStemsL + Rain.CV + Elev.CV, data = Mdata)
+
+Residuals:
+       BBS        BCI        CAX        COU        KRP        MAS        NNN        PSH        RNF        UDZ        VB-        YAN        YAS 
+ 0.0242941 -0.0113809 -0.0020812  0.0009334  0.0503653 -0.0337551 -0.0128744 -0.0230179 -0.0006814 -0.0041881 -0.0120455 -0.0050735  0.0295051 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.219180   0.009732  22.522 3.21e-06 ***
+V.Cstorage  -0.068297   0.013319  -5.128  0.00368 ** 
+V.FDis      -0.120799   0.021345  -5.659  0.00239 ** 
+V.TRich     -0.129712   0.020165  -6.433  0.00135 ** 
+V.NStemsT   -0.022736   0.013161  -1.728  0.14465    
+V.NStemsL    0.065650   0.015983   4.107  0.00929 ** 
+Rain.CV     -0.126730   0.021113  -6.003  0.00184 ** 
+Elev.CV     -0.013581   0.013270  -1.023  0.35304    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.03509 on 5 degrees of freedom
+Multiple R-squared:  0.9591,	Adjusted R-squared:  0.9017 
+F-statistic: 16.73 on 7 and 5 DF,  p-value: 0.003423
+
+> fit8 <- lmer(B.CT.RaoQ ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
+> 
+> AIC(bestfit7, fit8)
+         df       AIC
+bestfit7  9 -44.62628
+fit8     12  24.89499
+
+
+> ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
+> 
+> fit9 <- lm(CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=MData)
+> step9 <- stepAIC(fit9, direction="both")
+Start:  AIC=-67.45
+CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude) * V.NStemsT + 
+    abs(Latitude) * Elev.CV
+
+                          Df Sum of Sq      RSS     AIC
+- Rain.CV                  1 0.0000017 0.013352 -69.453
+- V.NStemsL                1 0.0000031 0.013354 -69.452
+- V.NStemsT:abs(Latitude)  1 0.0007733 0.014124 -68.723
+- Elev.CV:abs(Latitude)    1 0.0021826 0.015533 -67.486
+<none>                                 0.013351 -67.455
+- V.Cstorage               1 0.0030481 0.016399 -66.782
+- V.FDis                   1 0.0138704 0.027221 -60.193
+- V.TRich                  1 0.0283894 0.041740 -54.636
+
+Step:  AIC=-69.45
+CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+    Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude) + Elev.CV:abs(Latitude)
+
+                          Df Sum of Sq      RSS     AIC
+- V.NStemsL                1  0.000001 0.013354 -71.452
+- V.NStemsT:abs(Latitude)  1  0.000870 0.014222 -70.633
+<none>                                 0.013352 -69.453
+- V.Cstorage               1  0.003100 0.016452 -68.739
+- Elev.CV:abs(Latitude)    1  0.004132 0.017484 -67.948
++ Rain.CV                  1  0.000002 0.013351 -67.455
+- V.FDis                   1  0.027848 0.041200 -56.805
+- V.TRich                  1  0.034190 0.047543 -54.944
+
+Step:  AIC=-71.45
+CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + Elev.CV + 
+    abs(Latitude) + V.NStemsT:abs(Latitude) + Elev.CV:abs(Latitude)
+
+                          Df Sum of Sq      RSS     AIC
+- V.NStemsT:abs(Latitude)  1  0.000953 0.014307 -72.556
+<none>                                 0.013354 -71.452
+- V.Cstorage               1  0.004015 0.017369 -70.034
+- Elev.CV:abs(Latitude)    1  0.004182 0.017535 -69.910
++ V.NStemsL                1  0.000001 0.013352 -69.453
++ Rain.CV                  1  0.000000 0.013354 -69.452
+- V.FDis                   1  0.030478 0.043831 -58.001
+- V.TRich                  1  0.034218 0.047572 -56.936
+
+Step:  AIC=-72.56
+CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + Elev.CV + 
+    abs(Latitude) + Elev.CV:abs(Latitude)
+
+                          Df Sum of Sq      RSS     AIC
+<none>                                 0.014307 -72.556
+- Elev.CV:abs(Latitude)    1  0.003355 0.017662 -71.817
++ V.NStemsT:abs(Latitude)  1  0.000953 0.013354 -71.452
++ Rain.CV                  1  0.000182 0.014124 -70.722
++ V.NStemsL                1  0.000084 0.014222 -70.633
+- V.Cstorage               1  0.005094 0.019401 -70.596
+- V.FDis                   1  0.047101 0.061408 -55.617
+- V.TRich                  1  0.055886 0.070193 -53.879
+- V.NStemsT                1  0.239164 0.253470 -37.187
+> bestfit9 <- lm(CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + Elev.CV + 
++                  abs(Latitude) + Elev.CV:abs(Latitude), data=Mdata)
+> summary(bestfit9)
+
+Call:
+lm(formula = CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + 
+    Elev.CV + abs(Latitude) + Elev.CV:abs(Latitude), data = Mdata)
+
+Residuals:
+      BBS       BCI       CAX       COU       KRP       MAS       NNN       PSH       RNF       UDZ       VB-       YAN       YAS 
+ 0.010447  0.011048  0.012471 -0.026713  0.024096 -0.067538 -0.014095  0.002049  0.011537  0.003801 -0.008188 -0.037779  0.078865 
+
+Coefficients:
+                      Estimate Std. Error t value Pr(>|t|)    
+(Intercept)            2.56291    0.03704  69.185 1.19e-08 ***
+V.Cstorage            -0.02589    0.01941  -1.334 0.239654    
+V.FDis                -0.10644    0.02624  -4.057 0.009756 ** 
+V.TRich                0.12494    0.02827   4.419 0.006896 ** 
+V.NStemsT             -0.24752    0.02707  -9.142 0.000262 ***
+Elev.CV               -0.15895    0.05080  -3.129 0.025997 *  
+abs(Latitude)          0.10151    0.04420   2.297 0.070075 .  
+Elev.CV:abs(Latitude)  0.04071    0.03760   1.083 0.328320    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.05349 on 5 degrees of freedom
+Multiple R-squared:  0.9791,	Adjusted R-squared:  0.9499 
+F-statistic: 33.48 on 7 and 5 DF,  p-value: 0.0006599
+
+> fit10 <- lmer(B.CT.Shannon ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
+> AIC(bestfit9, fit10)
+         df       AIC
+bestfit9  9 -33.66325
+fit10    12  40.89786
+> 
+> fit11 <- lm(B.CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=MData)
+> step11 <- stepAIC(fit11, direction="both")
+Start:  AIC=-32.85
+B.CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude) * V.NStemsT + 
+    abs(Latitude) * Elev.CV
+
+                          Df Sum of Sq     RSS     AIC
+- V.FDis                   1  0.000068 0.19124 -34.849
+- Rain.CV                  1  0.000211 0.19138 -34.840
+- V.Cstorage               1  0.007801 0.19897 -34.334
+- Elev.CV:abs(Latitude)    1  0.011745 0.20292 -34.079
+<none>                                 0.19117 -32.854
+- V.NStemsT:abs(Latitude)  1  0.034133 0.22530 -32.718
+- V.TRich                  1  0.061023 0.25219 -31.253
+- V.NStemsL                1  0.067868 0.25904 -30.904
+
+Step:  AIC=-34.85
+B.CT.Shannon ~ V.Cstorage + V.TRich + V.NStemsT + V.NStemsL + 
+    Rain.CV + Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude) + 
+    Elev.CV:abs(Latitude)
+
+                          Df Sum of Sq     RSS     AIC
+- Rain.CV                  1  0.000848 0.19209 -36.792
+- V.Cstorage               1  0.012650 0.20389 -36.017
+- Elev.CV:abs(Latitude)    1  0.014683 0.20592 -35.888
+<none>                                 0.19124 -34.849
+- V.NStemsT:abs(Latitude)  1  0.036204 0.22744 -34.595
+- V.TRich                  1  0.065238 0.25648 -33.034
++ V.FDis                   1  0.000068 0.19117 -32.854
+- V.NStemsL                1  0.119031 0.31027 -30.558
+
+Step:  AIC=-36.79
+B.CT.Shannon ~ V.Cstorage + V.TRich + V.NStemsT + V.NStemsL + 
+    Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude) + Elev.CV:abs(Latitude)
+
+                          Df Sum of Sq     RSS     AIC
+- V.Cstorage               1  0.014872 0.20696 -37.822
+- Elev.CV:abs(Latitude)    1  0.017052 0.20914 -37.686
+<none>                                 0.19209 -36.792
+- V.NStemsT:abs(Latitude)  1  0.063185 0.25527 -35.095
++ Rain.CV                  1  0.000848 0.19124 -34.849
++ V.FDis                   1  0.000705 0.19138 -34.840
+- V.NStemsL                1  0.133311 0.32540 -31.940
+- V.TRich                  1  0.250808 0.44290 -27.932
+
+Step:  AIC=-37.82
+B.CT.Shannon ~ V.TRich + V.NStemsT + V.NStemsL + Elev.CV + abs(Latitude) + 
+    V.NStemsT:abs(Latitude) + Elev.CV:abs(Latitude)
+
+                          Df Sum of Sq     RSS     AIC
+- Elev.CV:abs(Latitude)    1  0.009308 0.21627 -39.250
+<none>                                 0.20696 -37.822
+- V.NStemsT:abs(Latitude)  1  0.052458 0.25942 -36.885
++ V.Cstorage               1  0.014872 0.19209 -36.792
++ V.FDis                   1  0.007173 0.19979 -36.281
++ Rain.CV                  1  0.003070 0.20389 -36.017
+- V.NStemsL                1  0.222526 0.42948 -30.332
+- V.TRich                  1  0.243045 0.45000 -29.725
+
+Step:  AIC=-39.25
+B.CT.Shannon ~ V.TRich + V.NStemsT + V.NStemsL + Elev.CV + abs(Latitude) + 
+    V.NStemsT:abs(Latitude)
+
+                          Df Sum of Sq     RSS     AIC
+<none>                                 0.21627 -39.250
+- V.NStemsT:abs(Latitude)  1   0.04544 0.26171 -38.771
++ Elev.CV:abs(Latitude)    1   0.00931 0.20696 -37.822
++ Rain.CV                  1   0.00773 0.20854 -37.723
++ V.Cstorage               1   0.00713 0.20914 -37.686
++ V.FDis                   1   0.00451 0.21176 -37.524
+- V.NStemsL                1   0.21902 0.43529 -32.157
+- V.TRich                  1   0.25529 0.47155 -31.117
+- Elev.CV                  1   0.64420 0.86047 -23.298
+> bestfit11 <- lm(B.CT.Shannon ~ V.TRich + V.NStemsT + V.NStemsL + Elev.CV + abs(Latitude) + 
++                   V.NStemsT:abs(Latitude), data=Mdata)
+> summary(bestfit11)
+
+Call:
+lm(formula = B.CT.Shannon ~ V.TRich + V.NStemsT + V.NStemsL + 
+    Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude), data = Mdata)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.26882 -0.08083 -0.01108  0.10342  0.21101 
+
+Coefficients:
+                         Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              0.973649   0.135676   7.176  0.00037 ***
+V.TRich                  0.229397   0.086197   2.661  0.03746 *  
+V.NStemsT                0.005112   0.163025   0.031  0.97600    
+V.NStemsL                0.192529   0.078104   2.465  0.04878 *  
+Elev.CV                 -0.277789   0.065709  -4.228  0.00551 ** 
+abs(Latitude)            0.395619   0.162891   2.429  0.05125 .  
+V.NStemsT:abs(Latitude) -0.112530   0.100219  -1.123  0.30442    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1899 on 6 degrees of freedom
+Multiple R-squared:  0.9108,	Adjusted R-squared:  0.8216 
+F-statistic: 10.21 on 6 and 6 DF,  p-value: 0.006186
+
+> fit12 <- lmer(B.CT.Shannon ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
+> AIC(bestfit11, fit12)
+          df        AIC
+bestfit11  8 -0.3580713
+fit12     12 40.8978588
