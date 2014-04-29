@@ -84,6 +84,10 @@ Continent2 <- c("Asia", "America", "America", "America", "Africa", "America", "A
 
 Mdata <- cbind(MData, Year, Continent1, Continent2)
 
+# Create output table of predictor and response variables for inclusion in paper
+output.table <- cbind(model.data, Year, Continent1)
+output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+write.csv(output.table, file="Table_PredictorResponseVariables.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
