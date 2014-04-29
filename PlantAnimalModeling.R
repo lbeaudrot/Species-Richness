@@ -117,12 +117,24 @@ pairs.data <- pairs.data[,-16]
 pairs.data <- pairs.data[,-4]
 
 pdf(file="PAIRS_Mammals.pdf")
-  pairs(pairs.data[,1:10], lower.panel = panel.smooth, upper.panel = panel.cor)
+  pairs(pairs.data[,1:11], lower.panel = panel.smooth, upper.panel = panel.cor)
 dev.off()
 
 pdf(file="PAIRS_Birds.pdf")
-  pairs(pairs.data[,11:20], lower.panel = panel.smooth, upper.panel = panel.cor)
+  pairs(pairs.data[,12:20], lower.panel = panel.smooth, upper.panel = panel.cor)
 dev.off()
+
+pdf(file="PAIRS_Environment.pdf")
+pairs(pairs.data[,31:36], lower.panel = panel.smooth, upper.panel = panel.cor)
+dev.off()
+
+pairs.data.reduced <- cbind(pairs.data$CT.median, pairs.data$CT.FDis, pairs.data$CT.Shannon, pairs.data$CT.modeB, pairs.data$B.CT.FDis, pairs.data$B.CT.Shannon, pairs.data$V.FDis, pairs.data$V.NStemsT, pairs.data$V.Cstorage, pairs.data$Rain.CV, pairs.data$Elev.CV, pairs.data$Latitude)
+colnames(pairs.data.reduced) <- c("CT.median", "CT.FDis", "CT.Shannon", "CT.modeB", "B.CT.FDis", "B.CT.Shannon", "V.FDis", "V.NStemsT", "V.Cstorage", "Rain.CV", "Elev.CV", "Latitude")
+
+pdf(file="PAIRS_Predictors.pdf")
+  pairs(pairs.data.reduced, lower.panel = panel.smooth, upper.panel = panel.cor)
+dev.off()
+
 
 PairsCOR <- round(cor(MData[,1:19]), digits=2)
 PairsCOR[lower.tri(PairsCOR)] <- NA
