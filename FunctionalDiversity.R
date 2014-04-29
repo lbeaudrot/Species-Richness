@@ -352,3 +352,4 @@ B.CTweighted
 #write.csv(CTweighted, file="FunctionalDiversity_Mammals_29April2014.csv", row.names=TRUE)
 #write.csv(B.CTweighted, file="FunctionalDiversity_Birds_29April2014.csv", row.names=TRUE)
 # Manually add "Site.Code" as first column name for these output files
+# Manuall add "-" to "VB-" Site.Code so that later merges will operate correctly

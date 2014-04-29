@@ -17,15 +17,12 @@ Run RichnessLoop.R
   Multiple points at which specification is required are indicated by the full line of # symbols.
 Note that non-looping models for a single site can be run with file EstimateSpeciesRichness.R
 
-ANIMAL FUNCTIONAL DIVERSITY CALCULATIONS
+ANIMAL FUNCTIONAL & TAXONOMIC DIVERSITY CALCULATIONS
 Load FunctionalTrait_HelperFunctions.R 
 Run WPI_Extraction.R to obtain species and site specific occupancy probabilities to use as abundance weights
 Run FunctionalDiversity.R to calculate animal functional diversity metrics. 
 *FunctionalDiversity.R requires some manual operation for data extraction.
-  Line 100: Designate site and year for data.use object
-  Line 155-195: Save site specific output individually
-
-ANIMAL TAXONOMIC RICHNESS CALCULATIONS
+  Line 352-353: Manually add "Site.Code" as first column name for the csv output files and  "-" to "VB-" Site.Code for merging
 
 MODELING & CALCULATIONS FOR ELEVATION, PRECIPITATION & LATITUDE 
 Run file PlantAnimalModeling.R
