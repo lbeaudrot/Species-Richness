@@ -178,8 +178,8 @@ summary(bestfit2)
 fit3 <- lmer(CT.mode ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
 fit4 <- lmer(CT.median ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
 
-AIC(fit1, fit2)
-AIC(fit3, fit4)
+AIC(fit1, fit3)
+AIC(fit2, fit4)
 
 # VISUALIZE MAMMAL FUNCTIONAL DIVERSITY
 set.panel(3,2)
@@ -197,7 +197,7 @@ fit5 <- lm(CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rai
 step5 <- stepAIC(fit5, direction="both")
 bestfit5 <- lm(CT.FDis ~ V.Cstorage + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + 
                  Elev.CV + abs(Latitude) + V.NStemsT:abs(Latitude) + Elev.CV:abs(Latitude), data=Mdata)
-
+summary(bestfit5)
 fit6 <- lmer(CT.mode ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
 
 AIC(bestfit5, fit6)
@@ -220,7 +220,7 @@ fit7 <- lm(B.CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + R
 step7 <- stepAIC(fit7, direction="both")
 bestfit7 <- lm(B.CT.FDis ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + 
                  Rain.CV + Elev.CV, data=Mdata)
-
+summary(bestfit7)
 fit8 <- lmer(B.CT.RaoQ ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
 
 AIC(bestfit7, fit8)
@@ -237,3 +237,21 @@ boxplot(Mdata$B.CT.Shannon~Mdata$Continent2, ylim=c(0,3))
 set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
+
+fit9 <- lm(CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=MData)
+step9 <- stepAIC(fit9, direction="both")
+bestfit9 <- lm(CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + Elev.CV + 
+                 abs(Latitude) + Elev.CV:abs(Latitude), data=Mdata)
+summary(bestfit9)
+fit10 <- lmer(B.CT.Shannon ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
+AIC(bestfit9, fit10)
+
+fit11 <- lm(B.CT.Shannon ~ V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=MData)
+step11 <- stepAIC(fit11, direction="both")
+bestfit11 <- lm(B.CT.Shannon ~ V.TRich + V.NStemsT + V.NStemsL + Elev.CV + abs(Latitude) + 
+                  V.NStemsT:abs(Latitude), data=Mdata)
+summary(bestfit11)
+fit12 <- lmer(B.CT.Shannon ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
+AIC(bestfit11, fit12)
+
+
