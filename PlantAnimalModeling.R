@@ -128,8 +128,8 @@ pdf(file="PAIRS_Environment.pdf")
 pairs(pairs.data[,31:36], lower.panel = panel.smooth, upper.panel = panel.cor)
 dev.off()
 
-pairs.data.reduced <- cbind(pairs.data$CT.median, pairs.data$CT.FDis, pairs.data$CT.Shannon, pairs.data$CT.modeB, pairs.data$B.CT.FDis, pairs.data$B.CT.Shannon, pairs.data$V.FDis, pairs.data$V.NStemsT, pairs.data$V.Cstorage, pairs.data$Rain.CV, pairs.data$Elev.CV, pairs.data$Latitude)
-colnames(pairs.data.reduced) <- c("CT.median", "CT.FDis", "CT.Shannon", "CT.modeB", "B.CT.FDis", "B.CT.Shannon", "V.FDis", "V.NStemsT", "V.Cstorage", "Rain.CV", "Elev.CV", "Latitude")
+pairs.data.reduced <- cbind(pairs.data$CT.median, pairs.data$CT.FDis, pairs.data$CT.Shannon, pairs.data$CT.modeB, pairs.data$B.CT.FDis, pairs.data$B.CT.Shannon, pairs.data$V.FDis, pairs.data$V.NStemsT, pairs.data$V.TRich, pairs.data$V.NStemsL, pairs.data$V.Cstorage, pairs.data$Rain.CV, pairs.data$Elev.CV, pairs.data$Latitude)
+colnames(pairs.data.reduced) <- c("CT.median", "CT.FDis", "CT.Shannon", "CT.modeB", "B.CT.FDis", "B.CT.Shannon", "V.FDis", "V.NStemsT", "V.TRich", "V.NStemsL","V.Cstorage", "Rain.CV", "Elev.CV", "Latitude")
 
 pdf(file="PAIRS_Predictors.pdf")
   pairs(pairs.data.reduced, lower.panel = panel.smooth, upper.panel = panel.cor)
@@ -178,7 +178,8 @@ summary(bestfit2)
 fit3 <- lmer(CT.mode ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
 fit4 <- lmer(CT.median ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
 
-AIC(fit1, fit2, fit3, fit4)
+AIC(fit1, fit2)
+AIC(fit3, fit4)
 
 # VISUALIZE MAMMAL FUNCTIONAL DIVERSITY
 set.panel(3,2)
