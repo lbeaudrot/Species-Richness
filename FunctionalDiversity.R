@@ -349,5 +349,6 @@ rownames(B.CTweighted) <- c("BBS", "BCI", "CAX", "COU", "KRP", "MAS", "NNN", "PS
 
 CTweighted
 B.CTweighted
-#write.csv(CTweighted, file="FunctionalDiversity_Mammals_28April2014.csv")
-#write.csv(B.CTweighted, file="FunctionalDiversity_Birds_28April2014.csv")
+#write.csv(CTweighted, file="FunctionalDiversity_Mammals_29April2014.csv", row.names=TRUE)
+#write.csv(B.CTweighted, file="FunctionalDiversity_Birds_29April2014.csv", row.names=TRUE)
+# Manually add "Site.Code" as first column name for these output files
