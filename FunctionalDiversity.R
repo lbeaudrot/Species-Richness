@@ -1,6 +1,23 @@
 # Process Trait Data and Calculate Functional Diversity Metrics
 library(FD)
 
+####### PROCESS DATA to subset for various models - time consuming so don't run unless necessary ###########
+## NB processing code copied from EstimateSpeciesRichness.R
+
+#ctdata <- f.teamdb.query(dataset=="camera trap")
+#load(ctdata)
+#alldata <- ctdata
+
+#alldata<-f.fix.data2(alldata)
+#Site.Code <- substr(alldata$Sampling.Unit.Name,4,6)
+#alldata <- cbind(alldata, Site.Code)
+
+# Set threshold to one minute
+# Note that f.separate.events takes a good bit of time to run on complete CT dataset. Avoid replicating where possible.
+#alldata <- f.order.data(alldata)
+#eventsdata <- f.separate.events(alldata, thresh=(1440))
+#allevents <- f.separate.events(alldata, thresh=(1))
+
 # Connect TEAM master species list to the PanTHERIA mammalian trait data
 
 masterlist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
@@ -73,39 +90,20 @@ Btraits$Guild_c_bird <- as.factor(Btraits$Guild_c_bird)
 rownames(Btraits) <- birds$Unique_Name
 str(Btraits)
 
-
-
-####### PROCESS DATA to subset for various models - time consuming so don't run unless necessary ###########
-## NB processing code copied from EstimateSpeciesRichness.R
-
-#ctdata <- f.teamdb.query(dataset=="camera trap")
-#load(ctdata)
-#alldata <- ctdata
-
-#alldata<-f.fix.data2(alldata)
-#Site.Code <- substr(alldata$Sampling.Unit.Name,4,6)
-#alldata <- cbind(alldata, Site.Code)
-
-# Set threshold to one minute
-# Note that f.separate.events takes a good bit of time to run on complete CT dataset. Avoid replicating where possible.
-#alldata <- f.order.data(alldata)
-#eventsdata <- f.separate.events(alldata, thresh=(1440))
-#allevents <- f.separate.events(alldata, thresh=(1))
-
 table(alldata$Site.Code, alldata$Sampling.Period) #Examine which sites have data for which years
 
-
+############################## CALCULATE FD FOR INDIVIDUAL SITE ######################
 ######## Start here to CHANGE INPUT DATA FOR Functional Diversity metrics ###############
 # Use  "Site.Code" to designate which site to include
-data.use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="CAX",]
+#Data.use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="CAX",]
 
 # Subset the species list for each site to calculate the functional diversity metrics
 splist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
-sitelist<-unique(data.use$bin) #site list
+sitelist<-unique(Data.Use$bin) #site list
 Msplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
 Msplist <- Msplist[Msplist$Class=="MAMMALIA",]
 #newsplist<-subset(splist,splist$Unique_Name %in% sitelist & splist$Include==1)
-#subdata<-subset(data.use, data.use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
+#subdata<-subset(Data.Use, Data.Use$bin %in% newsplist$Unique_Name) #this is the original camera trap data subsetted to these species
 #subdata<-f.correct.DF(subdata)
 
 # Apply to bird data 
@@ -139,9 +137,11 @@ SiteTraits <- cbind(SiteTraits[,1:3], droplevels(SiteTraits[,4:5]), psi_use)
 traitFD_w <- dbFD(SiteTraits[,1:dim(SiteTraits)[2]-1], a=psi_use[1:dim(SiteTraits)[1]], corr="cailliez", calc.FRic=FALSE)
 
 # Calculate FD for birds
+# Unweighted FD
 birdFD <- dbFD(BirdTraits, corr="cailliez")
 BirdTraits
 
+# Weighted FD by psi (occupancy) values from WPI
 B.psi_weights <- wpi_use$psi.median[match(rownames(BirdTraits), wpi_use$bin)]
 names(B.psi_weights) <- rownames(BirdTraits)
 Bpsi_use <- na.omit(B.psi_weights)
@@ -149,11 +149,12 @@ BirdTraits <- BirdTraits[match(names(Bpsi_use), rownames(BirdTraits)),]
 BirdTraits <- cbind(BirdTraits, B.psi_weights)
 BtraitFD_w <- dbFD(BirdTraits[,1:dim(BirdTraits)[2]-1], a=Bpsi_use[1:dim(BirdTraits)[1]], corr="cailliez", calc.FRic=FALSE)
 
+
+# MANUAL STORAGE
 # Store site/year specific values for extraction
 # MAMMALS and BIRDS for each site
 
 # use 2012 data
-
 #CAXtraitFD_w <- traitFD_w
 #B.CAXtraitFD_w <- BtraitFD_w
 
@@ -194,15 +195,102 @@ BtraitFD_w <- dbFD(BirdTraits[,1:dim(BirdTraits)[2]-1], a=Bpsi_use[1:dim(BirdTra
 #VBtraitFD_w <- traitFD_w
 #B.VBtraitFD_w <- BtraitFD_w
 
-YANtraitFD_w <- traitFD_w
-B.YANtraitFD_w <- BtraitFD_w
+#YANtraitFD_w <- traitFD_w
+#B.YANtraitFD_w <- BtraitFD_w
+
+# Store all data for extraction (or calculate using the loop below)
+#CTSite_FD <- list(BBStraitFD_w, BCItraitFD_w, BIFtraitFD_w, CAXtraitFD_w, COUtraitFD_w, KRPtraitFD_w, MAStraitFD_w,
+#                  NNNtraitFD_w, PSHtraitFD_w, RNFtraitFD_w, UDZtraitFD_w, VBtraitFD_w, YANtraitFD_w, YAStraitFD_w) 
+
+#B.CTSite_FD <- list(B.BBStraitFD_w, B.BCItraitFD_w, B.BIFtraitFD_w, B.CAXtraitFD_w, B.COUtraitFD_w, B.KRPtraitFD_w, B.MAStraitFD_w,
+#                    B.NNNtraitFD_w, B.PSHtraitFD_w, B.RNFtraitFD_w, B.UDZtraitFD_w, B.VBtraitFD_w, B.YANtraitFD_w, B.YAStraitFD_w) 
 
 
-#Extract Mammal FD data
-CTSite_FD <- list(BBStraitFD_w, BCItraitFD_w, BIFtraitFD_w, CAXtraitFD_w, COUtraitFD_w, KRPtraitFD_w, MAStraitFD_w,
-                  NNNtraitFD_w, PSHtraitFD_w, RNFtraitFD_w, UDZtraitFD_w, VBtraitFD_w, YANtraitFD_w, YAStraitFD_w) 
+########################## CALCULATE FD FOR ALL SITES #####################################
+# Extract relevant data and create a list to loop over
+# Ensure that all relevant data objects are included in the Data.Use object to loop over (and are in the desired output order - i.e. alphabetical)
+CAX.Use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="CAX",]
+PSH.Use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="PSH",]
+YAS.Use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="YAS",]
+BBS.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="BBS",]
+BCI.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="BCI",]
+#BIF.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="BIF",]
+COU.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="COU",]
+KRP.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="KRP",]
+MAS.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="MAS",]
+NNN.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="NNN",]
+RNF.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="RNF",]
+UDZ.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="UDZ",]
+VB.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="VB-",]
+YAN.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="YAN",]
 
-# Create output table from FD calculations
+Data.Use <- list(BBS.Use, BCI.Use, CAX.Use, COU.Use, KRP.Use, MAS.Use, NNN.Use, PSH.Use, RNF.Use, UDZ.Use, VB.Use, YAN.Use, YAS.Use)
+library(FD)
+CTSite_FD <- list()
+B.CTSite_FD <- list()
+CT.Shannon <- vector()
+B.CT.Shannon <- vector()
+splist <- read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
+sitelist <- list()
+Msplist <- list()
+Bsplist <- list()
+BirdTraits <- list()
+SiteTraits <- list()
+
+wpi_weights <- read.csv(file="wpi_weights.csv")
+wpi_use <- list()
+psi_weights <- list()
+psi_use <- list()
+CTSite_FD <- list()
+
+B.psi_weights <- list()
+Bpsi_use <- list()
+B.CTSite_FD <- list()
+
+# Loop over sites
+for(i in 1:length(Data.Use)){
+
+# Extract trait data
+  sitelist[[i]] <- unique(Data.Use[[i]]$bin)
+  sitelist
+  Msplist[[i]] <- subset(splist,splist$Unique_Name %in% sitelist[[i]] & splist$Include==1)
+  Msplist[[i]] <- Msplist[[i]][Msplist[[i]]$Class=="MAMMALIA",]
+  Bsplist[[i]] <- subset(Btraits,rownames(Btraits) %in% sitelist[[i]] & Btraits$V3==1)
+  BirdTraits[[i]] <- cbind(Bsplist[[i]][,1], Bsplist[[i]][,2])
+  rownames(BirdTraits[[i]]) <- rownames(Bsplist[[i]])
+  colnames(BirdTraits[[i]]) <- c("Mass", "Guild")
+  BirdTraits[[i]] <- as.data.frame(BirdTraits[[i]])
+  BirdTraits[[i]]$Guild <- droplevels(as.factor(BirdTraits[[i]]$Guild))
+
+# Extract weights and format mammal data
+  SiteTraits[[i]] <- Mtraits[match(Msplist[[i]]$Unique_Name, rownames(Mtraits)),]
+  SiteTraits[[i]] <- cbind(SiteTraits[[i]][,1:3], droplevels(SiteTraits[[i]][,4:5]))
+  wpi_use[[i]] <- wpi_weights[wpi_weights$Site.Code==Data.Use[[i]]$Site.Code[1], ]
+  psi_weights[[i]] <- wpi_use[[i]]$psi.median[match(rownames(SiteTraits[[i]]), wpi_use[[i]]$bin)]
+  names(psi_weights[[i]]) <- rownames(SiteTraits[[i]])
+  psi_use[[i]] <- na.omit(psi_weights[[i]])
+  SiteTraits[[i]] <- SiteTraits[[i]][match(names(psi_use[[i]]), rownames(SiteTraits[[i]])),]
+  SiteTraits[[i]] <- cbind(SiteTraits[[i]][,1:3], droplevels(SiteTraits[[i]][,4:5]), psi_use[[i]])
+
+# Calculate mammal FD and Shannon diversity indices  
+  CTSite_FD[[i]] <- dbFD(SiteTraits[[i]][,1:dim(SiteTraits[[i]])[2]-1], a=psi_use[[i]][1:dim(SiteTraits[[i]])[1]], corr="cailliez", calc.FRic=FALSE)
+  CT.Shannon[i] <- diversity(psi_use[[i]], index="shannon")
+  
+# Extract weights and format bird data
+  B.psi_weights[[i]] <- wpi_use[[i]]$psi.median[match(rownames(BirdTraits[[i]]), wpi_use[[i]]$bin)]
+  names(B.psi_weights[[i]]) <- rownames(BirdTraits[[i]])
+  Bpsi_use[[i]] <- na.omit(B.psi_weights[[i]])
+  BirdTraits[[i]] <- BirdTraits[[i]][match(names(Bpsi_use[[i]]), rownames(BirdTraits[[i]])),]
+  BirdTraits[[i]] <- cbind(BirdTraits[[i]], B.psi_weights[[i]])
+
+# Calculate bird FD and Shannon diversity indices 
+  B.CTSite_FD[[i]] <- dbFD(BirdTraits[[i]][,1:dim(BirdTraits[[i]])[2]-1], a=Bpsi_use[[i]][1:dim(BirdTraits[[i]])[1]], corr="cailliez", calc.FRic=FALSE)
+  B.CT.Shannon[i] <- diversity(B.psi_use[[i]], index="shannon")
+  
+} 
+
+
+#Extract Mammal FD calculations and create output table 
 CT.nbsp <- vector()
 CT.sing.sp <- vector()
 CT.FEve <- vector()
@@ -229,16 +317,12 @@ for(i in 1:length(CTSite_FD)){
   CWM.Guild[i] <- CTSite_FD[[i]]$CWM$Guild_c
 }
 
-CTweighted <- cbind(CT.nbsp, CT.sing.sp, CT.FEve, CT.FDiv, CT.FDis, CT.RaoQ, CWM.Mass, CWM.Litter, CWM.GR)
+CTweighted <- cbind(CT.nbsp, CT.sing.sp, CT.FEve, CT.FDiv, CT.FDis, CT.RaoQ, CWM.Mass, CWM.Litter, CWM.GR, CT.Shannon)
 CTweighted <- as.data.frame(CTweighted)
 rownames(CTweighted) <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB", "YAN", "YAS") 
 
 
-#Extract Bird FD data
-B.CTSite_FD <- list(B.BBStraitFD_w, B.BCItraitFD_w, B.BIFtraitFD_w, B.CAXtraitFD_w, B.COUtraitFD_w, B.KRPtraitFD_w, B.MAStraitFD_w,
-                  B.NNNtraitFD_w, B.PSHtraitFD_w, B.RNFtraitFD_w, B.UDZtraitFD_w, B.VBtraitFD_w, B.YANtraitFD_w, B.YAStraitFD_w) 
-
-# Create output table from FD calculations
+#Extract Bird FD calculations and create output table
 B.CT.nbsp <- vector()
 B.CT.sing.sp <- vector()
 B.CT.FEve <- vector()
