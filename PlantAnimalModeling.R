@@ -105,8 +105,8 @@ panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
 
 ## VISUALIZE PREDICTOR CORRELATIONS
 pairs(plot.VGmean, lower.panel = panel.smooth, upper.panel = panel.cor)
-pairs(plot.VGvar, lower.panel = panel.smooth, upper.panel = panel.cor)
 
+pdf(file="PAIRS_Vegetation.pdf")
 pairs(MData, lower.panel = panel.smooth, upper.panel = panel.cor)
 PairsCOR <- round(cor(MData[,1:19]), digits=2)
 PairsCOR[lower.tri(PairsCOR)] <- NA
