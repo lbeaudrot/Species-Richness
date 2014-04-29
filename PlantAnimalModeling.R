@@ -105,10 +105,10 @@ panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
 
 ## VISUALIZE PREDICTOR CORRELATIONS
 
-pairs(plot.VGmean, lower.panel = panel.smooth, upper.panel = panel.cor)
+pairs(plot.VGmean[,2:12], lower.panel = panel.smooth, upper.panel = panel.cor)
 
 pdf(file="PAIRS_Vegetation.pdf")
-  pairs(plot.VGmean, lower.panel = panel.smooth, upper.panel = panel.cor)
+  pairs(plot.VGmean[,2:12], lower.panel = panel.smooth, upper.panel = panel.cor)
 dev.off()
 
 pairs.data <- MData[,-7]
