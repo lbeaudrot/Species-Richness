@@ -9,7 +9,7 @@
 #Vegdata <- f.teamdb.query("vegetation")
 #Vdata <- Vegdata
 
-#Vdata <- f.teamdb.query("vegetation")
+Vdata <- f.teamdb.query("vegetation")
 
 # Add column with site codes
 Site.CodeT <- substr(Vdata$tree$"1haPlotNumber",4,6)
@@ -507,7 +507,6 @@ for(i in 1:dim(plant.covs)[2]-4){
 }
 colnames(plot.VGmean) <- paste("V", colnames(plot.VGmean), sep=".")
 plot.VGmean.backup <- plot.VGmean
-write.csv(plot.VGmean, file="PlantDiversityCalculations.csv")
 
 plot.VGvar <- matrix(NA, nrow=dim(plot.VGmean)[1], 
                       ncol=dim(plot.VGmean)[2], 
@@ -517,6 +516,7 @@ for(i in 1:dim(plant.covs)[2]-4){
   plot.VGvar
 }
 
-#colnames(plot.VGvar) <- paste("V", colnames(plot.VGvar), sep=".")
+#write.csv(plot.VGmean, file="PlantDiversityCalculations.csv")
+#write.csv(plot.VGvar, file="PlantDiversityVariances.csv")
 
 
