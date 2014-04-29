@@ -285,7 +285,7 @@ for(i in 1:length(Data.Use)){
 
 # Calculate bird FD and Shannon diversity indices 
   B.CTSite_FD[[i]] <- dbFD(BirdTraits[[i]][,1:dim(BirdTraits[[i]])[2]-1], a=Bpsi_use[[i]][1:dim(BirdTraits[[i]])[1]], corr="cailliez", calc.FRic=FALSE)
-  B.CT.Shannon[i] <- diversity(B.psi_use[[i]], index="shannon")
+  B.CT.Shannon[i] <- diversity(Bpsi_use[[i]], index="shannon")
   
 } 
 
@@ -319,7 +319,7 @@ for(i in 1:length(CTSite_FD)){
 
 CTweighted <- cbind(CT.nbsp, CT.sing.sp, CT.FEve, CT.FDiv, CT.FDis, CT.RaoQ, CWM.Mass, CWM.Litter, CWM.GR, CT.Shannon)
 CTweighted <- as.data.frame(CTweighted)
-rownames(CTweighted) <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB", "YAN", "YAS") 
+rownames(CTweighted) <- c("BBS", "BCI", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB", "YAN", "YAS") 
 
 
 #Extract Bird FD calculations and create output table
