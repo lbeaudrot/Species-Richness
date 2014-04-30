@@ -516,6 +516,7 @@ for(i in 1:dim(plant.covs)[2]-4){
   plot.VGvar
 }
 
+#write.csv(plant.covs, file="PlantDiversityCalculations_PlotLevel.csv", row.names=FALSE)
 #write.csv(plot.VGmean, file="PlantDiversityCalculations.csv")
 #write.csv(plot.VGvar, file="PlantDiversityVariances.csv")
 # Manually add "Site.Code" as first column name for these output csv files to enable merging 
