@@ -1,4 +1,5 @@
 # Modeling terrestrial vertebrate species richness and functional diversity as a function of site level vegetation properties and carbon storage
+# For phase two, keep analysis at the site level for all variables (in phase three, change analysis to plot level for carbon and plant variables using plant.covs)
 
 #Use PlantDiversity.R to obtain TEAM site level plant covariates.
 #See objects plot.VGmean and plot.VGvar for mean and variance of plant covariates
@@ -16,14 +17,9 @@ plot.VGvar <- read.csv(file="PlantDiversityVariances.csv")
 #CTaverages <- cbind(rownames(CTaverages), CTaverages)
 #colnames(CTaverages)[1] <- "Site.Code"
 
-CTaverages <- read.csv("CTaverages_mammal.csv")
-MammalFD <- read.csv("FunctionalDiversity_Mammals_29April2014.csv")
-model.data <- merge(CTaverages, MammalFD, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-
-CTaveragesB <- read.csv("CTaverages_bird.csv")
-BirdFD <- read.csv("FunctionalDiversity_Birds_29April2014.csv")
-model.data <- merge(model.data, CTaveragesB, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-model.data <- merge(model.data, BirdFD, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+CTaverages <- read.csv("CTaverages_overall.csv")
+AnimalFD <- read.csv("FunctionalDiversity_overall.csv")
+model.data <- merge(CTaverages, AnimalFD, by.x="Site.Code", by.y="Site.Code", all=TRUE)
 
 # MERGE ANIMAL DATA WITH PLANT DATA
 model.data <- merge(model.data, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=FALSE)
@@ -61,6 +57,9 @@ model.data <- merge(model.data, elevation, by.x="Site.Code", by.y="Site.Code", a
 Latitude <- read.csv("Latitude_MeanSiteCT.csv")
 model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
+# ADD FOREST LOSS data from Alex Zvoleff's calculations
+ForestLoss <- read.csv("GFC_Forest_Change_Summary.csv")
+model.data <- merge(model.data, ForestLoss, by.x="Site.Code", by.y="Site_Code", all=FALSE)
 # Format merged continuous data as data frame with numeric values and site codes as row names
 ModelData <- model.data
 rownames(ModelData) <- ModelData$Site.Code
@@ -78,16 +77,15 @@ MData <- cbind(MData[,1:24], scale(MData[,25:dim(MData)[2]]))
 rownames(MData) <- model.data$Site.Code
 
 # Add categorical variables for random effects
-Year <- c(2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012)
-Continent1 <- c("Asia", "America", "America", "America", "Africa", "America", "Africa", "Asia", "Africa", "Africa", "America", "America", "America")
-Continent2 <- c("Asia", "America", "America", "America", "Africa", "America", "Africa", "Asia", "Madagascar", "Africa", "America", "America", "America")
+Year <- c(2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012)
+Continent <- c("Asia", "America", "Africa", "America", "America", "Africa", "America", "Africa", "Asia", "Africa", "Africa", "America", "America", "America")
 
-Mdata <- cbind(MData, Year, Continent1, Continent2)
+Mdata <- cbind(MData, Year, Continent)
 
 # Create output table of predictor and response variables for inclusion in paper
 output.table <- cbind(model.data, Year, Continent1)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-write.csv(output.table, file="Table_PredictorResponseVariables.csv", row.names=FALSE)
+write.csv(output.table, file="Table_PredictorResponseVariables_Phase2.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
@@ -111,39 +109,9 @@ pdf(file="PAIRS_Vegetation.pdf")
   pairs(plot.VGmean[,2:12], lower.panel = panel.smooth, upper.panel = panel.cor)
 dev.off()
 
-pairs.data <- MData[,-7]
-pairs.data <- pairs.data[,-19]
-pairs.data <- pairs.data[,-16]
-pairs.data <- pairs.data[,-4]
-
-pdf(file="PAIRS_Mammals.pdf")
-  pairs(pairs.data[,1:11], lower.panel = panel.smooth, upper.panel = panel.cor)
-dev.off()
-
-pdf(file="PAIRS_Birds.pdf")
-  pairs(pairs.data[,12:20], lower.panel = panel.smooth, upper.panel = panel.cor)
-dev.off()
-
-pdf(file="PAIRS_Environment.pdf")
-pairs(pairs.data[,31:36], lower.panel = panel.smooth, upper.panel = panel.cor)
-dev.off()
-
-pairs.data.reduced <- cbind(pairs.data$CT.median, pairs.data$CT.FDis, pairs.data$CT.Shannon, pairs.data$CT.modeB, pairs.data$B.CT.FDis, pairs.data$B.CT.Shannon, pairs.data$V.FDis, pairs.data$V.NStemsT, pairs.data$V.TRich, pairs.data$V.NStemsL, pairs.data$V.Cstorage, pairs.data$Rain.CV, pairs.data$Elev.CV, pairs.data$Latitude)
-colnames(pairs.data.reduced) <- c("CT.median", "CT.FDis", "CT.Shannon", "CT.modeB", "B.CT.FDis", "B.CT.Shannon", "V.FDis", "V.NStemsT", "V.TRich", "V.NStemsL","V.Cstorage", "Rain.CV", "Elev.CV", "Latitude")
-
-pdf(file="PAIRS_Predictors.pdf")
-  pairs(pairs.data.reduced, lower.panel = panel.smooth, upper.panel = panel.cor)
-dev.off()
-
-
-PairsCOR <- round(cor(MData[,1:19]), digits=2)
-PairsCOR[lower.tri(PairsCOR)] <- NA
-diag(PairsCOR) <- NA
-PairsCOR
-ifelse(abs(PairsCOR)>0.5, PairsCOR, NA)
 
 # VISUALIZE species richness across sites
-# MAMMAL RICHNESS
+# SPECIES RICHNESS
 library("fields")
 set.panel(3,3)
 par(mar=c(2,2,1,1))
@@ -163,22 +131,22 @@ set.panel()
 library(lme4)
 library(MASS)
 
-fit1 <- lm(CT.mode ~ V.Cstorage + V.FDis + V.Shan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=Mdata)
+fit1 <- lm(CT.median ~ V.Cstorage + V.RaoQ + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=Mdata)
 step1 <- stepAIC(fit1, direction="both")
-bestfit1 <- lm(CT.mode ~ V.Cstorage + V.FDis + V.NStemsT + V.NStemsL + Rain.CV + 
-                 abs(Latitude) + Elev.CV + V.NStemsT:abs(Latitude), data=Mdata)
+bestfit1 <- lm()
 summary(bestfit1)
 
+lmer(CT.median ~ V.Cstorage + V.NStemsT + RainTotal + Elev.CV + F.Loss + abs(Latitude) + (1|Site.Code) + (1|Continent))
+lmer(CT.median ~ V.Cstorage + V.NStemsL + RainTotal + Elev.CV + F.Loss + abs(Latitude))
+lmer(CT.median ~ V.Cstorage + V.TShan + RainTotal + Elev.CV + F.Loss + abs(Latitude))
+lmer(CT.median ~ V.Cstorage + V.RaoQ + RainTotal + Elev.CV + F.Loss + abs(Latitude))
 
-lmer(CT.median ~ V.Cstorage + V.NStemsT + RainTotal + Elev.CV + abs(Latitude) + F.Loss + (1|Plot) + (1|Continent1))
-lmer(CT.median ~ V.Cstorage + V.NStemsL + RainTotal + Elev.CV + abs(Latitude) + F.Loss + (1|Plot) + (1|Continent1))
-lmer(CT.median ~ V.Cstorage + V.TShan + RainTotal + Elev.CV + abs(Latitude) + F.Loss + (1|Plot) + (1|Continent1))
-lmer(CT.median ~ V.Cstorage + V.FDis + RainTotal + Elev.CV + abs(Latitude) + F.Loss + (1|Plot) + (1|Continent1))
 
+fit3 <- lmer(CT.mode ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
 
 AIC(fit1, fit3)
 
-# VISUALIZE MAMMAL FUNCTIONAL DIVERSITY
+# VISUALIZE  FUNCTIONAL DIVERSITY
 set.panel(3,2)
 par(mar=c(3,2,2,1))
 hist(Mdata$CT.FDis, main="Mammal Functional Dispersion")
@@ -192,35 +160,19 @@ set.panel()
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
 
-###### VISUALIZE BIRD Vertebrate FUNCTIONAL DIVERSITY
-# BIRDS
-set.panel(3,2)
-par(mar=c(3,2,2,1))
-hist(Mdata$B.CT.FDis, main="Bird Functional Dispersion")
-hist(Mdata$B.CT.RaoQ, main="Bird Rao's Quadratic Entropy")
-boxplot(Mdata$B.CT.FDis~Mdata$Continent1, ylim=c(0,0.5))
-boxplot(Mdata$B.CT.RaoQ~Mdata$Continent1, ylim=c(0,0.5))
-boxplot(Mdata$B.CT.FDis~Mdata$Continent2, ylim=c(0,0.5))
-boxplot(Mdata$B.CT.RaoQ~Mdata$Continent2, ylim=c(0,0.5))
-set.panel()
 
-###### MODEL BIRD Vertebrate FUNCTIONAL DIVERSITY
+
 
 
 
 ###### VISUALIZE Terrestrial Vertebrate TAXONOMIC DIVERSITY
-set.panel(3,2)
+set.panel(3,1)
 par(mar=c(3,2,2,1))
 hist(Mdata$CT.Shannon, main="Mammal Taxonomic Diversity")
-hist(Mdata$B.CT.Shannon, main="Bird Taxonomic Diversity")
 boxplot(Mdata$CT.Shannon~Mdata$Continent1, ylim=c(0,3))
 boxplot(Mdata$B.CT.Shannon~Mdata$Continent1, ylim=c(0,3))
-boxplot(Mdata$CT.Shannon~Mdata$Continent2, ylim=c(0,3))
-boxplot(Mdata$B.CT.Shannon~Mdata$Continent2, ylim=c(0,3))
 set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
-
-
 
 
