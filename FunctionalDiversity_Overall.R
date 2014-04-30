@@ -89,6 +89,7 @@ Btraits <- cbind(Mass_c_bird, Guild_c_bird, birds$Include)
 Btraits <- as.data.frame(Btraits)
 Btraits$Guild_c_bird <- as.factor(Btraits$Guild_c_bird)
 rownames(Btraits) <- birds$Unique_Name
+colnames(Btraits) <- c("Mass_c_bird", "Guild_c_bird", "Include")
 str(Btraits)
 
 table(alldata$Site.Code, alldata$Sampling.Period) #Examine which sites have data for which years
@@ -108,7 +109,7 @@ Msplist <- Msplist[Msplist$Class=="MAMMALIA",]
 #subdata<-f.correct.DF(subdata)
 
 # Apply to bird data 
-Bsplist<-subset(Btraits,rownames(Btraits) %in% sitelist & Btraits$V3==1)
+Bsplist<-subset(Btraits,rownames(Btraits) %in% sitelist & Btraits$Include==1)
 BirdTraits <- cbind(Bsplist[,1], Bsplist[,2])
 rownames(BirdTraits) <- rownames(Bsplist)
 colnames(BirdTraits) <- c("Mass", "Guild")

@@ -1,5 +1,6 @@
 # Modeling terrestrial vertebrate species richness and functional diversity as a function of site level vegetation properties and carbon storage
-# For phase two, keep analysis at the site level for all variables (in phase three, change analysis to plot level for carbon and plant variables using plant.covs)
+# For phase two, keep analysis at the site level for all variables 
+# In phase three, change analysis to plot level for carbon and plant variables using plant.covs object or file "PlantDiversityCalculations_PlotLevel.csv)
 
 #Use PlantDiversity.R to obtain TEAM site level plant covariates.
 #See objects plot.VGmean and plot.VGvar for mean and variance of plant covariates
