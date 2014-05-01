@@ -75,9 +75,9 @@ wpi_weights <- rbind(wpi_weights2011, wpi_weights2012)
 
 # Calculate 1000 shannon diversity indices for each site using the wpi occupancy values as abundances. 
 # Use mean of 1000 values as diversity index for modeling
-WPIall <- WPIall[,2:5]
+WPIall <- WPIall[,1:5]
 WPIall <- cbind(WPIall, Combine$Site.Code[match(WPIall$site_id, Combine$Site.ID)])
-names(WPIall) <- c("species_id", "site_id", "year", "psi", "Site.Code")
+names(WPIall) <- c("iteration", "species_id", "site_id", "year", "psi", "Site.Code")
 
 WPIalluse <- subset(WPIall, Site.Code=="PSH" & year=="2012"|
                             Site.Code=="CAX" & year=="2012"|
@@ -95,4 +95,5 @@ WPIalluse <- subset(WPIall, Site.Code=="PSH" & year=="2012"|
                             Site.Code=="UDZ" & year=="2011"|
                             Site.Code=="VB-" & year=="2011"|
                             Site.Code=="YAN" & year=="2011")
-
+library(vegan)
+ddply(WPIalluse, .(site_id, iteration), diversity )
