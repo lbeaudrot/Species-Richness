@@ -104,10 +104,16 @@ Mtraits <- rbind(Mtraits, BTraits)
 Includelist <- masterlist[masterlist$Include==1,]
 IncludeTraits <- Mtraits[match(Includelist$Unique_Name, rownames(Mtraits)),]
 
-table(alldata$Site.Code, alldata$Sampling.Period) #Examine which sites have data for which years
+
+
+
+
+
 
 ############################## CALCULATE FD FOR INDIVIDUAL SITE ######################
 ######## Start here to CHANGE INPUT DATA FOR Functional Diversity metrics ###############
+#Examine which sites have data for which years
+#table(alldata$Site.Code, alldata$Sampling.Period) 
 # Use  "Site.Code" to designate which site to include
 #Data.use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="CAX",]
 
@@ -187,7 +193,7 @@ UDZ.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=
 VB.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="VB-",]
 YAN.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="YAN",]
 
-Data.Use <- list(BBS.Use, BCI.Use, CAX.Use, COU.Use, KRP.Use, MAS.Use, NNN.Use, PSH.Use, RNF.Use, UDZ.Use, VB.Use, YAN.Use, YAS.Use)
+Data.Use <- list(BBS.Use, BCI.Use, BIF.Use, CAX.Use, COU.Use, KRP.Use, MAS.Use, NNN.Use, PSH.Use, RNF.Use, UDZ.Use, VB.Use, YAN.Use, YAS.Use)
 library(FD)
 CTSite_FD <- list()
 B.CTSite_FD <- list()
