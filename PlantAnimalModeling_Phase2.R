@@ -76,7 +76,7 @@ MData <- as.data.frame(MData)
 colnames(MData) <- colnames(ModelData)
 
 # Scale predictor variables
-MData <- cbind(MData[,1:24], scale(MData[,25:dim(MData)[2]]))
+MData <- cbind(MData[,1:14], scale(MData[,15:dim(MData)[2]]))
 rownames(MData) <- model.data$Site.Code
 
 # Add categorical variables for random effects
@@ -134,7 +134,7 @@ set.panel()
 library(lme4)
 library(MASS)
 
-fit1 <- lm(CT.median ~ V.Cstorage + V.RaoQ + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT + abs(Latitude)*Elev.CV, data=Mdata)
+fit1 <- lm(CT.median ~ V.Cstorage + V.RaoQ + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + + ForestLoss + Latitude + Latitude*V.NStemsT + Latitude*Elev.CV, data=Mdata)
 step1 <- stepAIC(fit1, direction="both")
 bestfit1 <- lm()
 summary(bestfit1)
