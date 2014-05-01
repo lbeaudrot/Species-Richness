@@ -95,6 +95,7 @@ events.use <- list()
 ####### Set up for Dorazio et al. 2006 method for estimating species richness without covariates using JAGS #######
 # Input data requires a table of the number of sampling events for each species ("bin") at each camera trap ("Sampling.Unit.Name")
 # Input data requires the number of replicates in which each species was detected (i.e. max=nrepls)
+#
 
 CTresults <- list()
 for(i in 1:length(data.use)){
