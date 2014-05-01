@@ -23,7 +23,7 @@ AnimalFD <- read.csv("FunctionalDiversity_Overall_1May2014.csv")
 model.data <- merge(CTaverages, AnimalFD, by.x="Site.Code", by.y="Site.Code", all=TRUE)
 
 # MERGE ANIMAL DATA WITH PLANT DATA
-model.data <- merge(model.data, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+model.data <- merge(model.data, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=TRUE)
 
 # Calculate precipitation CV and add rainfall data to model.data
 rain.data <- read.csv(file="Precipitation_Data.csv")
@@ -62,6 +62,7 @@ model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", al
 ForestLoss <- read.csv("GFC_Forest_Change_Summary.csv")
 names(ForestLoss) <- c("Site.Code", "ForestLoss")
 model.data <- merge(model.data, ForestLoss, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+
 # Format merged continuous data as data frame with numeric values and site codes as row names
 ModelData <- model.data
 rownames(ModelData) <- ModelData$Site.Code
