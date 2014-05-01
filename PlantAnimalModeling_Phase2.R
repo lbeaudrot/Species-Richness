@@ -18,8 +18,8 @@ plot.VGvar <- read.csv(file="PlantDiversityVariances.csv")
 #CTaverages <- cbind(rownames(CTaverages), CTaverages)
 #colnames(CTaverages)[1] <- "Site.Code"
 
-CTaverages <- read.csv("CTaverages_overall.csv")
-AnimalFD <- read.csv("FunctionalDiversity_overall.csv")
+CTaverages <- read.csv("CTaverages.csv")
+AnimalFD <- read.csv("FunctionalDiversity_Overall_1May2014.csv")
 model.data <- merge(CTaverages, AnimalFD, by.x="Site.Code", by.y="Site.Code", all=TRUE)
 
 # MERGE ANIMAL DATA WITH PLANT DATA
@@ -60,7 +60,8 @@ model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", al
 
 # ADD FOREST LOSS data from Alex Zvoleff's calculations
 ForestLoss <- read.csv("GFC_Forest_Change_Summary.csv")
-model.data <- merge(model.data, ForestLoss, by.x="Site.Code", by.y="Site_Code", all=FALSE)
+names(ForestLoss) <- c("Site.Code", "ForestLoss")
+model.data <- merge(model.data, ForestLoss, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 # Format merged continuous data as data frame with numeric values and site codes as row names
 ModelData <- model.data
 rownames(ModelData) <- ModelData$Site.Code
