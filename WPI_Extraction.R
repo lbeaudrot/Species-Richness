@@ -111,7 +111,7 @@ median(trythis, index="shannon", MARGIN=2)
 
 
 hold1 <- list()
-hold2 <- list()
+hold2 <- list() 
 Shannon.Index <- vector()
 for(i in 1:length(unique(WPIalluse$Site.Code))){
   hold1[[i]] <- WPIalluse[WPIalluse$site_id==as.integer(names(table(WPIalluse$site_id)))[[i]],]
