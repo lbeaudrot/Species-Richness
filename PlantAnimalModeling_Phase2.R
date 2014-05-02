@@ -22,6 +22,9 @@ CTaverages <- read.csv("CTaverages.csv")
 AnimalFD <- read.csv("FunctionalDiversity_Overall_1May2014.csv")
 model.data <- merge(CTaverages, AnimalFD, by.x="Site.Code", by.y="Site.Code", all=TRUE)
 
+ShannonDist <- read.csv("ShannonIndex_Distribution.csv")
+model.data <- merge(model.data, ShannonDist, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+
 # MERGE ANIMAL DATA WITH PLANT DATA
 model.data <- merge(model.data, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=TRUE)
 
@@ -56,6 +59,7 @@ model.data <- merge(model.data, elevation, by.x="Site.Code", by.y="Site.Code", a
 #Latitude <- aggregate(traps$Latitude ~ traps$Site.Code, FUN=mean)
 #colnames(Latitude) <- c("Site.Code", "Latitude")
 Latitude <- read.csv("Latitude_MeanSiteCT.csv")
+Latitude$Latitude <- abs(Latitude$Latitude)
 model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 # ADD FOREST LOSS data from Alex Zvoleff's calculations
@@ -76,7 +80,7 @@ MData <- as.data.frame(MData)
 colnames(MData) <- colnames(ModelData)
 
 # Scale predictor variables
-MData <- cbind(MData[,1:14], scale(MData[,15:dim(MData)[2]]))
+MData <- cbind(MData[,1:15], scale(MData[,16:dim(MData)[2]]))
 rownames(MData) <- model.data$Site.Code
 
 # Add categorical variables for random effects
@@ -121,12 +125,12 @@ par(mar=c(2,2,1,1))
 hist(Mdata$CT.mean, main="Mean")
 hist(Mdata$CT.median, main="Median")
 hist(Mdata$CT.mode, main="Mode")
-boxplot(Mdata$CT.mean~Mdata$Continent1, ylim=c(0,40))
-boxplot(Mdata$CT.median~Mdata$Continent1, ylim=c(0,40))
-boxplot(Mdata$CT.mode~Mdata$Continent1, ylim=c(0,40))
-boxplot(Mdata$CT.mean~Mdata$Continent2, ylim=c(0,40))
-boxplot(Mdata$CT.median~Mdata$Continent2, ylim=c(0,40))
-boxplot(Mdata$CT.mode~Mdata$Continent2, ylim=c(0,40))
+boxplot(Mdata$CT.mean~Mdata$Continent, ylim=c(0,50))
+boxplot(Mdata$CT.median~Mdata$Continent, ylim=c(0,50))
+boxplot(Mdata$CT.mode~Mdata$Continent, ylim=c(0,50))
+boxplot(Mdata$CT.mean~Mdata$Continent, ylim=c(0,50))
+boxplot(Mdata$CT.median~Mdata$Continent, ylim=c(0,50))
+boxplot(Mdata$CT.mode~Mdata$Continent, ylim=c(0,50))
 set.panel()
 
 ###### MODEL Terrestrial Vertebrate SPECIES RICHNESS
@@ -134,37 +138,38 @@ set.panel()
 library(lme4)
 library(MASS)
 
-fit1 <- lm(CT.median ~ V.Cstorage + V.RaoQ + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + + ForestLoss + Latitude + Latitude*V.NStemsT + Latitude*Elev.CV, data=Mdata)
-step1 <- stepAIC(fit1, direction="both")
-bestfit1 <- lm()
+fit1 <- lm(CT.mode ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLoss + Latitude, data=Mdata)
+step1 <- stepAIC(fit1, direction="both") 
+bestfit1 <- lm(CT.mode ~ V.NStemsT + RainTotal + Elev.CV + V.NStemsT:Latitude + Elev.CV:Latitude, data=Mdata)
 summary(bestfit1)
 
-lmer(CT.median ~ V.Cstorage + V.NStemsT + RainTotal + Elev.CV + F.Loss + abs(Latitude) + (1|Site.Code) + (1|Continent))
-lmer(CT.median ~ V.Cstorage + V.NStemsL + RainTotal + Elev.CV + F.Loss + abs(Latitude))
-lmer(CT.median ~ V.Cstorage + V.TShan + RainTotal + Elev.CV + F.Loss + abs(Latitude))
-lmer(CT.median ~ V.Cstorage + V.RaoQ + RainTotal + Elev.CV + F.Loss + abs(Latitude))
+fit3 <- lmer(CT.mode ~ (1|Continent) + V.NStemsT + RainTotal + Elev.CV + Latitude + V.NStemsT:Latitude + Elev.CV:Latitude, data=Mdata)
+fit3 <- lmer(CT.mode ~ (1|Continent) + V.NStemsT + RainTotal + Elev.CV + V.NStemsT:Latitude + Elev.CV:Latitude, data=Mdata)
+fit4 <- lmer(CT.mode ~ (1|Continent) + V.NStemsT + RainTotal + Elev.CV, data=Mdata)
 
-
-fit3 <- lmer(CT.mode ~ (1|Continent1) + V.Cstorage + V.FDis + V.TRich + V.NStemsT + V.NStemsL + Rain.CV + Elev.CV + abs(Latitude) + abs(Latitude)*V.NStemsT, data=Mdata)
-
-AIC(fit1, fit3)
+AIC(bestfit1, bestfit1.1, fit3)
 
 # VISUALIZE  FUNCTIONAL DIVERSITY
 set.panel(3,2)
 par(mar=c(3,2,2,1))
 hist(Mdata$CT.FDis, main="Mammal Functional Dispersion")
 hist(Mdata$CT.RaoQ, main="Mammal Rao's Quadratic Entropy")
-boxplot(Mdata$CT.FDis~Mdata$Continent1, ylim=c(0,0.5))
-boxplot(Mdata$CT.RaoQ~Mdata$Continent1, ylim=c(0,0.5))
-boxplot(Mdata$CT.FDis~Mdata$Continent2, ylim=c(0,0.5))
-boxplot(Mdata$CT.RaoQ~Mdata$Continent2, ylim=c(0,0.5))
+boxplot(Mdata$CT.FDis~Mdata$Continent, ylim=c(0,0.5))
+boxplot(Mdata$CT.RaoQ~Mdata$Continent, ylim=c(0,0.5))
+boxplot(Mdata$CT.FDis~Mdata$Continent, ylim=c(0,0.5))
+boxplot(Mdata$CT.RaoQ~Mdata$Continent, ylim=c(0,0.5))
 set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
+fitFD <- lm(CT.FDis ~ V.Cstorage  + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLoss + Latitude, data=Mdata)
+fitFD.int <- lm(CT.FDis ~ V.Cstorage  + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLoss + Latitude + Latitude*V.NStemsT + Latitude*Elev.CV, data=Mdata)
+stepFD <- stepAIC(fitFD, direction="both")
+stepFD.int <- stepAIC(fitFD.int, direction="both")
 
-
-
+bestfitFD <- lm(CT.FDis ~ V.Cstorage + V.RaoQ + V.NStemsT + V.NStemsL + RainTotal + 
+                 Elev.CV + ForestLoss + Latitude + V.NStemsT:Latitude + Elev.CV:Latitude, data=Mdata)
+summary(bestfitFD)
 
 
 
