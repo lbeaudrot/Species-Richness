@@ -95,5 +95,29 @@ WPIalluse <- subset(WPIall, Site.Code=="PSH" & year=="2012"|
                             Site.Code=="UDZ" & year=="2011"|
                             Site.Code=="VB-" & year=="2011"|
                             Site.Code=="YAN" & year=="2011")
+
+WPIalluse <- WPIalluse[WPIalluse$iteration!=1001,]
+WPIalluse <- WPIalluse[WPIalluse$iteration!=1002,]
+WPIalluse$iteration <- factor(WPIalluse$iteration)
+
+library(reshape)
 library(vegan)
-ddply(WPIalluse, .(site_id, iteration), diversity )
+
+
+unstack(test, psi~iteration)
+diversity(trythis, index="shannon", MARGIN=2)
+median(trythis, index="shannon", MARGIN=2)
+
+
+
+hold1 <- list()
+hold2 <- list()
+Shannon.Index <- vector()
+for(i in 1:length(unique(WPIalluse$Site.Code))){
+  hold1[[i]] <- WPIalluse[WPIalluse$site_id==as.integer(names(table(WPIalluse$site_id)))[[i]],]
+  hold2[[i]] <- unstack(hold1[[i]], psi~iteration)
+  Shannon.Index[i] <- median(diversity(hold2[[i]], index="shannon", MARGIN=2))
+}
+
+Shannon.Index <- cbind(Combine, Shannon.Index)[,2:3]
+write.csv(Shannon.Index, file="ShannonIndex_Distribution.csv", row.names=FALSE)
