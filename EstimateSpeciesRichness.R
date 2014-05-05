@@ -31,7 +31,7 @@ table(alldata$Site.Code, alldata$Sampling.Period)
 
 ######## Start here to CHANGE INPUT DATA FOR MODELS using Dorazio et al. 2006 JAGS code ###############
 # Use "Sampling.Period" look at species richness separately for each year and "Site.Code" to designate which site to include
-data.use <- eventsdata[eventsdata$Sampling.Period=="2011.01" & eventsdata$Site.Code=="BIF",]
+data.use <- eventsdata[eventsdata$Sampling.Period=="2012.01" & eventsdata$Site.Code=="BIF",]
 
 #subset species to the species in that site and with Include=1
 splist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
@@ -103,7 +103,7 @@ n.burnin <- as.integer(125000)
 n.thin <- 3
 n.sims <- as.integer(20000)
 
-fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", 
+fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.params, model.file="/localdisk/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", 
                              n.chains=n.chains, n.iter=n.iter, n.burnin=n.burnin, n.thin=n.thin, n.sims=n.sims, digits=3, program=c("JAGS"))
 #plot.chains(jmodparallel)
 
@@ -126,7 +126,7 @@ fitparallel <- bugsParallel(data=sp.data, inits=sp.inits, parameters.to.save=sp.
 print(fitparallel, digits=3)
 #plot(fitparallel)
 
-sp.mean <- round(mean(fitparallel$sims.list$N), digits=2)
+sp.mean <- round(mean(fitparallel$sims.list$N), digits=0)
 sp.median <- median(fitparallel$sims.list$N)
 sp.mode <- as.numeric(names(sort(table(fitparallel$sims.list$N), decreasing=TRUE))[1])
 
@@ -134,14 +134,14 @@ sp.mean
 sp.median
 sp.mode
 
+#pdf(file="PosteriorDistributions_SpeciesRichness_Overall_BIF.pdf")
 hist(fitparallel$sims.list$N, breaks=150, xlab="Species Richness", 
      main=paste(events.use$Site.Code[1], substr(events.use$Sampling.Period[1],1,4), sep=" "), 
      sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
-text(100, 5000, paste("Mean", sp.mean, sep=" = "))
-text(100, 3000, paste("Median", sp.median, sep=" = "))
-text(100, 1000, paste("Mode", sp.mode, sep=" = "))
-
-
+legend("bottomright", legend=c(paste("Mean", sp.mean, sep=" = "), 
+                               paste("Median", sp.median, sep=" = "), 
+                               paste("Mode", sp.mode, sep=" = "), ""), bty="n")
+#dev.off()
  # Temporarily store site specific outputs
 
 #BBSfit <- fitparallel
@@ -160,7 +160,7 @@ BIFfit <- fitparallel
 #YASfit <- fitparallel
 
 # Save model outputs
-save(BIFfit, file="BIFfit.gzip",compress="gzip")
+save(BIFfit, file="CTresults_overall_BIF.gzip",compress="gzip")
 
 
 CTresults <- list(BBSfit, BCIfit, BIFfit, CAXfit, COUfit, KRPfit, MASfit, NNNfit, PSHfit, RNFfit, UDZfit, VBfit, YANfit, YASfit)
