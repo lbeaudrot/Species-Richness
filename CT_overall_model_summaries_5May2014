@@ -1,4 +1,4 @@
-Species Richness Estimates for birds and mammals combined for 13 TEAM sites using WPI include list (version updated 7 April 2013) and Dorazio et al 2006 Bayesian model.
+Species Richness Estimates for birds and mammals combined for 13 TEAM sites using WPI include list (version updated 7 April 2013) and Dorazio et al 2006 Bayesian model run with RichnessLoop.R. Output for BIF data using EstimateSpeciesRichness.R included at bottom. All output from 5 May 2014
 
 
 > CAX.use <- eventsdata[eventsdata$Sampling.Period=="2012.01" & eventsdata$Site.Code=="CAX",]
@@ -371,6 +371,30 @@ and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
 DIC info (using the rule, pD = var(deviance)/2)
 pD = 950.5 and DIC = 1882.2
 DIC is an estimate of expected predictive error (lower deviance is better).
+Inference for Bugs model at "/localdisk/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", fit using JAGS,
+ 4 chains, each with 250000 iterations (first 125000 discarded), n.thin = 3
+ n.sims = 166668 iterations saved
+             mean     sd     2.5%      25%      50%      75%    97.5%  Rhat n.eff
+alpha      -1.713  0.482   -2.847   -1.983   -1.646   -1.373   -0.948 1.026   120
+beta       -3.635  0.313   -4.369   -3.803   -3.595   -3.418   -3.139 1.023   140
+N          45.765  6.392   38.000   41.000   44.000   48.000   63.000 1.024   140
+omega       0.249  0.052    0.167    0.213    0.243    0.277    0.372 1.011   250
+rho         0.948  0.065    0.774    0.933    0.970    0.988    0.999 1.039   530
+sigma.u     1.519  0.342    0.990    1.276    1.470    1.705    2.342 1.007   440
+sigma.v     0.915  0.230    0.570    0.749    0.879    1.040    1.471 1.009   350
+deviance 1815.251 46.597 1728.937 1783.047 1813.448 1845.590 1911.622 1.001  9000
+
+For each parameter, n.eff is a crude measure of effective sample size,
+and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
+
+DIC info (using the rule, pD = var(deviance)/2)
+pD = 1085.3 and DIC = 2900.5
+DIC is an estimate of expected predictive error (lower deviance is better).
+
+
+##### BIF output (run separately with EstimateSpeciesRichness.R)
+
+> print(fitparallel, digits=3)
 Inference for Bugs model at "/localdisk/home/lbeaudrot/work/Species-Richness/MultiSpeciesSiteOccModel.txt", fit using JAGS,
  4 chains, each with 250000 iterations (first 125000 discarded), n.thin = 3
  n.sims = 166668 iterations saved
