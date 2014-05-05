@@ -18,8 +18,8 @@ plot.VGvar <- read.csv(file="PlantDiversityVariances.csv")
 #CTaverages <- cbind(rownames(CTaverages), CTaverages)
 #colnames(CTaverages)[1] <- "Site.Code"
 
-CTaverages <- read.csv("CTaverages.csv")
-AnimalFD <- read.csv("FunctionalDiversity_Overall_1May2014.csv")
+CTaverages <- read.csv("CTaverages_overall.csv")
+AnimalFD <- read.csv("FunctionalDiversity_Overall_5May2014.csv")
 model.data <- merge(CTaverages, AnimalFD, by.x="Site.Code", by.y="Site.Code", all=TRUE)
 
 ShannonDist <- read.csv("ShannonIndex_Distribution.csv")
@@ -68,7 +68,7 @@ model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", al
 
 # ADD FOREST LOSS data from Alex Zvoleff's calculations
 ForestLoss <- read.csv("GFC_Forest_Change_Summary.csv")
-names(ForestLoss) <- c("Site.Code", "ForestLossSite", "ForestLossZOI")
+names(ForestLoss) <- c("Site.Code", "ForestLossSite", "ForestLossZOI", "PA_area", "SA_area", "ZOI_area")
 model.data <- merge(model.data, ForestLoss, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 # Format merged continuous data as data frame with numeric values and site codes as row names
@@ -84,11 +84,11 @@ MData <- as.data.frame(MData)
 colnames(MData) <- colnames(ModelData)
 
 # Scale predictor variables
-MData <- cbind(MData[,1:15], scale(MData[,16:dim(MData)[2]]))
+MData <- cbind(MData[,1:14], scale(MData[,15:dim(MData)[2]]))
 rownames(MData) <- model.data$Site.Code
 
 # Add categorical variables for random effects
-Year <- c(2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012)
+Year <- c(2011, 2011, 2012, 2012, 2011, 2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012)
 Continent <- c("Asia", "America", "Africa", "America", "America", "Africa", "America", "Africa", "Asia", "Africa", "Africa", "America", "America", "America")
 
 Mdata <- cbind(MData, Year, Continent)
@@ -96,7 +96,7 @@ Mdata <- cbind(MData, Year, Continent)
 # Create output table of predictor and response variables for inclusion in paper
 output.table <- cbind(model.data, Year, Continent)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_2May2014.csv", row.names=FALSE)
+#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_5May2014.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
