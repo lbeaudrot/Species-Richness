@@ -135,7 +135,7 @@ sp.median
 sp.mode
 
 #pdf(file="PosteriorDistributions_SpeciesRichness_Overall_BIF.pdf")
-hist(fitparallel$sims.list$N, breaks=150, xlab="Species Richness", 
+hist(fitparallel$sims.list$N, breaks=150, xlab="Terrestrial Vertebrate Species Richness", 
      main=paste(events.use$Site.Code[1], substr(events.use$Sampling.Period[1],1,4), sep=" "), 
      sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
 legend("bottomright", legend=c(paste("Mean", sp.mean, sep=" = "), 

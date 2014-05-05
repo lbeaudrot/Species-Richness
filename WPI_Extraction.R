@@ -48,16 +48,13 @@ psi2012 <- cbind(psi2012, sites2012)
 names(psi2012) <- c("species_id", "site_id", "year", "psi.mean", "psi.median", "bin", "Site.Code")
 
 
-wpi_weights <- rbind(psi2012[psi2012$Site.Code=="PSH"|psi2012$Site.Code=="CAX"|psi2012$Site.Code=="YAS",],
-                     psi2011[psi2011$Site.Code!="PSH"&psi2011$Site.Code!="CAX"&psi2011$Site.Code!="YAS",])
-
-wpi_weights2011 <- subset(psi2012, Site.Code=="PSH"|
+wpi_weights2012 <- subset(psi2012, Site.Code=="PSH"|
                         Site.Code=="CAX"|
-                        Site.Code=="YAS")
+                        Site.Code=="YAS"|
+                        Site.Code=="BIF")
 
-wpi_weights2012 <- subset(psi2011, Site.Code=="BBS"|
+wpi_weights2011 <- subset(psi2011, Site.Code=="BBS"|
                         Site.Code=="BCI"|
-                        Site.Code=="BIF"|
                         Site.Code=="COU"|
                         Site.Code=="CSN"|
                         Site.Code=="KRP"|
@@ -70,7 +67,7 @@ wpi_weights2012 <- subset(psi2011, Site.Code=="BBS"|
                         Site.Code=="YAN")
 
 wpi_weights <- rbind(wpi_weights2011, wpi_weights2012)
-#write.csv(wpi_weights, file="wpi_weights.csv", row.names=FALSE)
+write.csv(wpi_weights, file="wpi_weights.csv", row.names=FALSE)
 
 
 # Calculate 1000 shannon diversity indices for each site using the wpi occupancy values as abundances. 
@@ -84,7 +81,7 @@ WPIalluse <- subset(WPIall, Site.Code=="PSH" & year=="2012"|
                             Site.Code=="YAS" & year=="2012"| 
                             Site.Code=="BBS" & year=="2011"|
                             Site.Code=="BCI" & year=="2011"|
-                            Site.Code=="BIF" & year=="2011"|
+                            Site.Code=="BIF" & year=="2012"|
                             Site.Code=="COU" & year=="2011"|
                             Site.Code=="CSN" & year=="2011"|
                             Site.Code=="KRP" & year=="2011"|
@@ -102,13 +99,6 @@ WPIalluse$iteration <- factor(WPIalluse$iteration)
 
 library(reshape)
 library(vegan)
-
-
-unstack(test, psi~iteration)
-diversity(trythis, index="shannon", MARGIN=2)
-median(trythis, index="shannon", MARGIN=2)
-
-
 
 hold1 <- list()
 hold2 <- list() 
