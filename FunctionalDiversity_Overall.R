@@ -155,11 +155,11 @@ traitFD_w <- dbFD(SiteTraits[,1:dim(SiteTraits)[2]-1], a=psi_use[1:dim(SiteTrait
 #CAXtraitFD_w <- traitFD_w
 #PSHtraitFD_w <- traitFD_w
 #YAStraitFD_w <- traitFD_w
+#BIFtraitFD_w <- traitFD_w
 
 # use 2011 data
 #BBStraitFD_w <- traitFD_w
 #BCItraitFD_w <- traitFD_w
-#BIFtraitFD_w <- traitFD_w
 #COUtraitFD_w <- traitFD_w
 #KRPtraitFD_w <- traitFD_w
 #MAStraitFD_w <- traitFD_w
@@ -183,7 +183,7 @@ PSH.Use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=
 YAS.Use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="YAS",]
 BBS.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="BBS",]
 BCI.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="BCI",]
-BIF.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="BIF",]
+BIF.Use <- allevents[allevents$Sampling.Period=="2012.01" & allevents$Site.Code=="BIF",]
 COU.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="COU",]
 KRP.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="KRP",]
 MAS.Use <- allevents[allevents$Sampling.Period=="2011.01" & allevents$Site.Code=="MAS",]
@@ -272,6 +272,6 @@ rownames(CTweighted) <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NNN"
 
 
 CTweighted
-#write.csv(CTweighted, file="FunctionalDiversity_Overall_1May2014.csv", row.names=TRUE)
+write.csv(CTweighted, file="FunctionalDiversity_Overall_5May2014.csv", row.names=TRUE)
 # Manually add "Site.Code" as first column name for  output file
 # Manuall add "-" to "VB-" Site.Code so that later merges will operate correctly
