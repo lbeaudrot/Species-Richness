@@ -45,12 +45,16 @@ CV <- function(data){
   sd(data)/mean(data)
 }
 
+elev.range <- function(data){
+  max(data) - min(data)
+}
 # Calculate ELEVATION CV and add elevation to model.data
 elevation.data <- read.csv("CT_edgedist_elevation_final.csv") 
 elevation.mean <- aggregate(elevation.data$Elevation ~ elevation.data$Site.Code, FUN=mean)
 elevation.CV <- aggregate(elevation.data$Elevation ~ elevation.data$Site.Code, FUN=CV)[2]
-elevation <- cbind(elevation.mean, elevation.CV)
-colnames(elevation) <- c("Site.Code", "Elev.Mean", "Elev.CV")
+elevation.range <- aggregate(elevation.data$Elevation ~ elevation.data$Site.Code, FUN=elev.range)[2]
+elevation <- cbind(elevation.mean, elevation.CV, elevation.range)
+colnames(elevation) <- c("Site.Code", "Elev.Mean", "Elev.CV", "Elev.Range")
 model.data <- merge(model.data, elevation, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 # ADD LATITUDE for each TEAM site as a covariate - see EstimateSpeciesRichness.R line 203
@@ -64,7 +68,7 @@ model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", al
 
 # ADD FOREST LOSS data from Alex Zvoleff's calculations
 ForestLoss <- read.csv("GFC_Forest_Change_Summary.csv")
-names(ForestLoss) <- c("Site.Code", "ForestLoss")
+names(ForestLoss) <- c("Site.Code", "ForestLossSite", "ForestLossZOI")
 model.data <- merge(model.data, ForestLoss, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 # Format merged continuous data as data frame with numeric values and site codes as row names
@@ -90,9 +94,9 @@ Continent <- c("Asia", "America", "Africa", "America", "America", "Africa", "Ame
 Mdata <- cbind(MData, Year, Continent)
 
 # Create output table of predictor and response variables for inclusion in paper
-output.table <- cbind(model.data, Year, Continent1)
+output.table <- cbind(model.data, Year, Continent)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-write.csv(output.table, file="Table_PredictorResponseVariables_Phase2.csv", row.names=FALSE)
+#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_2May2014.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
@@ -138,16 +142,16 @@ set.panel()
 library(lme4)
 library(MASS)
 
-fit1 <- lm(CT.mode ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLoss + Latitude, data=Mdata)
-step1 <- stepAIC(fit1, direction="both") 
-bestfit1 <- lm(CT.mode ~ V.NStemsT + RainTotal + Elev.CV + V.NStemsT:Latitude + Elev.CV:Latitude, data=Mdata)
-summary(bestfit1)
+fitRich <- lm(CT.mode ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLossZOI + Latitude, data=Mdata)
+stepRich <- stepAIC(fitRich, direction="both") 
+bfRich <- lm(CT.mode ~ V.NStemsT + RainTotal + Elev.CV + ForestLossZOI, data=Mdata)
+summary(bfRich)
+bfRich.int <- lm(CT.mode ~ V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + V.NStemsT:Latitude, data=Mdata)
+bfRich.ran <- lmer(CT.mode ~ V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + (1|Continent), data=Mdata)
+bfRich.int.ran <- lmer(CT.mode ~ V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + V.NStemsT:Latitude + (1|Continent), data=Mdata)
+AIC(bfRich, bfRich.int, bfRich.ran, bfRich.int.ran)
+summary(bfRich.int.ran)
 
-fit3 <- lmer(CT.mode ~ (1|Continent) + V.NStemsT + RainTotal + Elev.CV + Latitude + V.NStemsT:Latitude + Elev.CV:Latitude, data=Mdata)
-fit3 <- lmer(CT.mode ~ (1|Continent) + V.NStemsT + RainTotal + Elev.CV + V.NStemsT:Latitude + Elev.CV:Latitude, data=Mdata)
-fit4 <- lmer(CT.mode ~ (1|Continent) + V.NStemsT + RainTotal + Elev.CV, data=Mdata)
-
-AIC(bestfit1, bestfit1.1, fit3)
 
 # VISUALIZE  FUNCTIONAL DIVERSITY
 set.panel(3,2)
@@ -162,25 +166,33 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-fitFD <- lm(CT.FDis ~ V.Cstorage  + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLoss + Latitude, data=Mdata)
-fitFD.int <- lm(CT.FDis ~ V.Cstorage  + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLoss + Latitude + Latitude*V.NStemsT + Latitude*Elev.CV, data=Mdata)
+fitFD <- lm(CT.FDis ~ V.Cstorage  + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLossZOI + Latitude, data=Mdata)
 stepFD <- stepAIC(fitFD, direction="both")
-stepFD.int <- stepAIC(fitFD.int, direction="both")
-
-bestfitFD <- lm(CT.FDis ~ V.Cstorage + V.RaoQ + V.NStemsT + V.NStemsL + RainTotal + 
-                 Elev.CV + ForestLoss + Latitude + V.NStemsT:Latitude + Elev.CV:Latitude, data=Mdata)
-summary(bestfitFD)
+bfFD <- lm(CT.FDis ~ V.TShan + ForestLossZOI, data=Mdata)
+summary(bfFD)
+bfFD.int <- lm(CT.FDis ~ V.TShan + ForestLossZOI + Latitude:V.TShan, data=Mdata)
+bfFD.ran <- lmer(CT.FDis ~ V.TShan + ForestLossZOI + (1|Continent), data=Mdata)
+bfFD.int.ran <- lmer(CT.FDis ~ V.TShan + ForestLossZOI + Latitude:V.TShan + (1|Continent), data=Mdata)
+AIC(bfFD, bfFD.int, bfFD.ran, bfFD.int.ran)
+summary(bfFD)
 
 
 
 ###### VISUALIZE Terrestrial Vertebrate TAXONOMIC DIVERSITY
-set.panel(3,1)
+set.panel(2,1)
 par(mar=c(3,2,2,1))
-hist(Mdata$CT.Shannon, main="Mammal Taxonomic Diversity")
-boxplot(Mdata$CT.Shannon~Mdata$Continent1, ylim=c(0,3))
-boxplot(Mdata$B.CT.Shannon~Mdata$Continent1, ylim=c(0,3))
+hist(Mdata$CT.Shannon, main="Terrestrial Vertebrate Taxonomic Diversity")
+boxplot(Mdata$CT.Shannon~Mdata$Continent, ylim=c(0,4))
 set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
-
+fitShan <- lm(CT.Shannon ~ V.Cstorage  + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLossZOI + Latitude, data=Mdata)
+stepShan <- stepAIC(fitShan, direction="both")
+bfShan <- lm(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV, data=Mdata)
+summary(bfShan)
+bfShan.int <- lm(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV + V.NStemsT:Latitude + Elev.CV:Latitude, data=Mdata)
+bfShan.ran <- lmer(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV + (1|Continent), data=Mdata)
+bfShan.int.ran <- lmer(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV + V.NStemsT:Latitude + Elev.CV:Latitude + (1|Continent), data=Mdata)
+AIC(bfShan, bfShan.int, bfShan.ran, bfShan.int.ran)
+summary(bfShan)

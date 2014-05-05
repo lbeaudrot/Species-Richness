@@ -205,9 +205,11 @@ colnames(CTaverages) <- paste("CT", colnames(CTaverages), sep=".")
 #### SPECIFY WHETHER PLOTS ARE MAMMALS or BIRDS
 # Re-graph plots using results
 #pdf(file="PosteriorDistributions_SpeciesRichness_Birds.pdf")
-pdf(file="PosteriorDistributions_SpeciesRichness_Mammals.pdf")
+#pdf(file="PosteriorDistributions_SpeciesRichness_Mammals.pdf")
+pdf(file="PosteriorDistributions_SpeciesRichness_Overall.pdf")
+
 for(i in 1:length(data.use)){
-  hist(CTresults[[i]]$sims.list$N, breaks=150, xlab="Mammal Species Richness", 
+  hist(CTresults[[i]]$sims.list$N, breaks=150, xlab="Terrestrial Vertebrate Species Richness", 
        main=paste(events.use[[i]]$Site.Code[1], substr(events.use[[i]]$Sampling.Period[1],1,4), sep=" "), 
        sub=paste("Chains = ", n.chains, ",  Iterations =", n.iter, ",  Burnin =", n.burnin, ",  Thin =", n.thin, sep=" "))
   legend("bottomright", legend=c(paste("Mean", CTaverages[i,1], sep=" = "), 
@@ -219,9 +221,11 @@ dev.off()
 #### SPECIFY WHETHER RESULTS ARE MAMMALS or BIRDS
 # Write output table to use in modeling
 #write.csv(CTaverages, file="CTaverages_bird.csv", row.names=TRUE, col.names=TRUE)
-write.csv(CTaverages, file="CTaverages_mammal.csv", row.names=TRUE, col.names=TRUE)
+#write.csv(CTaverages, file="CTaverages_mammal.csv", row.names=TRUE, col.names=TRUE)
+write.csv(CTaverages, file="CTaverages_overall.csv", row.names=TRUE, col.names=TRUE)
 
 # Save model outputs
 #save(CTresults, file="CTresults_bird.gzip",compress="gzip")
-save(CTresults, file="CTresults_mammal.gzip",compress="gzip")
+#save(CTresults, file="CTresults_mammal.gzip",compress="gzip")
+save(CTresults, file="CTresults_overall.gzip",compress="gzip")
 #######################################################################################
