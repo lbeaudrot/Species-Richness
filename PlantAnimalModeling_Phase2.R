@@ -66,10 +66,23 @@ Latitude <- read.csv("Latitude_MeanSiteCT.csv")
 Latitude$Latitude <- abs(Latitude$Latitude)
 model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
+
 # ADD FOREST LOSS data from Alex Zvoleff's calculations
 ForestLoss <- read.csv("GFC_Forest_Change_Summary.csv")
 names(ForestLoss) <- c("Site.Code", "ForestLossSite", "ForestLossZOI", "PA_area", "SA_area", "ZOI_area")
 model.data <- merge(model.data, ForestLoss, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+
+
+# PERFORM TRANSFORMATIONS OF PREDICTOR VARIABLES 
+#model.data$Latitude <- log(model.data$Latitude)
+#model.data$Elev.CV <- log(model.data$Elev.CV )
+#model.data$V.Cstorage <- log(model.data$V.Cstorage)
+#model.data$V.NStemsT <- log(model.data$V.NStemsT)
+#model.data$ForestLossZOI <- log(model.data$ForestLossZOI)
+#model.data$PA_area <- log(model.data$PA_area)
+#model.data$SA_area <- log(model.data$SA_area)
+#model.data$ZOI_area <- log(model.data$ZOI_area)
+model.data$CT.FDiv <- rep(0, dim(model.data)[1])
 
 # Format merged continuous data as data frame with numeric values and site codes as row names
 ModelData <- model.data
@@ -85,7 +98,9 @@ colnames(MData) <- colnames(ModelData)
 
 # Scale predictor variables
 MData <- cbind(MData[,1:14], scale(MData[,15:dim(MData)[2]]))
+#MData <- scale(MData)
 rownames(MData) <- model.data$Site.Code
+MData <- as.data.frame(MData)
 
 # Add categorical variables for random effects
 Year <- c(2011, 2011, 2012, 2012, 2011, 2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012)
@@ -120,79 +135,97 @@ pdf(file="PAIRS_Vegetation.pdf")
   pairs(plot.VGmean[,2:12], lower.panel = panel.smooth, upper.panel = panel.cor)
 dev.off()
 
+Examine <- as.data.frame(cbind(Mdata$CT.median, Mdata$CT.FDis, Mdata$CT.Shannon, Mdata$V.Cstorage, MData$V.TRich, Mdata$V.NStemsT, Mdata$V.NStemsL, Mdata$RainTotal, Mdata$Rain.CV, Mdata$Elev.CV, Mdata$ForestLossZOI, Mdata$Latitude, Mdata$SA_area))
+names(Examine) <- c("CT.median", "CT.FDis", "CT.Shannon", "V.Cstorage", "V.TRich", "V.NStemsT", "V.NStemsL", "RainTotal", "Rain.CV", "Elev.CV", "ForestLossZOI", "Latitude", "SA_area")
+pairs(Examine, lower.panel = panel.smooth, upper.panel = panel.cor)
 
 # VISUALIZE species richness across sites
 # SPECIES RICHNESS
 library("fields")
-set.panel(3,3)
+set.panel(2,3)
 par(mar=c(2,2,1,1))
 hist(Mdata$CT.mean, main="Mean")
 hist(Mdata$CT.median, main="Median")
 hist(Mdata$CT.mode, main="Mode")
-boxplot(Mdata$CT.mean~Mdata$Continent, ylim=c(0,50))
-boxplot(Mdata$CT.median~Mdata$Continent, ylim=c(0,50))
-boxplot(Mdata$CT.mode~Mdata$Continent, ylim=c(0,50))
-boxplot(Mdata$CT.mean~Mdata$Continent, ylim=c(0,50))
-boxplot(Mdata$CT.median~Mdata$Continent, ylim=c(0,50))
-boxplot(Mdata$CT.mode~Mdata$Continent, ylim=c(0,50))
+boxplot(Mdata$CT.mean~Mdata$Continent, ylim=c(-1,1))
+boxplot(Mdata$CT.median~Mdata$Continent, ylim=c(-1,1))
+boxplot(Mdata$CT.mode~Mdata$Continent, ylim=c(-1,1))
 set.panel()
 
 ###### MODEL Terrestrial Vertebrate SPECIES RICHNESS
 
 library(lme4)
-library(MASS)
+library(MASS) 
+library(MuMIn)
 
-fitRich <- lm(CT.mode ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLossZOI + Latitude, data=Mdata)
+
+
+fitRich <- lm(CT.median ~  V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepRich <- stepAIC(fitRich, direction="both") 
-bfRich <- lm(CT.mode ~ V.NStemsT + RainTotal + Elev.CV + ForestLossZOI, data=Mdata)
+bfRich <- lm(CT.median ~ V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + 
+               ForestLossZOI + Latitude + PA_area, data=Mdata)
 summary(bfRich)
-bfRich.int <- lm(CT.mode ~ V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + V.NStemsT:Latitude, data=Mdata)
-bfRich.ran <- lmer(CT.mode ~ V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + (1|Continent), data=Mdata)
-bfRich.int.ran <- lmer(CT.mode ~ V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + V.NStemsT:Latitude + (1|Continent), data=Mdata)
-AIC(bfRich, bfRich.int, bfRich.ran, bfRich.int.ran)
-summary(bfRich.int.ran)
+hist(resid(bfRich))
+plot(resid(bfRich), Mdata$CT.median)
 
+#bfRich.int <- lm(CT.median ~ , data=Mdata)
+bfRich.ran <- lmer(CT.median ~ V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + 
+                     ForestLossZOI + Latitude + PA_area + (1|Continent), data=Mdata)
+#bfRich.int.ran <- lmer(CT.median ~ , data=Mdata)
+AIC(bfRich, bfRich.ran)
+summary(bfRich.ran)
+
+allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
+summary(allRich)
 
 # VISUALIZE  FUNCTIONAL DIVERSITY
-set.panel(3,2)
+set.panel(2,2)
 par(mar=c(3,2,2,1))
-hist(Mdata$CT.FDis, main="Mammal Functional Dispersion")
-hist(Mdata$CT.RaoQ, main="Mammal Rao's Quadratic Entropy")
-boxplot(Mdata$CT.FDis~Mdata$Continent, ylim=c(0,0.5))
-boxplot(Mdata$CT.RaoQ~Mdata$Continent, ylim=c(0,0.5))
-boxplot(Mdata$CT.FDis~Mdata$Continent, ylim=c(0,0.5))
-boxplot(Mdata$CT.RaoQ~Mdata$Continent, ylim=c(0,0.5))
+hist(Mdata$CT.FDis, main="Functional Dispersion")
+hist(Mdata$CT.RaoQ, main="Rao's Quadratic Entropy")
+boxplot(Mdata$CT.FDis~Mdata$Continent, ylim=c(0.2,0.4))
+boxplot(Mdata$CT.RaoQ~Mdata$Continent, ylim=c(0,0.2))
 set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-fitFD <- lm(CT.FDis ~ V.Cstorage  + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLossZOI + Latitude, data=Mdata)
+fitFD <- lm(CT.FDis ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepFD <- stepAIC(fitFD, direction="both")
-bfFD <- lm(CT.FDis ~ V.TShan + ForestLossZOI, data=Mdata)
+bfFD <- lm(CT.FDis ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + 
+             Elev.CV + ForestLossZOI, data=Mdata)
 summary(bfFD)
-bfFD.int <- lm(CT.FDis ~ V.TShan + ForestLossZOI + Latitude:V.TShan, data=Mdata)
-bfFD.ran <- lmer(CT.FDis ~ V.TShan + ForestLossZOI + (1|Continent), data=Mdata)
-bfFD.int.ran <- lmer(CT.FDis ~ V.TShan + ForestLossZOI + Latitude:V.TShan + (1|Continent), data=Mdata)
-AIC(bfFD, bfFD.int, bfFD.ran, bfFD.int.ran)
-summary(bfFD)
+#bfFD.int <- lm(CT.FDis ~ , data=Mdata)
+bfFD.ran <- lmer(CT.FDis ~ RainTotal + Elev.CV + ForestLossZOI + (1|Continent), data=Mdata)
+#bfFD.int.ran <- lmer(CT.FDis ~  (1|Continent), data=Mdata)
+AIC(bfFD, bfFD.ran)
+summary(bfFD.ran)
 
-
+allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+allFD <- model.avg(allFD.dredge, beta=TRUE, fit=TRUE)
+summary(allFD)
 
 ###### VISUALIZE Terrestrial Vertebrate TAXONOMIC DIVERSITY
 set.panel(2,1)
 par(mar=c(3,2,2,1))
-hist(Mdata$CT.Shannon, main="Terrestrial Vertebrate Taxonomic Diversity")
+hist(Mdata$CT.Shannon, main="Taxonomic Diversity")
 boxplot(Mdata$CT.Shannon~Mdata$Continent, ylim=c(0,4))
 set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
-fitShan <- lm(CT.Shannon ~ V.Cstorage  + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Elev.CV + ForestLossZOI + Latitude, data=Mdata)
+fitShan <- lm(Shannon.Index ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepShan <- stepAIC(fitShan, direction="both")
-bfShan <- lm(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV, data=Mdata)
+bfShan <- lm(CT.Shannon ~ V.TShan + V.NStemsT + RainTotal + Rain.CV + Elev.CV + 
+               ForestLossZOI + Latitude, data=Mdata)
 summary(bfShan)
-bfShan.int <- lm(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV + V.NStemsT:Latitude + Elev.CV:Latitude, data=Mdata)
+bfShan.int <- lm(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV + V.NStemsT:Latitude, data=Mdata)
 bfShan.ran <- lmer(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV + (1|Continent), data=Mdata)
-bfShan.int.ran <- lmer(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV + V.NStemsT:Latitude + Elev.CV:Latitude + (1|Continent), data=Mdata)
+bfShan.int.ran <- lmer(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV + V.NStemsT:Latitude + (1|Continent), data=Mdata)
 AIC(bfShan, bfShan.int, bfShan.ran, bfShan.int.ran)
 summary(bfShan)
+
+
+allShan.dredge2 <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+allShan2 <- model.avg(allShan.dredge2, beta=TRUE, fit=TRUE)
+summary(allShan2)
