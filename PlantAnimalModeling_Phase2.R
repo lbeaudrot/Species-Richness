@@ -251,3 +251,7 @@ boxplot(Mdata$CT.median~Mdata$Continent, ylab="Species Richness")
 boxplot(Mdata$CT.FDisMedian~Mdata$Continent, ylab="Functional Diversity (FDis)")
 boxplot(Mdata$Shannon.Index~Mdata$Continent, ylab="Species Diversity (Shannon Index)")
 
+library(maps)
+map('world', interior=FALSE, xlim=c(-90, 155), ylim=c(-60, 37))
+LatLon <- read.csv(file="SiteLatitudeLongitude.csv")
+points(LatLon$Longitude, LatLon$Latitude, col="green2", pch=19)
