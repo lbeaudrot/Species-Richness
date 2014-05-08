@@ -265,8 +265,8 @@ for(i in 1:length(Data.Use)){
 
   
     for(i in 1:length(Data.Use)){
-      #for(j in 1:dim(weights1000[[i]])[2]){
-      for(j in 1:2){
+      for(j in 1:dim(weights1000[[i]])[2]){
+        #for(j in 1:2){
     hold3 <- weights1000[[i]][,j]
     names(hold3) <- rownames(weights1000[[i]])
     CTSite_FD[[j]] <- dbFD(SiteTraits[[i]], a=hold3, corr="cailliez", calc.FRic=FALSE)
@@ -289,35 +289,11 @@ for(i in 1:length(Data.Use)){
   
 }    
   
-  
 names(CTweightedmedian) <- c("CAX", "MAS", "VB-", "BIF", "BBS", "NNN", "YAS", "RNF", "UDZ", "BCI", "YAN", "COU", "KRP", "PSH")
 
-  
-  #### EXPERIMENTAL ABOVE
-  
-  # Calculate mammal FD and Shannon diversity indices  
-  #CTSite_FD[[i]] <- dbFD(SiteTraits[[i]][,1:dim(SiteTraits[[i]])[2]-1], a=psi_use[[i]][1:dim(SiteTraits[[i]])[1]], corr="cailliez", calc.FRic=FALSE)
-  
-#Extract FD calculations and create output table 
-  CT.nbsp[i] <- CTSite_FD[[i]]$nbsp
-  CT.sing.sp[i] <- CTSite_FD[[i]]$sing.sp
-  CT.FEve[i] <- CTSite_FD[[i]]$FEve
-  CT.FDiv[i] <- CTSite_FD[[i]]$FDiv
-  CT.FDis[i] <- CTSite_FD[[i]]$FDis
-  CT.RaoQ[i] <- CTSite_FD[[i]]$RaoQ
-  CWM.Mass[i] <- CTSite_FD[[i]]$CWM$Mass_c
-  CWM.Litter[i] <- CTSite_FD[[i]]$CWM$LitterSize_c
-  CWM.GR[i] <- CTSite_FD[[i]]$CWM$GR_Area_c
-  CWM.Activity[i] <- CTSite_FD[[i]]$CWM$ActivityCycle_c
-  CWM.Guild[i] <- CTSite_FD[[i]]$CWM$Guild_c
-}
-
-CTweighted <- cbind(CT.nbsp, CT.sing.sp, CT.FEve, CT.FDiv, CT.FDis, CT.RaoQ, CWM.Mass, CWM.Litter, CWM.GR)
-CTweighted <- as.data.frame(CTweighted)
-rownames(CTweighted) <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NNN", "PSH", "RNF", "UDZ", "VB", "YAN", "YAS") 
-
-
 CTweighted
-#write.csv(CTweighted, file="FunctionalDiversity_Overall_Distribution_7May2014.csv", row.names=TRUE)
+save(CTweighted, file="CTweighted.gzip",compress="gzip")
+write.csv(CTweightedmedian, file="FunctionalDiversity_Overall_Distribution_8May2014.csv", row.names=TRUE)
+write.csv(CTweighted, file="FunctionalDiversity_Overall_ListOutput_8May2014.csv", row.names=TRUE)
 # Manually add "Site.Code" as first column name for  output file
 # Manuall add "-" to "VB-" Site.Code so that later merges will operate correctly
