@@ -293,9 +293,9 @@ CTweightedmedian
 names(CTweightedmedian) <- c("CAX", "MAS", "VB-", "BIF", "BBS", "NNN", "YAS", "RNF", "UDZ", "BCI", "YAN", "COU", "KRP", "PSH")
 CTweightedmedian
 
-CTweighted
-save(CTweighted, file="CTweighted.gzip",compress="gzip")
-write.csv(CTweightedmedian, file="FunctionalDiversity_Overall_Distribution_8May2014.csv", row.names=TRUE)
-write.csv(CTweighted, file="FunctionalDiversity_Overall_ListOutput_8May2014.csv", row.names=TRUE)
-# Manually add "Site.Code" as first column name for  output file
+#CTweighted
+#save(CTweighted, file="CTweighted.gzip",compress="gzip")
+#write.csv(CTweightedmedian, file="FunctionalDiversity_Overall_Distribution_8May2014.csv", row.names=TRUE)
+#write.csv(CTweighted, file="FunctionalDiversity_Overall_ListOutput_8May2014.csv", row.names=TRUE)
+# Paste special (transpose) list and manually add "Site.Code" as first column name for  output file
 # Manuall add "-" to "VB-" Site.Code so that later merges will operate correctly
