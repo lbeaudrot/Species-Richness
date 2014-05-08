@@ -244,3 +244,10 @@ legend("bottomleft", expression(R^2* " = -0.04, N=12, p=0.51"), cex=1, bty="n")
 plot(model.data$V.Cstorage/1000, Mdata$Shannon.Index, las=1, ylab="Species Diversity (Shannon Index)", xlab="", bty="n", xlim=c(100, 300), ylim=c(2.4, 3.4))
 legend("bottomleft", expression(R^2* "= -0.01, N=12, p=0.37"), cex=1, bty="n")
 mtext("               Aboveground Carbon Storage (Mg C sq ha)", side=1, outer=TRUE, line=-2)
+
+set.panel(1,3)
+par(mar=c(3, 5, 2, 0))
+boxplot(Mdata$CT.median~Mdata$Continent, ylab="Species Richness")
+boxplot(Mdata$CT.FDisMedian~Mdata$Continent, ylab="Functional Diversity (FDis)")
+boxplot(Mdata$Shannon.Index~Mdata$Continent, ylab="Species Diversity (Shannon Index)")
+
