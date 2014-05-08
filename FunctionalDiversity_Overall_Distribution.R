@@ -288,8 +288,10 @@ for(i in 1:length(Data.Use)){
   CTweightedmedian[i] <- median(CTweighted[[i]]$CT.FDis)
   
 }    
-  
+
+CTweightedmedian
 names(CTweightedmedian) <- c("CAX", "MAS", "VB-", "BIF", "BBS", "NNN", "YAS", "RNF", "UDZ", "BCI", "YAN", "COU", "KRP", "PSH")
+CTweightedmedian
 
 CTweighted
 save(CTweighted, file="CTweighted.gzip",compress="gzip")
