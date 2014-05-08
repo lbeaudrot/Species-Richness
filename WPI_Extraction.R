@@ -83,10 +83,10 @@ WPIalluse <- subset(WPIall, Site.Code=="PSH" & year=="2012"|
                             Site.Code=="BCI" & year=="2011"|
                             Site.Code=="BIF" & year=="2012"|
                             Site.Code=="COU" & year=="2011"|
-                            Site.Code=="CSN" & year=="2011"|
+                           #Site.Code=="CSN" & year=="2011"|
                             Site.Code=="KRP" & year=="2011"|
                             Site.Code=="MAS" & year=="2011"|
-                            Site.Code=="NAK" & year=="2011"|
+                           #Site.Code=="NAK" & year=="2011"|
                             Site.Code=="NNN" & year=="2011"|
                             Site.Code=="RNF" & year=="2011"|
                             Site.Code=="UDZ" & year=="2011"|
