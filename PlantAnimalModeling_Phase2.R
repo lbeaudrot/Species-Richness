@@ -25,6 +25,9 @@ model.data <- merge(CTaverages, AnimalFD, by.x="Site.Code", by.y="Site.Code", al
 ShannonDist <- read.csv("ShannonIndex_Distribution.csv")
 model.data <- merge(model.data, ShannonDist, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
+CT.FDisDist <- read.csv("FunctionalDiversity_Overall_Distribution_8May2014.csv")
+model.data <- merge(model.data, CT.FDisDist, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+
 # MERGE ANIMAL DATA WITH PLANT DATA
 model.data <- merge(model.data, plot.VGmean, by.x="Site.Code", by.y="Site.Code", all=TRUE)
 
@@ -97,7 +100,7 @@ MData <- as.data.frame(MData)
 colnames(MData) <- colnames(ModelData)
 
 # Scale predictor variables
-MData <- cbind(MData[,1:14], scale(MData[,15:dim(MData)[2]]))
+MData <- cbind(MData[,1:15], scale(MData[,16:dim(MData)[2]]))
 #MData <- scale(MData)
 rownames(MData) <- model.data$Site.Code
 MData <- as.data.frame(MData)
@@ -111,7 +114,7 @@ Mdata <- cbind(MData, Year, Continent)
 # Create output table of predictor and response variables for inclusion in paper
 output.table <- cbind(model.data, Year, Continent)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_5May2014.csv", row.names=FALSE)
+#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_8May2014.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
@@ -190,7 +193,7 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-fitFD <- lm(CT.FDis ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitFD <- lm(CT.FDisMedian ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepFD <- stepAIC(fitFD, direction="both")
 bfFD <- lm(CT.FDis ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + 
              Elev.CV + ForestLossZOI, data=Mdata)
@@ -226,6 +229,18 @@ AIC(bfShan, bfShan.int, bfShan.ran, bfShan.int.ran)
 summary(bfShan)
 
 
-allShan.dredge2 <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
-allShan2 <- model.avg(allShan.dredge2, beta=TRUE, fit=TRUE)
-summary(allShan2)
+allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+allShan <- model.avg(allShan.dredge, beta=TRUE, fit=TRUE)
+summary(allShan)
+
+
+############ Create Plots #########
+set.panel(1,3)
+par(mar=c(5, 4, 1, 0))
+plot(model.data$V.Cstorage/1000, Mdata$CT.median, las=1, ylab="Terrestrial Vertebrate Species Richness", xlab="", bty="n", xlim=c(100, 300), ylim=c(15,50))
+legend("bottomleft", expression(R^2* "= -0.07, N=12, p=0.69"), cex=1, bty="n")
+plot(model.data$V.Cstorage/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity (FDis)", xlab="", bty="n", xlim=c(100, 300), ylim=c(0.24,0.34))
+legend("bottomleft", expression(R^2* " = -0.04, N=12, p=0.51"), cex=1, bty="n")
+plot(model.data$V.Cstorage/1000, Mdata$Shannon.Index, las=1, ylab="Species Diversity (Shannon Index)", xlab="", bty="n", xlim=c(100, 300), ylim=c(2.4, 3.4))
+legend("bottomleft", expression(R^2* "= -0.01, N=12, p=0.37"), cex=1, bty="n")
+mtext("               Aboveground Carbon Storage (Mg C sq ha)", side=1, outer=TRUE, line=-2)
