@@ -163,7 +163,7 @@ library(MuMIn)
 
 
 
-fitRich <- lm(CT.median ~  V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitRich <- lm(CT.median ~  V.Cstorage + V.TShan + V.NStemsT + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepRich <- stepAIC(fitRich, direction="both") 
 bfRich <- lm(CT.median ~ V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + 
                ForestLossZOI + Latitude + PA_area, data=Mdata)
@@ -193,7 +193,7 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-fitFD <- lm(CT.FDisMedian ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitFD <- lm(CT.FDis ~ V.Cstorage + V.TShan + V.NStemsT + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepFD <- stepAIC(fitFD, direction="both")
 bfFD <- lm(CT.FDis ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + 
              Elev.CV + ForestLossZOI, data=Mdata)
@@ -217,7 +217,7 @@ set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
-fitShan <- lm(Shannon.Index ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitShan <- lm(CT.Shannon ~ V.Cstorage + V.TShan + V.NStemsT + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepShan <- stepAIC(fitShan, direction="both")
 bfShan <- lm(CT.Shannon ~ V.TShan + V.NStemsT + RainTotal + Rain.CV + Elev.CV + 
                ForestLossZOI + Latitude, data=Mdata)
@@ -236,13 +236,13 @@ summary(allShan)
 
 ############ Create Plots #########
 set.panel(1,3)
-par(mar=c(5, 4, 1, 0))
-plot(model.data$V.Cstorage/1000, Mdata$CT.median, las=1, ylab="Terrestrial Vertebrate Species Richness", xlab="", bty="n", xlim=c(100, 300), ylim=c(15,50))
-legend("bottomleft", expression(R^2* "= -0.07, N=12, p=0.69"), cex=1, bty="n")
-plot(model.data$V.Cstorage/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity (FDis)", xlab="", bty="n", xlim=c(100, 300), ylim=c(0.24,0.34))
-legend("bottomleft", expression(R^2* " = -0.04, N=12, p=0.51"), cex=1, bty="n")
-plot(model.data$V.Cstorage/1000, Mdata$Shannon.Index, las=1, ylab="Species Diversity (Shannon Index)", xlab="", bty="n", xlim=c(100, 300), ylim=c(2.4, 3.4))
-legend("bottomleft", expression(R^2* "= -0.01, N=12, p=0.37"), cex=1, bty="n")
+par(mar=c(5, 5, 1, 0))
+plot(model.data$V.Cstorage/1000, Mdata$CT.median, las=1, ylab="Terrestrial Vertebrate Species Richness", xlab="", bty="n", xlim=c(100, 300), ylim=c(15,50), cex.lab=1.5, pch=19)
+legend("bottom", expression(R^2* " = -0.07, df=12, p=0.69"), cex=1.2, bty="n")
+plot(model.data$V.Cstorage/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity (FDis)", xlab="", bty="n", xlim=c(100, 300), ylim=c(0.24,0.34), cex.lab=1.5, pch=19)
+legend("bottom", expression(R^2* " = -0.04, df=12, p=0.51"), cex=1.2, bty="n")
+plot(model.data$V.Cstorage/1000, Mdata$Shannon.Index, las=1, ylab="Species Diversity (Shannon Index)", xlab="", bty="n", xlim=c(100, 300), ylim=c(2.4, 3.4), cex.lab=1.5, pch=19)
+legend("bottom", expression(R^2* " = -0.01, df=12, p=0.37"), cex=1.2, bty="n")
 mtext("               Aboveground Carbon Storage (Mg C sq ha)", side=1, outer=TRUE, line=-2)
 
 set.panel(1,3)
