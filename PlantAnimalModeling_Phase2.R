@@ -77,12 +77,15 @@ model.data <- merge(model.data, ForestLoss, by.x="Site.Code", by.y="Site.Code", 
 
 
 # PERFORM TRANSFORMATIONS OF PREDICTOR VARIABLES 
-#model.data$Latitude <- log(model.data$Latitude)
-#model.data$Elev.CV <- log(model.data$Elev.CV )
 #model.data$V.Cstorage <- log(model.data$V.Cstorage)
+#model.data$V.TShan <- log(model.data$V.TShan)
 #model.data$V.NStemsT <- log(model.data$V.NStemsT)
-#model.data$ForestLossZOI <- log(model.data$ForestLossZOI)
-#model.data$PA_area <- log(model.data$PA_area)
+#model.data$RainTotal <- log(model.data$RainTotal)
+#model.data$Elev.CV <- log(model.data$Elev.CV )
+#model.data$Latitude <- log(model.data$Latitude)
+model.data$ForestLossZOI <- log(model.data$ForestLossZOI)
+model.data$PA_area <- log(model.data$PA_area)
+
 #model.data$SA_area <- log(model.data$SA_area)
 #model.data$ZOI_area <- log(model.data$ZOI_area)
 model.data$CT.FDiv <- rep(0, dim(model.data)[1])
@@ -138,8 +141,8 @@ pdf(file="PAIRS_Vegetation.pdf")
   pairs(plot.VGmean[,2:12], lower.panel = panel.smooth, upper.panel = panel.cor)
 dev.off()
 
-Examine <- as.data.frame(cbind(Mdata$CT.median, Mdata$CT.FDis, Mdata$CT.Shannon, Mdata$V.Cstorage, MData$V.TRich, Mdata$V.NStemsT, Mdata$V.NStemsL, Mdata$RainTotal, Mdata$Rain.CV, Mdata$Elev.CV, Mdata$ForestLossZOI, Mdata$Latitude, Mdata$SA_area))
-names(Examine) <- c("CT.median", "CT.FDis", "CT.Shannon", "V.Cstorage", "V.TRich", "V.NStemsT", "V.NStemsL", "RainTotal", "Rain.CV", "Elev.CV", "ForestLossZOI", "Latitude", "SA_area")
+Examine <- as.data.frame(cbind(Mdata$CT.median, Mdata$CT.FDis, Mdata$CT.Shannon, Mdata$V.Cstorage, MData$V.TShan, Mdata$V.NStemsT, Mdata$RainTotal, Mdata$Rain.CV, Mdata$Elev.CV, Mdata$ForestLossZOI, Mdata$Latitude, Mdata$PA_area))
+names(Examine) <- c("CT.median", "CT.FDis", "CT.Shannon", "V.Cstorage", "V.TShan", "V.NStemsT", "RainTotal", "Rain.CV", "Elev.CV", "ForestLossZOI", "Latitude", "PA_area")
 pairs(Examine, lower.panel = panel.smooth, upper.panel = panel.cor)
 
 # VISUALIZE species richness across sites
@@ -163,7 +166,7 @@ library(MuMIn)
 
 
 
-fitRich <- lm(CT.median ~  V.Cstorage + V.TShan + V.NStemsT + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitRich <- lm(CT.median ~  V.Cstorage + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepRich <- stepAIC(fitRich, direction="both") 
 bfRich <- lm(CT.median ~ V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + 
                ForestLossZOI + Latitude + PA_area, data=Mdata)
@@ -180,6 +183,7 @@ summary(bfRich.ran)
 
 allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
+allRich.sel <- model.sel(allRich.dredge)
 summary(allRich)
 
 # VISUALIZE  FUNCTIONAL DIVERSITY
@@ -193,7 +197,7 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-fitFD <- lm(CT.FDis ~ V.Cstorage + V.TShan + V.NStemsT + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitFD <- lm(log(CT.FDisMedian) ~ V.Cstorage + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepFD <- stepAIC(fitFD, direction="both")
 bfFD <- lm(CT.FDis ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + 
              Elev.CV + ForestLossZOI, data=Mdata)
@@ -217,7 +221,7 @@ set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
-fitShan <- lm(CT.Shannon ~ V.Cstorage + V.TShan + V.NStemsT + RainTotal + Rain.CV + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitShan <- lm(Shannon.Index ~ V.Cstorage + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepShan <- stepAIC(fitShan, direction="both")
 bfShan <- lm(CT.Shannon ~ V.TShan + V.NStemsT + RainTotal + Rain.CV + Elev.CV + 
                ForestLossZOI + Latitude, data=Mdata)
@@ -230,6 +234,14 @@ summary(bfShan)
 
 
 allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+
+confset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
+confset.1p <- get.models(allShan.dredge, weight >=.01)
+
+allShan <- model.avg(confset.95p, beta=TRUE, fit=TRUE)
+
+model.sel(allShan.dredge)
+model.sel(confset.95p)
 allShan <- model.avg(allShan.dredge, beta=TRUE, fit=TRUE)
 summary(allShan)
 
