@@ -141,8 +141,8 @@ pdf(file="PAIRS_Vegetation.pdf")
   pairs(plot.VGmean[,2:12], lower.panel = panel.smooth, upper.panel = panel.cor)
 dev.off()
 
-Examine <- as.data.frame(cbind(Mdata$CT.median, Mdata$CT.FDis, Mdata$CT.Shannon, Mdata$V.Cstorage, MData$V.TShan, Mdata$V.NStemsT, Mdata$RainTotal, Mdata$Rain.CV, Mdata$Elev.CV, Mdata$ForestLossZOI, Mdata$Latitude, Mdata$PA_area))
-names(Examine) <- c("CT.median", "CT.FDis", "CT.Shannon", "V.Cstorage", "V.TShan", "V.NStemsT", "RainTotal", "Rain.CV", "Elev.CV", "ForestLossZOI", "Latitude", "PA_area")
+Examine <- as.data.frame(cbind(Mdata$CT.median, Mdata$CT.FDisMedian, Mdata$Shannon.Index, Mdata$V.Cstorage, MData$V.TShan, Mdata$V.NStemsT, Mdata$RainTotal, Mdata$Elev.CV, Mdata$ForestLossZOI, Mdata$Latitude, Mdata$PA_area))
+names(Examine) <- c("CT.median", "FDis", "Shannon", "V.Cstorage", "V.TShan", "V.NStemsT", "RainTotal", "Elev.CV", "ForestLossZOI", "Latitude", "PA_area")
 pairs(Examine, lower.panel = panel.smooth, upper.panel = panel.cor)
 
 # VISUALIZE species richness across sites
@@ -182,9 +182,19 @@ AIC(bfRich, bfRich.ran)
 summary(bfRich.ran)
 
 allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+
 allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
 allRich.sel <- model.sel(allRich.dredge)
 summary(allRich)
+
+Richconfset.95p <- get.models(allRich.dredge, cumsum(weight) <= .95)
+allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
+model.sel(Richconfset.95p)
+summary(allRich)
+
+
+plot(resid(fitRich), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Species Richness")
+hist(resid(fitRich), main="", xlab="Global Model Residuals")
 
 # VISUALIZE  FUNCTIONAL DIVERSITY
 set.panel(2,2)
@@ -197,7 +207,7 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-fitFD <- lm(log(CT.FDisMedian) ~ V.Cstorage + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitFD <- lm(CT.FDisMedian ~ V.Cstorage + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepFD <- stepAIC(fitFD, direction="both")
 bfFD <- lm(CT.FDis ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + 
              Elev.CV + ForestLossZOI, data=Mdata)
@@ -211,6 +221,15 @@ summary(bfFD.ran)
 allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 allFD <- model.avg(allFD.dredge, beta=TRUE, fit=TRUE)
 summary(allFD)
+
+FDconfset.95p <- get.models(allFD.dredge, cumsum(weight) <= .95)
+allFD <- model.avg(FDconfset.95p, beta=TRUE, fit=TRUE)
+model.sel(FDconfset.95p)
+summary(allFD)
+
+plot(resid(fitFD), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Functional Diversity")
+hist(resid(fitFD), main="", xlab="Global Model Residuals")
+
 
 ###### VISUALIZE Terrestrial Vertebrate TAXONOMIC DIVERSITY
 set.panel(2,1)
@@ -234,16 +253,46 @@ summary(bfShan)
 
 
 allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
-
-confset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
-confset.1p <- get.models(allShan.dredge, weight >=.01)
-
-allShan <- model.avg(confset.95p, beta=TRUE, fit=TRUE)
-
 model.sel(allShan.dredge)
-model.sel(confset.95p)
 allShan <- model.avg(allShan.dredge, beta=TRUE, fit=TRUE)
+
+
+Shanconfset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
+#confset.1p <- get.models(allShan.dredge, weight >=.01)
+allShan <- model.avg(Shanconfset.95p, beta=TRUE, fit=TRUE)
+confint(allShan)
+model.sel(Shanconfset.95p)
 summary(allShan)
+
+
+
+plot(resid(fitShan), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Taxonomic Diversity")
+hist(resid(fitShan), main="", xlab="Global Model Residuals")
+
+
+
+# All diagnostics together
+
+set.panel(2,3)
+par(mar=c(5,5,2,1))
+plot(resid(fitRich), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Species Richness", main="Species Richness")
+hist(resid(fitRich), main="", xlab="Global Model Residuals")
+
+plot(resid(fitFD), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Functional Diversity", main="Functional Diversity")
+hist(resid(fitFD), main="", xlab="Global Model Residuals")
+
+plot(resid(fitShan), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Taxonomic Diversity", main="Taxonomic Diversity")
+hist(resid(fitShan), main="", xlab="Global Model Residuals")
+
+
+
+plot(resid(fitRich), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Species Richness", main="Species Richness")
+plot(resid(fitFD), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Functional Diversity", main="Functional Diversity")
+plot(resid(fitShan), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Taxonomic Diversity", main="Taxonomic Diversity")
+
+hist(resid(fitRich), main="", xlab="Global Model Residuals")
+hist(resid(fitFD), main="", xlab="Global Model Residuals")
+hist(resid(fitShan), main="", xlab="Global Model Residuals")
 
 
 ############ Create Plots #########
