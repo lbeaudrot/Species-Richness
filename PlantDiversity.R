@@ -484,6 +484,19 @@ names(Cplot) <- c("Plot", "Cstorage")
 plant.covs <- merge(FDweighted, PlotLevelRD, by.x="plot", by.y="Plot", all=FALSE)
 plant.covs <- merge(plant.covs, Cplot, by.x="plot", by.y="Plot", all=FALSE)
 
+# Use updated equations from Chave et al. In Press from Global Change Biology to re-calculate carbon storage
+# Data can be downloaded from http://chave.ups-tlse.fr/chave/pantropical_allometry.htm or extracted by:
+#source("http://chave.ups-tlse.fr/chave/pantropical/readlayers.r")
+#LatLon <- read.csv(file="SiteLatitudeLongitude.csv")
+#coord <- cbind(LatLon$Longitude, LatLon$Latitude)
+#colnames(coord) <- c("longitude", "latitude")
+#retrieve_raster("E",coord)
+E_value <- read.csv(file="E_extract_ChaveInPress.csv")
+
+#Equation 7: exp( -1.803 - 0.976*E_value$E + 0.976*ln(WD) + 2.673*ln(D) - 0.0299*(ln(D))^2)
+
+
+
 # Exclude plots that have less than 80% of stems identified to family level
 ExcludePlots <- names(ExcludePlots)
 plant.covs <- plant.covs[-na.omit(match(ExcludePlots, plant.covs$plot)),]
