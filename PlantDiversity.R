@@ -493,7 +493,26 @@ plant.covs <- merge(plant.covs, Cplot, by.x="plot", by.y="Plot", all=FALSE)
 #retrieve_raster("E",coord)
 E_value <- read.csv(file="E_extract_ChaveInPress.csv")
 
+# Match E value to each stem in Trees to use in calculation
+E <- E_value$E[match(Trees$Site.CodeT, E_value$Site.Code)]
+Trees <- cbind(Trees, E)
+
 #Equation 7: exp( -1.803 - 0.976*E_value$E + 0.976*ln(WD) + 2.673*ln(D) - 0.0299*(ln(D))^2)
+ABG2 <- exp(-1.803 - 0.976*Trees$E + 0.976*log(Trees$StemWD) + 2.673*log(Trees$Diameter) - 0.0299*(log(Trees$Diameter))^2)
+
+
+Trees <- cbind(Trees, ABG2)
+plotABG2 <- aggregate(Trees$ABG2 ~ Trees$"1haPlotNumber", FUN=mean, na.omit=TRUE)
+names(plotABG2) <- c("Plot", "ABG2")
+allABG2 <- ifelse(is.na(Trees$ABG2)==TRUE, plotABG2$ABG2[match(Trees$"1haPlotNumber", plotABG2$Plot)], Trees$ABG2)
+Trees$ABG2 <- allABG2
+Cstorage2 <- Trees$ABG2*0.5
+Trees <- cbind(Trees, Cstorage2)
+
+Cplot2 <- aggregate(Trees$Cstorage2 ~ Trees$"1haPlotNumber", FUN=sum, na.omit=TRUE)
+names(Cplot2) <- c("Plot", "Cstorage2")
+
+plant.covs <- merge(plant.covs, Cplot2, by.x="plot", by.y="Plot", all=FALSE)
 
 
 
