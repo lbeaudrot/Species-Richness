@@ -265,12 +265,12 @@ hist(resid(fitShan), main="", xlab="Global Model Residuals")
 ############ Create Plots #########
 set.panel(1,3)
 par(mar=c(5, 5, 1, 0))
-plot(model.data$V.Cstorage/1000, Mdata$CT.median, las=1, ylab="Terrestrial Vertebrate Species Richness", xlab="", bty="n", xlim=c(100, 300), ylim=c(15,50), cex.lab=1.5, pch=19)
-legend("bottom", expression(R^2* " = -0.07, df=12, p=0.69"), cex=1.2, bty="n")
-plot(model.data$V.Cstorage/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity (FDis)", xlab="", bty="n", xlim=c(100, 300), ylim=c(0.24,0.34), cex.lab=1.5, pch=19)
-legend("bottom", expression(R^2* " = -0.04, df=12, p=0.51"), cex=1.2, bty="n")
-plot(model.data$V.Cstorage/1000, Mdata$Shannon.Index, las=1, ylab="Species Diversity (Shannon Index)", xlab="", bty="n", xlim=c(100, 300), ylim=c(2.4, 3.4), cex.lab=1.5, pch=19)
-legend("bottom", expression(R^2* " = -0.01, df=12, p=0.37"), cex=1.2, bty="n")
+plot(model.data$V.Cstorage2/1000, Mdata$CT.median, las=1, ylab="Species Richness", xlab="", bty="n", xlim=c(100, 250), ylim=c(10,50), cex.lab=1.1, pch=19)
+legend("bottomleft", expression(R^2* " = -0.08, df=12, p=0.77"), cex=1.1, bty="n")
+plot(model.data$V.Cstorage2/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity (FDis)", xlab="", bty="n", xlim=c(100, 250), ylim=c(0.24,0.32), cex.lab=1.1, pch=19)
+legend("bottomleft", expression(R^2* " = 0.05, df=12, p=0.22"), cex=1.1, bty="n")
+plot(model.data$V.Cstorage2/1000, Mdata$Shannon.Index, las=1, ylab="Species Diversity (Shannon Index)", xlab="", bty="n", xlim=c(100, 250), ylim=c(2.2, 3.4), cex.lab=1.1, pch=19)
+legend("bottomleft", expression(R^2* " = -0.05, df=12, p=0.56"), cex=1.1, bty="n")
 mtext("               Aboveground Carbon Storage (Mg C sq ha)", side=1, outer=TRUE, line=-2)
 
 set.panel(1,3)
@@ -280,6 +280,15 @@ boxplot(Mdata$CT.FDisMedian~Mdata$Continent, ylab="Functional Diversity (FDis)")
 boxplot(Mdata$Shannon.Index~Mdata$Continent, ylab="Species Diversity (Shannon Index)")
 
 library(maps)
-map('world', interior=FALSE, xlim=c(-90, 155), ylim=c(-60, 37), col="gray60")
+
 LatLon <- read.csv(file="SiteLatitudeLongitude.csv")
-points(LatLon$Longitude, LatLon$Latitude, col="green4", pch=19, cex=0.9)
+LatLon <- LatLon[-9,]
+LatLon <- LatLon[-6,]
+set.panel()
+pdf(file="TEAM_Map_14Sites.pdf")
+par(mar=c(0,0,0,0))
+map('world', interior=FALSE, xlim=c(-132, 155), ylim=c(-60, 37), col="gray60")
+points(LatLon$Longitude, LatLon$Latitude, col="green4", pch=c(1:14), cex=1)
+legend(x=-132, y=37, legend=LatLon$Site.Code, pch=c(1:14), border="transparent", col="green4", bg="white", box.col="transparent", title="TEAM Sites", title.adj=0.12, cex=0.66)
+dev.off()
+
