@@ -1,0 +1,96 @@
+Results of multi-modal inference from model weighting and averaging with Chave 2014 ABG calculations
+
+
+
+
+### SPECIES RICHNESS
+fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+Richconfset.95p <- get.models(allRich.dredge, cumsum(weight) <= .95)
+allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
+model.sel(Richconfset.95p)
+summary(allRich)
+
+Model-averaged coefficients: 
+              Estimate Std. Error Adjusted SE z value Pr(>|z|)   
+(Intercept)    0.00000    0.00000     0.00000      NA       NA   
+Elev.CV       -0.55911    0.21848     0.24208   2.310  0.02091 * 
+V.NStemsT     -0.69382    0.21302     0.23776   2.918  0.00352 **
+RainTotal      0.26813    0.23220     0.25688   1.044  0.29659   
+PA_area        0.37732    0.22556     0.25076   1.505  0.13240   
+Latitude      -0.47475    0.30794     0.33340   1.424  0.15446   
+V.Cstorage2   -0.13291    0.21034     0.23706   0.561  0.57503   
+V.TShan        0.04728    0.23826     0.26504   0.178  0.85841   
+ForestLossZOI  0.01079    0.27634     0.30169   0.036  0.97147   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Full model-averaged coefficients (with shrinkage): 
+ (Intercept)     Elev.CV   V.NStemsT   RainTotal     PA_area    Latitude V.Cstorage2     V.TShan ForestLossZOI
+  0.00000000 -0.39091026 -0.57920548  0.04641851  0.10796859 -0.09230347 -0.00933480  0.00278168    0.00071732
+
+Relative variable importance:
+    V.NStemsT       Elev.CV       PA_area      Latitude     RainTotal   V.Cstorage2 ForestLossZOI       V.TShan 
+         0.83          0.70          0.29          0.19          0.17          0.07          0.07          0.06 
+
+## FUNCTIONAL DIVERSITY
+fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+FDconfset.95p <- get.models(allFD.dredge, cumsum(weight) <= .95)
+allFD <- model.avg(FDconfset.95p, beta=TRUE, fit=TRUE)
+model.sel(FDconfset.95p)
+summary(allFD)
+
+Model-averaged coefficients: 
+              Estimate Std. Error Adjusted SE z value Pr(>|z|)  
+(Intercept)     0.0000     0.0000      0.0000      NA       NA  
+ForestLossZOI   0.5293     0.2463      0.2746   1.927   0.0539 .
+V.TShan         0.6013     0.2389      0.2674   2.249   0.0245 *
+V.NStemsT      -0.2870     0.2507      0.2796   1.026   0.3047  
+PA_area        -0.1968     0.3003      0.3318   0.593   0.5531  
+Latitude       -0.1182     0.2674      0.2988   0.396   0.6924  
+RainTotal       0.3492     0.3764      0.4039   0.865   0.3873  
+V.Cstorage2    -0.1554     0.3582      0.3866   0.402   0.6877  
+Elev.CV        -0.2089     0.3553      0.3813   0.548   0.5838  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Full model-averaged coefficients (with shrinkage): 
+ (Intercept) ForestLossZOI    V.TShan  V.NStemsT    PA_area   Latitude  RainTotal V.Cstorage2    Elev.CV
+   0.0000000     0.3124482  0.4210266 -0.0500125 -0.0196874 -0.0092298  0.0487017  -0.0175463 -0.0193456
+
+Relative variable importance:
+      V.TShan ForestLossZOI     V.NStemsT     RainTotal   V.Cstorage2       PA_area       Elev.CV      Latitude 
+         0.70          0.59          0.17          0.14          0.11          0.10          0.09          0.08 
+
+
+## TAXONOMIC DIVERSITY
+
+fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+Shanconfset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
+allShan <- model.avg(Shanconfset.95p, beta=TRUE, fit=TRUE)
+model.sel(Shanconfset.95p)
+summary(allShan)
+
+Model-averaged coefficients: 
+              Estimate Std. Error Adjusted SE z value Pr(>|z|)   
+(Intercept)    0.00000    0.00000     0.00000      NA       NA   
+Elev.CV       -0.73198    0.23907     0.25983   2.817  0.00485 **
+RainTotal      0.56331    0.19292     0.21750   2.590  0.00960 **
+V.NStemsT     -0.50478    0.18064     0.20385   2.476  0.01328 * 
+Latitude      -0.39875    0.21674     0.24114   1.654  0.09820 . 
+V.TShan        0.41281    0.22915     0.25353   1.628  0.10347   
+ForestLossZOI -0.38922    0.27073     0.29514   1.319  0.18724   
+V.Cstorage2    0.09663    0.23276     0.25776   0.375  0.70775   
+PA_area        0.38311    0.29161     0.31647   1.211  0.22605   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Full model-averaged coefficients (with shrinkage): 
+ (Intercept)    Elev.CV  RainTotal  V.NStemsT   Latitude    V.TShan ForestLossZOI V.Cstorage2    PA_area
+   0.0000000 -0.6004777  0.3467922 -0.3172779 -0.0916540  0.0975869    -0.0590767   0.0036701  0.0473692
+
+Relative variable importance:
+      Elev.CV     V.NStemsT     RainTotal       V.TShan      Latitude ForestLossZOI       PA_area   V.Cstorage2 
+         0.82          0.63          0.62          0.24          0.23          0.15          0.12          0.04 

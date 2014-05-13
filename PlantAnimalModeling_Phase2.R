@@ -141,8 +141,8 @@ pdf(file="PAIRS_Vegetation.pdf")
   pairs(plot.VGmean[,2:12], lower.panel = panel.smooth, upper.panel = panel.cor)
 dev.off()
 
-Examine <- as.data.frame(cbind(Mdata$CT.median, Mdata$CT.FDisMedian, Mdata$Shannon.Index, Mdata$V.Cstorage, MData$V.TShan, Mdata$V.NStemsT, Mdata$RainTotal, Mdata$Elev.CV, Mdata$ForestLossZOI, Mdata$Latitude, Mdata$PA_area))
-names(Examine) <- c("CT.median", "FDis", "Shannon", "V.Cstorage", "V.TShan", "V.NStemsT", "RainTotal", "Elev.CV", "ForestLossZOI", "Latitude", "PA_area")
+Examine <- as.data.frame(cbind(Mdata$CT.median, Mdata$CT.FDisMedian, Mdata$Shannon.Index, Mdata$V.Cstorage, Mdata$V.Cstorage2, MData$V.TShan, Mdata$V.NStemsT, Mdata$RainTotal, Mdata$Elev.CV, Mdata$ForestLossZOI, Mdata$Latitude, Mdata$PA_area))
+names(Examine) <- c("CT.median", "FDis", "Shannon", "V.Cstorage", "V.Cstorage2", "V.TShan", "V.NStemsT", "RainTotal", "Elev.CV", "ForestLossZOI", "Latitude", "PA_area")
 pairs(Examine, lower.panel = panel.smooth, upper.panel = panel.cor)
 
 # VISUALIZE species richness across sites
@@ -166,7 +166,7 @@ library(MuMIn)
 
 
 
-fitRich <- lm(CT.median ~  V.Cstorage + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepRich <- stepAIC(fitRich, direction="both") 
 bfRich <- lm(CT.median ~ V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + 
                ForestLossZOI + Latitude + PA_area, data=Mdata)
@@ -207,7 +207,7 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-fitFD <- lm(CT.FDisMedian ~ V.Cstorage + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepFD <- stepAIC(fitFD, direction="both")
 bfFD <- lm(CT.FDis ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + 
              Elev.CV + ForestLossZOI, data=Mdata)
@@ -240,7 +240,7 @@ set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
-fitShan <- lm(Shannon.Index ~ V.Cstorage + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 stepShan <- stepAIC(fitShan, direction="both")
 bfShan <- lm(CT.Shannon ~ V.TShan + V.NStemsT + RainTotal + Rain.CV + Elev.CV + 
                ForestLossZOI + Latitude, data=Mdata)
@@ -256,14 +256,13 @@ allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=T
 model.sel(allShan.dredge)
 allShan <- model.avg(allShan.dredge, beta=TRUE, fit=TRUE)
 
-
-Shanconfset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
 #confset.1p <- get.models(allShan.dredge, weight >=.01)
+Shanconfset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
 allShan <- model.avg(Shanconfset.95p, beta=TRUE, fit=TRUE)
-confint(allShan)
 model.sel(Shanconfset.95p)
 summary(allShan)
 
+#confint(allShan)
 
 
 plot(resid(fitShan), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Taxonomic Diversity")
