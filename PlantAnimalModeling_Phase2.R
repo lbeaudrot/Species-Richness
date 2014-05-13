@@ -286,9 +286,9 @@ hist(resid(fitShan), main="", xlab="Global Model Residuals")
 
 
 
-plot(resid(fitRich), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Species Richness", main="Species Richness")
-plot(resid(fitFD), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Functional Diversity", main="Functional Diversity")
-plot(resid(fitShan), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Taxonomic Diversity", main="Taxonomic Diversity")
+plot(Mdata$CT.median, resid(fitRich), ylab="Global Model Residuals", xlab="Predicted Species Richness", main="Species Richness")
+plot(Mdata$CT.median, resid(fitFD), ylab="Global Model Residuals", xlab="Predicted Functional Diversity", main="Functional Diversity")
+plot(Mdata$CT.median, resid(fitShan), ylab="Global Model Residuals", xlab="Predicted Taxonomic Diversity", main="Taxonomic Diversity")
 
 hist(resid(fitRich), main="", xlab="Global Model Residuals")
 hist(resid(fitFD), main="", xlab="Global Model Residuals")
