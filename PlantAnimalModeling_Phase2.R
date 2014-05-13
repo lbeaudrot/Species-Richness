@@ -117,7 +117,7 @@ Mdata <- cbind(MData, Year, Continent)
 # Create output table of predictor and response variables for inclusion in paper
 output.table <- cbind(model.data, Year, Continent)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_8May2014.csv", row.names=FALSE)
+#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_13May2014.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
@@ -167,29 +167,15 @@ library(MuMIn)
 
 
 fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
-stepRich <- stepAIC(fitRich, direction="both") 
-bfRich <- lm(CT.median ~ V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + 
-               ForestLossZOI + Latitude + PA_area, data=Mdata)
-summary(bfRich)
-hist(resid(bfRich))
-plot(resid(bfRich), Mdata$CT.median)
-
-#bfRich.int <- lm(CT.median ~ , data=Mdata)
-bfRich.ran <- lmer(CT.median ~ V.NStemsT + V.NStemsL + RainTotal + Rain.CV + Elev.CV + 
-                     ForestLossZOI + Latitude + PA_area + (1|Continent), data=Mdata)
-#bfRich.int.ran <- lmer(CT.median ~ , data=Mdata)
-AIC(bfRich, bfRich.ran)
-summary(bfRich.ran)
-
 allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
-
-allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
-allRich.sel <- model.sel(allRich.dredge)
-summary(allRich)
+#allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
+#allRich.sel <- model.sel(allRich.dredge)
+#summary(allRich)
 
 Richconfset.95p <- get.models(allRich.dredge, cumsum(weight) <= .95)
 allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
-model.sel(Richconfset.95p)
+Rich95output <- model.sel(Richconfset.95p)
+write.csv(Rich95output, file="ModelAveraging_Rich95output.csv", row.names=FALSE)
 summary(allRich)
 
 
@@ -208,23 +194,14 @@ set.panel()
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
 fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
-stepFD <- stepAIC(fitFD, direction="both")
-bfFD <- lm(CT.FDis ~ V.Cstorage + V.TShan + V.NStemsT + V.NStemsL + RainTotal + 
-             Elev.CV + ForestLossZOI, data=Mdata)
-summary(bfFD)
-#bfFD.int <- lm(CT.FDis ~ , data=Mdata)
-bfFD.ran <- lmer(CT.FDis ~ RainTotal + Elev.CV + ForestLossZOI + (1|Continent), data=Mdata)
-#bfFD.int.ran <- lmer(CT.FDis ~  (1|Continent), data=Mdata)
-AIC(bfFD, bfFD.ran)
-summary(bfFD.ran)
-
 allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
-allFD <- model.avg(allFD.dredge, beta=TRUE, fit=TRUE)
-summary(allFD)
+#allFD <- model.avg(allFD.dredge, beta=TRUE, fit=TRUE)
+#summary(allFD)
 
 FDconfset.95p <- get.models(allFD.dredge, cumsum(weight) <= .95)
 allFD <- model.avg(FDconfset.95p, beta=TRUE, fit=TRUE)
-model.sel(FDconfset.95p)
+FD95output <- model.sel(FDconfset.95p)
+write.csv(FD95output, file="ModelAveraging_FD95output.csv", row.names=FALSE)
 summary(allFD)
 
 plot(resid(fitFD), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Functional Diversity")
@@ -241,25 +218,16 @@ set.panel()
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
 fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
-stepShan <- stepAIC(fitShan, direction="both")
-bfShan <- lm(CT.Shannon ~ V.TShan + V.NStemsT + RainTotal + Rain.CV + Elev.CV + 
-               ForestLossZOI + Latitude, data=Mdata)
-summary(bfShan)
-bfShan.int <- lm(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV + V.NStemsT:Latitude, data=Mdata)
-bfShan.ran <- lmer(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV + (1|Continent), data=Mdata)
-bfShan.int.ran <- lmer(CT.Shannon ~ V.NStemsT + V.NStemsL + RainTotal + Elev.CV + V.NStemsT:Latitude + (1|Continent), data=Mdata)
-AIC(bfShan, bfShan.int, bfShan.ran, bfShan.int.ran)
-summary(bfShan)
-
-
 allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
-model.sel(allShan.dredge)
-allShan <- model.avg(allShan.dredge, beta=TRUE, fit=TRUE)
+#model.sel(allShan.dredge)
+#allShan <- model.avg(allShan.dredge, beta=TRUE, fit=TRUE)
 
 #confset.1p <- get.models(allShan.dredge, weight >=.01)
 Shanconfset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
 allShan <- model.avg(Shanconfset.95p, beta=TRUE, fit=TRUE)
-model.sel(Shanconfset.95p)
+Shan95output <- model.sel(Shanconfset.95p)
+write.csv(Shan95output, file="ModelAveraging_Shan95output.csv", row.names=FALSE)
+
 summary(allShan)
 
 #confint(allShan)
