@@ -175,7 +175,7 @@ allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=T
 Richconfset.95p <- get.models(allRich.dredge, cumsum(weight) <= .95)
 allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
 Rich95output <- model.sel(Richconfset.95p)
-write.csv(Rich95output, file="ModelAveraging_Rich95output.csv", row.names=FALSE)
+#write.csv(Rich95output, file="ModelAveraging_Rich95output.csv", row.names=FALSE)
 summary(allRich)
 
 
@@ -201,7 +201,7 @@ allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 FDconfset.95p <- get.models(allFD.dredge, cumsum(weight) <= .95)
 allFD <- model.avg(FDconfset.95p, beta=TRUE, fit=TRUE)
 FD95output <- model.sel(FDconfset.95p)
-write.csv(FD95output, file="ModelAveraging_FD95output.csv", row.names=FALSE)
+#write.csv(FD95output, file="ModelAveraging_FD95output.csv", row.names=FALSE)
 summary(allFD)
 
 plot(resid(fitFD), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Functional Diversity")
@@ -226,7 +226,7 @@ allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=T
 Shanconfset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
 allShan <- model.avg(Shanconfset.95p, beta=TRUE, fit=TRUE)
 Shan95output <- model.sel(Shanconfset.95p)
-write.csv(Shan95output, file="ModelAveraging_Shan95output.csv", row.names=FALSE)
+#write.csv(Shan95output, file="ModelAveraging_Shan95output.csv", row.names=FALSE)
 
 summary(allShan)
 
@@ -307,4 +307,54 @@ dev.off()
 
 
 ## Coefficient Plot
+library(ggplot2)
 
+Rich.coef <- summary(allRich)[[3]]
+rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Stem Density", "Rainfall", "PA Size", "Latitude", "Carbon", "Tree Diversity", "Forest Loss")
+
+Shan.coef <- summary(allShan)[[3]]
+rownames(Shan.coef) <- c("(Intercept)", "Elevation CV", "Rainfall", "Stem Density", "Latitude", "Tree Diversity", "Forest Loss", "Carbon", "PA Size")
+
+FD.coef <- summary(allFD)[[3]]
+rownames(FD.coef) <- c("(Intercept)", "Forest Loss", "Tree Diversity", "Stem Density", "PA Size", "Latitude", "Rainfall", "Carbon", "Elevation CV")
+
+#graphmodels <- list(summary(allRich)[[3]], summary(allShan)[[3]], summary(allFD)[[3]])
+graphmodels <- list(Rich.coef, Shan.coef, FD.coef)
+names(graphmodels) <- c("Species Richness", "Taxonomic Diversity", "Functional Diversity")
+
+OutputPlot <- qplot(rownames(test2), test2[,1], ymin = test2[,4],
+                    ymax = test2[,5], data = test2, geom = "pointrange",
+                    ylab = NULL, xlab = NULL)
+OutputPlot <- OutputPlot + geom_hline(yintercept = 0, lwd = I(7/12), colour = I(hsv(0/12, 7/12, 7/12)), alpha = I(5/12))
+OutputPlot <- OutputPlot + facet_grid(~ ModelName) + coord_flip() + theme_bw()
+
+
+CoefficientPlot <- function(models, modelnames = ""){
+  # models must be a list()
+  
+  CoefficientTables <- graphmodels
+  TableRows <- unlist(lapply(CoefficientTables, nrow))
+  
+  if(modelnames[1] == ""){
+    ModelNameLabels <- rep(paste("Model", 1:length(TableRows)), TableRows)
+  } else {
+    ModelNameLabels <- rep(modelnames, TableRows)
+  }
+  
+  MatrixofModels <- cbind(do.call(rbind, CoefficientTables), ModelNameLabels)
+  MatrixofModels <- data.frame(cbind(rownames(MatrixofModels), MatrixofModels))
+  colnames(MatrixofModels) <- c("IV", "Estimate", "StandardError", "AdjSE", "LowerCI", "UpperCI", "ModelName")
+  MatrixofModels$IV <- factor(MatrixofModels$IV, levels = MatrixofModels$IV)
+  MatrixofModels[, -c(1, 7)] <- apply(MatrixofModels[, -c(1, 7)], 2, function(x){as.numeric(as.character(x))})
+  
+  OutputPlot <- qplot(IV, Estimate, ymin = LowerCI,
+                      ymax = UpperCI, data = MatrixofModels, geom = "pointrange",
+                      ylab = NULL, xlab = NULL)
+  OutputPlot <- OutputPlot + geom_hline(yintercept = 0, lwd = I(7/12), colour = I(hsv(0/12, 7/12, 7/12)), alpha = I(5/12))
+  OutputPlot <- OutputPlot + facet_grid(~ ModelName) + coord_flip() + theme_bw()
+  return(OutputPlot)
+}
+
+pdf(file="CoefficientPlot.pdf")
+CoefficientPlot(graphmodels, modelnames=c("Species Richness", "Taxonomic Diversity", "Functional Diversity"))
+dev.off()
