@@ -307,6 +307,7 @@ dev.off()
 
 
 ## Coefficient Plot
+# Code modified from https://gist.github.com/dsparks/818976
 library(ggplot2)
 
 Rich.coef <- summary(allRich)[[3]]
