@@ -103,11 +103,13 @@ library(vegan)
 hold1 <- list()
 hold2 <- list() 
 Shannon.Index <- vector()
+Shannon.Index.sd <- vector()
 for(i in 1:length(unique(WPIalluse$Site.Code))){
   hold1[[i]] <- WPIalluse[WPIalluse$site_id==as.integer(names(table(WPIalluse$site_id)))[[i]],]
   hold2[[i]] <- unstack(hold1[[i]], psi~iteration)
   Shannon.Index[i] <- median(diversity(hold2[[i]], index="shannon", MARGIN=2))
+  Shannon.Index.sd[i] <- sd(diversity(hold2[[i]], index="shannon", MARGIN=2))
 }
 
-Shannon.Index <- cbind(Combine, Shannon.Index)[,2:3]
+Shannon.Index <- cbind(Combine, Shannon.Index, Shannon.Index.sd)[,2:4]
 write.csv(Shannon.Index, file="ShannonIndex_Distribution.csv", row.names=FALSE)

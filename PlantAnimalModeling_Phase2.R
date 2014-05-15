@@ -103,7 +103,7 @@ MData <- as.data.frame(MData)
 colnames(MData) <- colnames(ModelData)
 
 # Scale predictor variables
-MData <- cbind(MData[,1:15], scale(MData[,16:dim(MData)[2]]))
+MData <- cbind(MData[,1:17], scale(MData[,18:dim(MData)[2]]))
 #MData <- scale(MData)
 rownames(MData) <- model.data$Site.Code
 MData <- as.data.frame(MData)
@@ -117,7 +117,7 @@ Mdata <- cbind(MData, Year, Continent)
 # Create output table of predictor and response variables for inclusion in paper
 output.table <- cbind(model.data, Year, Continent)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_13May2014.csv", row.names=FALSE)
+#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_15May2014.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
