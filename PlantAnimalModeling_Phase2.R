@@ -265,14 +265,14 @@ hist(resid(fitShan), main="", xlab="Global Model Residuals")
 
 
 ############ Create Plots #########
-pdf(file="AnimalDiversity_Carbon2_Plots.pdf", height=2.7)
+pdf(file="AnimalDiversity_Carbon2_Plots_Symbols.pdf", height=2.7)
 set.panel(1,3)
 par(mar=c(5, 5, 1, 1))
-plot(model.data$V.Cstorage2/1000, Mdata$CT.median, las=1, ylab="Species Richness", xlab="", bty="n", xlim=c(100, 250), ylim=c(10,50), cex.lab=1.2, pch=19)
+plot(model.data$V.Cstorage2/1000, Mdata$CT.median, las=1, ylab="Species Richness", xlab="", bty="n", xlim=c(100, 250), ylim=c(10,50), cex.lab=1.2, pch=c(1:14))
 legend("bottomleft", expression(R^2* " = -0.08, df=12, p=0.77"), cex=1, bty="n")
-plot(model.data$V.Cstorage2/1000, Mdata$Shannon.Index, las=1, ylab="Taxonomic Diversity", xlab="", bty="n", xlim=c(100, 250), ylim=c(2.2, 3.4), cex.lab=1.2, pch=19)
+plot(model.data$V.Cstorage2/1000, Mdata$Shannon.Index, las=1, ylab="Taxonomic Diversity", xlab="", bty="n", xlim=c(100, 250), ylim=c(2.2, 3.4), cex.lab=1.2, pch=c(1:14))
 legend("bottomleft", expression(R^2* " = -0.05, df=12, p=0.56"), cex=1, bty="n")
-plot(model.data$V.Cstorage2/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity", xlab="", bty="n", xlim=c(100, 250), ylim=c(0.24,0.32), cex.lab=1.2, pch=19)
+plot(model.data$V.Cstorage2/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity", xlab="", bty="n", xlim=c(100, 250), ylim=c(0.24,0.32), cex.lab=1.2, pch=c(1:14))
 legend("bottomleft", expression(R^2* " = 0.05, df=12, p=0.22"), cex=1, bty="n")
 mtext("               Aboveground Carbon Storage (Mg C sq ha)", side=1, outer=TRUE, line=-2)
 dev.off()
@@ -346,8 +346,12 @@ CoefficientPlot <- function(models, modelnames = ""){
   MatrixofModels <- cbind(do.call(rbind, CoefficientTables), ModelNameLabels)
   MatrixofModels <- data.frame(cbind(rownames(MatrixofModels), MatrixofModels))
   colnames(MatrixofModels) <- c("IV", "Estimate", "StandardError", "AdjSE", "LowerCI", "UpperCI", "ModelName")
-  MatrixofModels$IV <- factor(MatrixofModels$IV, levels = MatrixofModels$IV)
+  #MatrixofModels$IV <- factor(MatrixofModels$IV, levels = MatrixofModels$IV)
+  MatrixofModels$IV <- factor(MatrixofModels$IV, levels = c("(Intercept)", "Carbon", "PA Size", "Latitude", "Forest Loss", "Tree Diversity", "Rainfall", "Elevation CV", "Stem Density"))
+  
   MatrixofModels[, -c(1, 7)] <- apply(MatrixofModels[, -c(1, 7)], 2, function(x){as.numeric(as.character(x))})
+  
+  MatrixofModels$ModelName <- factor(MatrixofModels$ModelName, levels=c("Species Richness", "Taxonomic Diversity", "Functional Diversity"))
   
   OutputPlot <- qplot(IV, Estimate, ymin = LowerCI,
                       ymax = UpperCI, data = MatrixofModels, geom = "pointrange",
