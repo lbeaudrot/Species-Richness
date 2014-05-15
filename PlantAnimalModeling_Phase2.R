@@ -114,8 +114,12 @@ Continent <- c("Asia", "America", "Africa", "America", "America", "Africa", "Ame
 
 Mdata <- cbind(MData, Year, Continent)
 
+# Bring in sd values from CT_overall_model_summaries_5May2014 to use as weights in weighted least squares regression
+CT.Rich.sd <- c(10.044, 6.280, 18.513, 5.167, 9.519, 10.394, 3.509, 11.639, 9.676, 3.044, 14.641, 9.584, 4.872, 6.392)
+Mdata <- cbind(Mdata, CT.Rich.sd)
+
 # Create output table of predictor and response variables for inclusion in paper
-output.table <- cbind(model.data, Year, Continent)
+output.table <- cbind(model.data, Year, Continent, CT.Rich.sd)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 #write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_15May2014.csv", row.names=FALSE)
 
@@ -164,9 +168,7 @@ library(lme4)
 library(MASS) 
 library(MuMIn)
 
-
-
-fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata, weights=(1/(CT.Rich.sd^2)))
 allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
 #allRich.sel <- model.sel(allRich.dredge)
@@ -179,7 +181,7 @@ Rich95output <- model.sel(Richconfset.95p)
 summary(allRich)
 
 
-plot(resid(fitRich), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Species Richness")
+plot(Mdata$CT.median, resid(fitRich), xlab="Global Model Residuals", ylab="Predicted Species Richness")
 hist(resid(fitRich), main="", xlab="Global Model Residuals")
 
 # VISUALIZE  FUNCTIONAL DIVERSITY
