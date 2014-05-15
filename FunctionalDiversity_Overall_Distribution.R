@@ -293,6 +293,9 @@ CTweightedmedian
 names(CTweightedmedian) <- c("CAX", "MAS", "VB-", "BIF", "BBS", "NNN", "YAS", "RNF", "UDZ", "BCI", "YAN", "COU", "KRP", "PSH")
 CTweightedmedian
 
+# Calculate standard deviations of estimates
+CT.FDis.sd <- c(sd(CTweighted$CT.FDis), sd(CTweighted$CT.FDis.1), sd(CTweighted$CT.FDis.2), sd(CTweighted$CT.FDis.3), sd(CTweighted$CT.FDis.4), sd(CTweighted$CT.FDis.5), sd(CTweighted$CT.FDis.6), sd(CTweighted$CT.FDis.7), sd(CTweighted$CT.FDis.8), sd(CTweighted$CT.FDis.9), sd(CTweighted$CT.FDis.10), sd(CTweighted$CT.FDis.11), sd(CTweighted$CT.FDis.12), sd(CTweighted$CT.FDis.13))
+
 #CTweighted
 #save(CTweighted, file="CTweighted.gzip",compress="gzip")
 #write.csv(CTweightedmedian, file="FunctionalDiversity_Overall_Distribution_8May2014.csv", row.names=TRUE)
