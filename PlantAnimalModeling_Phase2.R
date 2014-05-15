@@ -299,8 +299,7 @@ dev.off()
 
 RelVar <- read.csv("RelativeVariableImportance.csv")
 barplotdata <- t(RelVar[,2:4])
-#colnames(barplotdata) <- c("Stem Density", "Elevation", "Area", "Latitude", "Rainfall", "Carbon", "Forest Loss", "Tree Diversity")
-colnames(barplotdata) <- c("Stem Density", "Elevation CV", "Tree Diversity", "Annual Rain", "Forest Loss", "Protected Area", "Latitude", "Carbon")
+colnames(barplotdata) <- RelVar$Variable
 pdf(file="RelativeVariableImportance_BarPlot.pdf", height=5)
 par(mar=c(8,5,2,2))
 barplot(barplotdata, beside=TRUE, horiz=FALSE, las=2, ylab="Relative Variable Importance", cex.lab=1, cex.axis=1)
@@ -313,7 +312,7 @@ dev.off()
 library(ggplot2)
 
 Rich.coef <- summary(allRich)[[3]]
-rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Stem Density", "Rainfall", "PA Size", "Latitude", "Carbon", "Tree Diversity", "Forest Loss")
+rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Rainfall", "Stem Density", "Forest Loss", "Carbon", "PA Size", "Latitude", "Tree Diversity")
 
 Shan.coef <- summary(allShan)[[3]]
 rownames(Shan.coef) <- c("(Intercept)", "Elevation CV", "Rainfall", "Stem Density", "Latitude", "Tree Diversity", "Forest Loss", "Carbon", "PA Size")
