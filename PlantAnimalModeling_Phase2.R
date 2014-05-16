@@ -66,8 +66,9 @@ model.data <- merge(model.data, elevation, by.x="Site.Code", by.y="Site.Code", a
 #Latitude <- aggregate(traps$Latitude ~ traps$Site.Code, FUN=mean)
 #colnames(Latitude) <- c("Site.Code", "Latitude")
 Latitude_orig <- read.csv("Latitude_MeanSiteCT.csv")
-Latitude <- abs(Latitude_orig$Latitude)
-model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+Latitude_match <- Latitude_orig
+Latitude_match$Latitude <- abs(Latitude_match$Latitude)
+model.data <- merge(model.data, Latitude_match, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 
 # ADD FOREST LOSS data from Alex Zvoleff's calculations
@@ -126,7 +127,7 @@ colnames(extras) <- c("Site.Code2", "ForestLossZOI2", "PA_area2", "Latitude2")
 # Create output table of predictor and response variables for inclusion in paper
 output.table <- cbind(model.data, Year, Continent, CT.Rich.sd, extras)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_16May2014.csv", row.names=FALSE)
+#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_16May2014.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
@@ -182,7 +183,7 @@ allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=T
 Richconfset.95p <- get.models(allRich.dredge, cumsum(weight) <= .95)
 allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
 Rich95output <- model.sel(Richconfset.95p)
-#write.csv(Rich95output, file="ModelAveraging_Rich95output.csv", row.names=FALSE)
+write.csv(Rich95output, file="ModelAveraging_Rich95output_WLS.csv", row.names=FALSE)
 summary(allRich)
 
 
