@@ -65,8 +65,8 @@ model.data <- merge(model.data, elevation, by.x="Site.Code", by.y="Site.Code", a
 #traps <- eventsdata[!duplicated(eventsdata$Sampling.Unit.Name),]
 #Latitude <- aggregate(traps$Latitude ~ traps$Site.Code, FUN=mean)
 #colnames(Latitude) <- c("Site.Code", "Latitude")
-Latitude <- read.csv("Latitude_MeanSiteCT.csv")
-Latitude$Latitude <- abs(Latitude$Latitude)
+Latitude_orig <- read.csv("Latitude_MeanSiteCT.csv")
+Latitude <- abs(Latitude_orig$Latitude)
 model.data <- merge(model.data, Latitude, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 
@@ -118,10 +118,15 @@ Mdata <- cbind(MData, Year, Continent)
 CT.Rich.sd <- c(10.044, 6.280, 18.513, 5.167, 9.519, 10.394, 3.509, 11.639, 9.676, 3.044, 14.641, 9.584, 4.872, 6.392)
 Mdata <- cbind(Mdata, CT.Rich.sd)
 
+extras <- as.data.frame(cbind(ForestLoss$ForestLossZOI, ForestLoss$PA_area, Latitude_orig$Latitude))
+extras <- cbind(Latitude_orig$Site.Code, extras)
+extras <- extras[-9,]
+extras <- extras[-6,]
+colnames(extras) <- c("Site.Code2", "ForestLossZOI2", "PA_area2", "Latitude2")
 # Create output table of predictor and response variables for inclusion in paper
-output.table <- cbind(model.data, Year, Continent, CT.Rich.sd)
+output.table <- cbind(model.data, Year, Continent, CT.Rich.sd, extras)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_15May2014.csv", row.names=FALSE)
+write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_16May2014.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
