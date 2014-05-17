@@ -43,6 +43,13 @@ rain <- data.frame(rain.data$Site.Code, rain.data$total, rain.CV)
 colnames(rain) <- c("Site.Code", "RainTotal", "Rain.CV")
 model.data <- merge(model.data, rain, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
+
+# Add annual rainfall from Worldclim extracted at 2.5 arc-minutes resolution
+rainWC <- read.csv("SiteLatitudeLongitude.csv")
+AnnualRainWC <- rainWC[,-3]
+AnnualRainWC <- AnnualRainWC[,-2]
+model.data <- merge(model.data, AnnualRainWC, by.x="Site.Code", by.y="Site.Code", all=FALSE)
+
 # Define CV function
 CV <- function(data){
   sd(data)/mean(data)
@@ -127,7 +134,7 @@ colnames(extras) <- c("Site.Code2", "ForestLossZOI2", "PA_area2", "Latitude2")
 # Create output table of predictor and response variables for inclusion in paper
 output.table <- cbind(model.data, Year, Continent, CT.Rich.sd, extras)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_16May2014.csv", row.names=FALSE)
+#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_17May2014.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
@@ -151,8 +158,8 @@ pdf(file="PAIRS_Vegetation.pdf")
   pairs(plot.VGmean[,2:12], lower.panel = panel.smooth, upper.panel = panel.cor)
 dev.off()
 
-Examine <- as.data.frame(cbind(Mdata$CT.median, Mdata$CT.FDisMedian, Mdata$Shannon.Index, Mdata$V.Cstorage, Mdata$V.Cstorage2, MData$V.TShan, Mdata$V.NStemsT, Mdata$RainTotal, Mdata$Elev.CV, Mdata$ForestLossZOI, Mdata$Latitude, Mdata$PA_area))
-names(Examine) <- c("CT.median", "FDis", "Shannon", "V.Cstorage", "V.Cstorage2", "V.TShan", "V.NStemsT", "RainTotal", "Elev.CV", "ForestLossZOI", "Latitude", "PA_area")
+Examine <- as.data.frame(cbind(Mdata$CT.median, Mdata$CT.FDisMedian, Mdata$Shannon.Index, Mdata$V.Cstorage, Mdata$V.Cstorage2, MData$V.TShan, Mdata$V.NStemsT, Mdata$RainTotal, Mdata$Elev.CV, Mdata$ForestLossZOI, Mdata$Latitude, Mdata$PA_area, Mdata$WC_Bio12))
+names(Examine) <- c("CT.median", "FDis", "Shannon", "V.Cstorage", "V.Cstorage2", "V.TShan", "V.NStemsT", "RainTotal", "Elev.CV", "ForestLossZOI", "Latitude", "PA_area", "WC_Bio12")
 pairs(Examine, lower.panel = panel.smooth, upper.panel = panel.cor)
 
 # VISUALIZE species richness across sites
@@ -174,7 +181,7 @@ library(lme4)
 library(MASS) 
 library(MuMIn)
 
-fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata, weights=(1/(CT.Rich.sd^2)))
+fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata, weights=(1/(CT.Rich.sd^2)))
 allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
 #allRich.sel <- model.sel(allRich.dredge)
@@ -183,7 +190,7 @@ allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=T
 Richconfset.95p <- get.models(allRich.dredge, cumsum(weight) <= .95)
 allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
 Rich95output <- model.sel(Richconfset.95p)
-write.csv(Rich95output, file="ModelAveraging_Rich95output_WLS.csv", row.names=FALSE)
+#write.csv(Rich95output, file="ModelAveraging_Rich95output_WLS_WCBio12.csv", row.names=FALSE)
 summary(allRich)
 
 
@@ -201,7 +208,7 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #allFD <- model.avg(allFD.dredge, beta=TRUE, fit=TRUE)
 #summary(allFD)
@@ -209,7 +216,7 @@ allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 FDconfset.95p <- get.models(allFD.dredge, cumsum(weight) <= .95)
 allFD <- model.avg(FDconfset.95p, beta=TRUE, fit=TRUE)
 FD95output <- model.sel(FDconfset.95p)
-#write.csv(FD95output, file="ModelAveraging_FD95output.csv", row.names=FALSE)
+#write.csv(FD95output, file="ModelAveraging_FD95output_WCBio12.csv", row.names=FALSE)
 summary(allFD)
 
 plot(resid(fitFD), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Functional Diversity")
@@ -225,7 +232,7 @@ set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
-fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + RainTotal + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
 allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #model.sel(allShan.dredge)
 #allShan <- model.avg(allShan.dredge, beta=TRUE, fit=TRUE)
@@ -234,7 +241,7 @@ allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=T
 Shanconfset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
 allShan <- model.avg(Shanconfset.95p, beta=TRUE, fit=TRUE)
 Shan95output <- model.sel(Shanconfset.95p)
-#write.csv(Shan95output, file="ModelAveraging_Shan95output.csv", row.names=FALSE)
+#write.csv(Shan95output, file="ModelAveraging_Shan95output_WCBio12.csv", row.names=FALSE)
 
 summary(allShan)
 
@@ -271,14 +278,14 @@ hist(resid(fitShan), main="", xlab="Global Model Residuals")
 
 
 ############ Create Plots #########
-pdf(file="AnimalDiversity_Carbon2_Plots_Symbols.pdf", height=2.7)
+pdf(file="AnimalDiversity_Carbon2_Plots.pdf", height=2.7)
 set.panel(1,3)
 par(mar=c(5, 5, 1, 1))
-plot(model.data$V.Cstorage2/1000, Mdata$CT.median, las=1, ylab="Species Richness", xlab="", bty="n", xlim=c(100, 250), ylim=c(10,50), cex.lab=1.2, pch=c(1:14))
-legend("bottomleft", expression(R^2* " = -0.08, df=12, p=0.77"), cex=1, bty="n")
-plot(model.data$V.Cstorage2/1000, Mdata$Shannon.Index, las=1, ylab="Taxonomic Diversity", xlab="", bty="n", xlim=c(100, 250), ylim=c(2.2, 3.4), cex.lab=1.2, pch=c(1:14))
-legend("bottomleft", expression(R^2* " = -0.05, df=12, p=0.56"), cex=1, bty="n")
-plot(model.data$V.Cstorage2/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity", xlab="", bty="n", xlim=c(100, 250), ylim=c(0.24,0.32), cex.lab=1.2, pch=c(1:14))
+plot(model.data$V.Cstorage2/1000, Mdata$CT.median, las=1, ylab="Species Richness", xlab="", bty="n", xlim=c(100, 250), ylim=c(10,50), cex.lab=1.2, pch=19)
+legend("bottomleft", expression(R^2* " < 0.001, df=12, p=0.77"), cex=1, bty="n")
+plot(model.data$V.Cstorage2/1000, Mdata$Shannon.Index, las=1, ylab="Taxonomic Diversity", xlab="", bty="n", xlim=c(100, 250), ylim=c(2.2, 3.4), cex.lab=1.2, pch=19)
+legend("bottomleft", expression(R^2* " = 0.03, df=12, p=0.56"), cex=1, bty="n")
+plot(model.data$V.Cstorage2/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity", xlab="", bty="n", xlim=c(100, 250), ylim=c(0.24,0.32), cex.lab=1.2, pch=19)
 legend("bottomleft", expression(R^2* " = 0.05, df=12, p=0.22"), cex=1, bty="n")
 mtext("               Aboveground Carbon Storage (Mg C sq ha)", side=1, outer=TRUE, line=-2)
 dev.off()
@@ -303,10 +310,10 @@ points(LatLon$Longitude, LatLon$Latitude, col="green4", pch=c(1:14), cex=1)
 legend(x=-132, y=37, legend=LatLon$Site.Code, pch=c(1:14), border="transparent", col="green4", bg="white", box.col="transparent", title="TEAM Sites", title.adj=0.12, cex=0.66)
 dev.off()
 
-RelVar <- read.csv("RelativeVariableImportance.csv")
+RelVar <- read.csv("RelativeVariableImportance_WCBio12.csv")
 barplotdata <- t(RelVar[,2:4])
 colnames(barplotdata) <- RelVar$Variable
-pdf(file="RelativeVariableImportance_BarPlot.pdf", height=5)
+pdf(file="RelativeVariableImportance_BarPlot_WCBio12.pdf", height=5)
 par(mar=c(8,5,2,2))
 barplot(barplotdata, beside=TRUE, horiz=FALSE, las=2, ylab="Relative Variable Importance", cex.lab=1, cex.axis=1)
 legend("right", pch=22, pt.cex=1.5, legend=c("Species Richness", "Taxonomic Diversity", "Functional Diversity"), col=c("black"), pt.bg=c("black", "gray", "gray92"), bty="n")
@@ -318,13 +325,13 @@ dev.off()
 library(ggplot2)
 
 Rich.coef <- summary(allRich)[[3]]
-rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Rainfall", "Stem Density", "Forest Loss", "Carbon", "PA Size", "Latitude", "Tree Diversity")
+rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Stem Density",  "PA Size", "Rainfall", "Latitude", "Carbon", "Tree Diversity", "Forest Loss")
 
 Shan.coef <- summary(allShan)[[3]]
-rownames(Shan.coef) <- c("(Intercept)", "Elevation CV", "Rainfall", "Stem Density", "Latitude", "Tree Diversity", "Forest Loss", "Carbon", "PA Size")
+rownames(Shan.coef) <- c("(Intercept)", "Elevation CV", "Stem Density", "Tree Diversity", "Forest Loss", "PA Size", "Latitude", "Rainfall", "Carbon")
 
 FD.coef <- summary(allFD)[[3]]
-rownames(FD.coef) <- c("(Intercept)", "Forest Loss", "Tree Diversity", "Stem Density", "PA Size", "Latitude", "Rainfall", "Carbon", "Elevation CV")
+rownames(FD.coef) <- c("(Intercept)", "Forest Loss", "Tree Diversity", "Stem Density", "Rainfall", "PA Size", "Latitude", "Carbon", "Elevation CV")
 
 #graphmodels <- list(summary(allRich)[[3]], summary(allShan)[[3]], summary(allFD)[[3]])
 graphmodels <- list(Rich.coef, Shan.coef, FD.coef)
