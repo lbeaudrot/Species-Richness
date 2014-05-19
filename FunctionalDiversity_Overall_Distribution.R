@@ -24,6 +24,19 @@ library(FD)
 masterlist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
 pantheria <- read.csv("Pantheria_Data_WR05_Aug2008.csv") # PanTHERIA data
 
+pantheria$Binomial <- as.character(pantheria$Binomial)
+# Manually update names in PanTheria data to match IUCN taxonomy used in TEAM master list
+Binomial2 <- ifelse(pantheria$Binomial=="Profelis aurata", "Caracal aurata",
+ifelse(pantheria$Binomial=="Cephalophus natalensis", "Cephalophus harveyi",
+ifelse(pantheria$Binomial=="Eulemur rufus", "Eulemur rufifrons",
+ifelse(pantheria$Binomial=="Mazama gouazoubira", "Mazama nemorivaga",
+ifelse(pantheria$Binomial=="Catopuma temminckii", "Pardofelis temminckii",
+ifelse(pantheria$Binomial=="Manis tricuspis", "Phataginus tricuspis",
+ifelse(pantheria$Binomial=="Manis gigantea", "Smutsia gigantea",
+ifelse(pantheria$Binomial=="Muntiacus muntjak", "Muntiacus montanus", pantheria$Binomial))))))))
+
+pantheria$Binomial <- factor(Binomial2)
+
 #subset TEAM species list from overall PanTHERIA database
 matchedlist <- pantheria[match(masterlist$Unique_Name, pantheria$Binomial),]
 splist <- cbind(masterlist, matchedlist)
@@ -297,8 +310,8 @@ CTweightedmedian
 CT.FDis.sd <- c(sd(CTweighted$CT.FDis), sd(CTweighted$CT.FDis.1), sd(CTweighted$CT.FDis.2), sd(CTweighted$CT.FDis.3), sd(CTweighted$CT.FDis.4), sd(CTweighted$CT.FDis.5), sd(CTweighted$CT.FDis.6), sd(CTweighted$CT.FDis.7), sd(CTweighted$CT.FDis.8), sd(CTweighted$CT.FDis.9), sd(CTweighted$CT.FDis.10), sd(CTweighted$CT.FDis.11), sd(CTweighted$CT.FDis.12), sd(CTweighted$CT.FDis.13))
 
 #CTweighted
-#save(CTweighted, file="CTweighted.gzip",compress="gzip")
-#write.csv(cbind(unlist(CTweightedmedian), CT.FDis.sd), file="FunctionalDiversity_Overall_Distribution_8May2014.csv", row.names=TRUE)
-#write.csv(CTweighted, file="FunctionalDiversity_Overall_ListOutput_8May2014.csv", row.names=TRUE)
+save(CTweighted, file="CTweighted_19May2014.gzip",compress="gzip")
+write.csv(cbind(unlist(CTweightedmedian), CT.FDis.sd), file="FunctionalDiversity_Overall_Distribution_19May2014.csv", row.names=TRUE)
+write.csv(CTweighted, file="FunctionalDiversity_Overall_ListOutput_19May2014.csv", row.names=TRUE)
 # Paste special (transpose) list and manually add "Site.Code" as first column name for  output file
 # Manuall add "-" to "VB-" Site.Code so that later merges will operate correctly
