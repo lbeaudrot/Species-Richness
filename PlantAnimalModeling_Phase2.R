@@ -126,6 +126,10 @@ Mdata <- cbind(MData, Year, Continent)
 CT.Rich.sd <- c(10.044, 6.280, 18.513, 5.167, 9.519, 10.394, 3.509, 11.639, 9.676, 3.044, 14.641, 9.584, 4.872, 6.392)
 Mdata <- cbind(Mdata, CT.Rich.sd)
 
+Asia <- c(1,0,0,0,0,0,0,0,1,0,0,0,0,0)
+Africa <- c(0,0,1,0,0,1,0,1,0,1,1,0,0,0)
+Mdata <- cbind(Mdata, Asia, Africa)
+
 extras <- as.data.frame(cbind(ForestLoss$ForestLossZOI, ForestLoss$PA_area, Latitude_orig$Latitude))
 extras <- cbind(Latitude_orig$Site.Code, extras)
 extras <- extras[-9,]
@@ -181,7 +185,7 @@ library(lme4)
 library(MASS) 
 library(MuMIn)
 
-fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata, weights=(1/(CT.Rich.sd^2)))
+fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata, weights=(1/(CT.Rich.sd^2)))
 allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
 #allRich.sel <- model.sel(allRich.dredge)
@@ -208,7 +212,7 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata)
 allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #allFD <- model.avg(allFD.dredge, beta=TRUE, fit=TRUE)
 #summary(allFD)
@@ -232,7 +236,7 @@ set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
-fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area, data=Mdata)
+fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata)
 allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #model.sel(allShan.dredge)
 #allShan <- model.avg(allShan.dredge, beta=TRUE, fit=TRUE)
@@ -359,8 +363,8 @@ CoefficientPlot <- function(models, modelnames = ""){
   MatrixofModels <- cbind(do.call(rbind, CoefficientTables), ModelNameLabels)
   MatrixofModels <- data.frame(cbind(rownames(MatrixofModels), MatrixofModels))
   colnames(MatrixofModels) <- c("IV", "Estimate", "StandardError", "AdjSE", "LowerCI", "UpperCI", "ModelName")
-  #MatrixofModels$IV <- factor(MatrixofModels$IV, levels = MatrixofModels$IV)
-  MatrixofModels$IV <- factor(MatrixofModels$IV, levels = c("(Intercept)", "Carbon", "PA Size", "Latitude", "Forest Loss", "Tree Diversity", "Rainfall", "Elevation CV", "Stem Density"))
+  MatrixofModels$IV <- factor(MatrixofModels$IV, levels = MatrixofModels$IV)
+  #MatrixofModels$IV <- factor(MatrixofModels$IV, levels = c("(Intercept)", "Africa", "Asia", "Carbon", "PA Size", "Latitude", "Forest Loss", "Tree Diversity", "Rainfall", "Elevation CV", "Stem Density"))
   
   MatrixofModels[, -c(1, 7)] <- apply(MatrixofModels[, -c(1, 7)], 2, function(x){as.numeric(as.character(x))})
   
