@@ -284,6 +284,6 @@ rownames(CTweighted) <- c("BBS", "BCI", "BIF", "CAX", "COU", "KRP", "MAS", "NNN"
 
 
 CTweighted
-write.csv(CTweighted, file="FunctionalDiversity_Overall_5May2014.csv", row.names=TRUE)
+write.csv(CTweighted, file="FunctionalDiversity_Overall_20May2014.csv", row.names=TRUE)
 # Manually add "Site.Code" as first column name for  output file
 # Manuall add "-" to "VB-" Site.Code so that later merges will operate correctly
