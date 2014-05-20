@@ -24,8 +24,8 @@ library(FD)
 masterlist<-read.csv("master_species_list_updated_7April2014.csv",h=T) #master list
 pantheria <- read.csv("Pantheria_Data_WR05_Aug2008.csv") # PanTHERIA data
 
-pantheria$Binomial <- as.character(pantheria$Binomial)
 # Manually update names in PanTheria data to match IUCN taxonomy used in TEAM master list
+pantheria$Binomial <- as.character(pantheria$Binomial)
 Binomial2 <- ifelse(pantheria$Binomial=="Profelis aurata", "Caracal aurata",
 ifelse(pantheria$Binomial=="Cephalophus natalensis", "Cephalophus harveyi",
 ifelse(pantheria$Binomial=="Eulemur rufus", "Eulemur rufifrons",
@@ -34,7 +34,6 @@ ifelse(pantheria$Binomial=="Catopuma temminckii", "Pardofelis temminckii",
 ifelse(pantheria$Binomial=="Manis tricuspis", "Phataginus tricuspis",
 ifelse(pantheria$Binomial=="Manis gigantea", "Smutsia gigantea",
 ifelse(pantheria$Binomial=="Muntiacus muntjak", "Muntiacus montanus", pantheria$Binomial))))))))
-
 pantheria$Binomial <- factor(Binomial2)
 
 #subset TEAM species list from overall PanTHERIA database
