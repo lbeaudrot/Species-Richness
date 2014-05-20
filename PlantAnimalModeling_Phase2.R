@@ -25,7 +25,7 @@ model.data <- merge(CTaverages, AnimalFD, by.x="Site.Code", by.y="Site.Code", al
 ShannonDist <- read.csv("ShannonIndex_Distribution.csv")
 model.data <- merge(model.data, ShannonDist, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
-CT.FDisDist <- read.csv("FunctionalDiversity_Overall_Distribution_8May2014.csv")
+CT.FDisDist <- read.csv("FunctionalDiversity_Overall_Distribution_19May2014.csv")
 model.data <- merge(model.data, CT.FDisDist, by.x="Site.Code", by.y="Site.Code", all=FALSE)
 
 # MERGE ANIMAL DATA WITH PLANT DATA
@@ -335,7 +335,7 @@ Shan.coef <- summary(allShan)[[3]]
 rownames(Shan.coef) <- c("(Intercept)","Asia", "Elevation CV", "Stem Density", "Tree Diversity", "Forest Loss", "PA Size", "Latitude", "Africa", "Rainfall", "Carbon")
 
 FD.coef <- summary(allFD)[[3]]
-rownames(FD.coef) <- c("(Intercept)","Africa", "Forest Loss", "Tree Diversity", "Elevation CV", "Asia", "PA Size", "Carbon", "Rainfall", "Latitude", "Stem Density")
+rownames(FD.coef) <- c("(Intercept)","Africa", "Forest Loss", "Tree Diversity", "Asia",  "Elevation CV", "Stem Density", "PA Size", "Carbon", "Rainfall", "Latitude")
 
 #graphmodels <- list(summary(allRich)[[3]], summary(allShan)[[3]], summary(allFD)[[3]])
 graphmodels <- list(Rich.coef, Shan.coef, FD.coef)
