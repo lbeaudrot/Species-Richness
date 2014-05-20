@@ -307,11 +307,12 @@ names(CTweightedmedian) <- c("CAX", "MAS", "VB-", "BIF", "BBS", "NNN", "YAS", "R
 CTweightedmedian
 
 # Calculate standard deviations of estimates
-CT.FDis.sd <- c(sd(CTweighted$CT.FDis), sd(CTweighted$CT.FDis.1), sd(CTweighted$CT.FDis.2), sd(CTweighted$CT.FDis.3), sd(CTweighted$CT.FDis.4), sd(CTweighted$CT.FDis.5), sd(CTweighted$CT.FDis.6), sd(CTweighted$CT.FDis.7), sd(CTweighted$CT.FDis.8), sd(CTweighted$CT.FDis.9), sd(CTweighted$CT.FDis.10), sd(CTweighted$CT.FDis.11), sd(CTweighted$CT.FDis.12), sd(CTweighted$CT.FDis.13))
+#CT.FDis.sd <- c(sd(CTweighted$CT.FDis), sd(CTweighted$CT.FDis.1), sd(CTweighted$CT.FDis.2), sd(CTweighted$CT.FDis.3), sd(CTweighted$CT.FDis.4), sd(CTweighted$CT.FDis.5), sd(CTweighted$CT.FDis.6), sd(CTweighted$CT.FDis.7), sd(CTweighted$CT.FDis.8), sd(CTweighted$CT.FDis.9), sd(CTweighted$CT.FDis.10), sd(CTweighted$CT.FDis.11), sd(CTweighted$CT.FDis.12), sd(CTweighted$CT.FDis.13))
+CT.FDis.sd <- c(sd(CTweighted[[1]]$CT.FDis), sd(CTweighted[[2]]$CT.FDis), sd(CTweighted[[3]]$CT.FDis), sd(CTweighted[[4]]$CT.FDis), sd(CTweighted[[5]]$CT.FDis), sd(CTweighted[[6]]$CT.FDis), sd(CTweighted[[7]]$CT.FDis), sd(CTweighted[[8]]$CT.FDis), sd(CTweighted[[9]]$CT.FDis), sd(CTweighted[[10]]$CT.FDis), sd(CTweighted[[11]]$CT.FDis), sd(CTweighted[[12]]$CT.FDis), sd(CTweighted[[13]]$CT.FDis), sd(CTweighted[[14]]$CT.FDis))
 
 #CTweighted
 save(CTweighted, file="CTweighted_19May2014.gzip",compress="gzip")
 write.csv(cbind(unlist(CTweightedmedian), CT.FDis.sd), file="FunctionalDiversity_Overall_Distribution_19May2014.csv", row.names=TRUE)
 write.csv(CTweighted, file="FunctionalDiversity_Overall_ListOutput_19May2014.csv", row.names=TRUE)
-# Paste special (transpose) list and manually add "Site.Code" as first column name for  output file
+# Manually add "Site.Code" as first column name for  output file
 # Manuall add "-" to "VB-" Site.Code so that later merges will operate correctly
