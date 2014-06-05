@@ -19,7 +19,7 @@ plot.VGvar <- read.csv(file="PlantDiversityVariances.csv")
 #colnames(CTaverages)[1] <- "Site.Code"
 
 CTaverages <- read.csv("CTaverages_overall.csv")
-AnimalFD <- read.csv("FunctionalDiversity_Overall_5May2014.csv")
+AnimalFD <- read.csv("FunctionalDiversity_Overall_20May2014.csv")
 model.data <- merge(CTaverages, AnimalFD, by.x="Site.Code", by.y="Site.Code", all=TRUE)
 
 ShannonDist <- read.csv("ShannonIndex_Distribution.csv")
@@ -138,7 +138,7 @@ colnames(extras) <- c("Site.Code2", "ForestLossZOI2", "PA_area2", "Latitude2")
 # Create output table of predictor and response variables for inclusion in paper
 output.table <- cbind(model.data, Year, Continent, CT.Rich.sd, extras, Asia, Africa)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_19May2014.csv", row.names=FALSE)
+#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_20May2014.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
