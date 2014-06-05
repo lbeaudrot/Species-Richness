@@ -189,30 +189,30 @@ Trees <- Vdata$tree
 # Limit data to one year from each site so that data correspond to CT metrics
 # 2012 for CAX, YAS, and PSH
 # 2011 for all other sites
-Trees <- subset(Trees,
-                Site.CodeT=="CAX" & SamplingPeriod=="2012.01"|
-                  Site.CodeT=="YAS" & SamplingPeriod=="2012.01"|
-                  Site.CodeT=="PSH" & SamplingPeriod=="2012.01"|
-                  Site.CodeT=="BBS" & SamplingPeriod=="2011.01"|
-                  Site.CodeT=="BCI" & SamplingPeriod=="2011.01"|
-                  Site.CodeT=="BIF" & SamplingPeriod=="2012.01"|
-                  Site.CodeT=="COU" & SamplingPeriod=="2011.01"|
-                  Site.CodeT=="CSN" & SamplingPeriod=="2011.01"|
-                  Site.CodeT=="KRP" & SamplingPeriod=="2011.01"|
-                  Site.CodeT=="MAS" & SamplingPeriod=="2011.01"|
-                  Site.CodeT=="NAK" & SamplingPeriod=="2011.01"|
-                  Site.CodeT=="NNN" & SamplingPeriod=="2011.01"|
-                  Site.CodeT=="RNF" & SamplingPeriod=="2011.01"|
-                  Site.CodeT=="UDZ" & SamplingPeriod=="2011.01"|
-                  Site.CodeT=="VB-" & SamplingPeriod=="2011.01"|
-                  Site.CodeT=="YAN" & SamplingPeriod=="2011.01")
+#Trees <- subset(Trees,
+#                Site.CodeT=="CAX" & SamplingPeriod=="2012.01"|
+#                  Site.CodeT=="YAS" & SamplingPeriod=="2012.01"|
+#                  Site.CodeT=="PSH" & SamplingPeriod=="2012.01"|
+#                  Site.CodeT=="BBS" & SamplingPeriod=="2011.01"|
+#                  Site.CodeT=="BCI" & SamplingPeriod=="2011.01"|
+#                  Site.CodeT=="BIF" & SamplingPeriod=="2012.01"|
+#                  Site.CodeT=="COU" & SamplingPeriod=="2011.01"|
+#                  Site.CodeT=="CSN" & SamplingPeriod=="2011.01"|
+#                  Site.CodeT=="KRP" & SamplingPeriod=="2011.01"|
+#                  Site.CodeT=="MAS" & SamplingPeriod=="2011.01"|
+#                  Site.CodeT=="NAK" & SamplingPeriod=="2011.01"|
+#                  Site.CodeT=="NNN" & SamplingPeriod=="2011.01"|
+#                  Site.CodeT=="RNF" & SamplingPeriod=="2011.01"|
+#                  Site.CodeT=="UDZ" & SamplingPeriod=="2011.01"|
+#                  Site.CodeT=="VB-" & SamplingPeriod=="2011.01"|
+#                  Site.CodeT=="YAN" & SamplingPeriod=="2011.01")
 
 #Remove dead trees
 aliveT <- grep(pattern="K", x=Trees$ConditionCodes, invert=TRUE)
 Trees <- Trees[aliveT,]
 
 # Add decimal KRP plot with inflated diameters until issue is resolved in the database
-Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1"] <- Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1"]/10
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1" & Trees$SamplingPeriod=="2011.01"] <- Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1"& Trees$SamplingPeriod=="2011.01"]/10
 
 # Add decimal to 6 stems in plot VG-COU-5 that have inflated diameters until issue is resolved in the database
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==392] <- 39.2
@@ -224,44 +224,13 @@ Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==1120] <- 112.
 # Add decimal to outlier diameter in plot VG-YAS-1
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-YAS-1" & Trees$Diameter==420] <- 42.0
 
-# Check for number of duplicate stems
-dim(Trees[duplicated(Trees$SamplingUnitName)==TRUE,])
-
-# Remove duplicated SamplingUnitNames until issue is resolved in the database
-Trees <- Trees[duplicated(Trees$SamplingUnitName)==FALSE,]
-
-
-Lianas <- Vdata$liana 
-
-Lianas <- subset(Lianas,
-                 Site.CodeL=="CAX" & SamplingPeriod=="2012.01"|
-                   Site.CodeL=="YAS" & SamplingPeriod=="2012.01"|
-                   Site.CodeL=="PSH" & SamplingPeriod=="2012.01"|
-                   Site.CodeL=="BBS" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="BCI" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="BIF" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="COU" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="CSN" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="KRP" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="MAS" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="NAK" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="NNN" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="RNF" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="UDZ" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="VB-" & SamplingPeriod=="2011.01"|
-                   Site.CodeL=="YAN" & SamplingPeriod=="2011.01")
-
-#Remove dead lianas
-aliveL <- grep(pattern="K", x=Lianas$ConditionCodes, invert=TRUE)
-Lianas <- Lianas[aliveL,]
-
-# Remove duplicated SamplingUnitNames until issue is resolved in the database
-Lianas <- Lianas[duplicated(Lianas$SamplingUnitName)==FALSE,]
+# Check to be sure that no other years had outlier values for these stems
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter>300] 
 
 
 ############### END DATA CLEANING ###############
 
-############### BEGIN PLANT DIVERSITY CALCULATIONS ######
+############### BEGIN CARBON CALCULATIONS ######
 # Data Exploration
 # Examine plots at each site
 #table(Vtrees$"1haPlotNumber", Vtrees$Site.CodeT)
@@ -274,40 +243,6 @@ FamilyUnknown <- PlotFamilyStemsT[,colnames(PlotFamilyStemsT)=="Unknown"]
 PercentUnknown <- (FamilyUnknown/TotalStems)*100
 ExcludePlots <- PercentUnknown[PercentUnknown>20]
 
-# CALCULATE PLOT-LEVEL PLANT DIVERSITY METRICS
-# Once complete, combine into a dataframe to calculate site averages and site variability
-
-# Format data with plots as rows and Genera as columns
-# Remove unknown stems (for diversity calculations only)
-PlotGenusStemsT <- table(Trees$"1haPlotNumber", Trees$Genus)
-NStemsT <- rowSums(PlotGenusStemsT)
-PlotGenusStemsT <- PlotGenusStemsT[,colnames(PlotGenusStemsT)!="Unknown"]
-PlotGenusStemsL <- table(Lianas$"1haPlotNumber", Lianas$Genus)
-NStemsL <- rowSums(PlotGenusStemsL)
-PlotGenusStemsL <- PlotGenusStemsL[,colnames(PlotGenusStemsL)!="Unknown"]
-
-# Calculate GENUS RICHNESS for each plot at each site for trees and for lianas
-TRich <- rowSums(ifelse(PlotGenusStemsT>0,1,0))
-LRich <- rowSums(ifelse(PlotGenusStemsL>0,1,0))
-
-# Calculate GENUS TAXONOMIC DIVERSITY (SHANNON INDEX) for each plot at each site for trees and lianas
-library(vegan)
-TShan <- diversity(PlotGenusStemsT, index="shannon", MARGIN=1, base=exp(1))
-TShan <- cbind(NStemsT, TShan)
-LShan <- diversity(PlotGenusStemsL, index="shannon", MARGIN=1, base=exp(1))
-LShan <- cbind(NStemsL, LShan)
-
-# Create dataframe with plot level richness and diversity values
-Richness <- merge(TRich, LRich, by="row.names", all=TRUE)
-names(Richness) <- c("Plot", "TRich", "LRich")
-Diversity <- merge(TShan, LShan, by="row.names", all=TRUE)
-names(Diversity) <- c("Plot", "NStemsT", "TShan", "NStemsL", "LShan")
-
-PlotLevelRD <- merge(Richness, Diversity, by="Plot", all=TRUE)
-PlotLevelRD$LRich <- ifelse(is.na(PlotLevelRD$LRich)==TRUE, 0, PlotLevelRD$LRich)
-PlotLevelRD$NStemsL <- ifelse(is.na(PlotLevelRD$NStemsL)==TRUE, 0, PlotLevelRD$NStemsL)
-
-#write.table(Plot.RD, file="Plot.RD.csv", col.names=TRUE, sep=",")
 
 # Import wood density data
 WDdata <- read.csv("GlobalWoodDensityData.csv")
@@ -332,128 +267,7 @@ names(genusWD) <- colnames(PlotGenusStemsT)
 families <- Trees$Family[match(sort(unique(Trees$Genus)), Trees$Genus)]
 WD <- ifelse(is.na(genusWD)==TRUE, fWD$WD[match(families, fWD$Family)], genusWD)
 
-# Determine the maxium diameter value for a genus at a site from data used in this study
-maxD <- aggregate(Trees$Diameter, by=list(Trees$Site.CodeT, Trees$Genus), FUN=max)
-names(maxD) <- c("Site.CodeT", "Genus", "maxD")
-
-# Remove unknown genera
-maxD <- maxD[maxD$Genus!="Unknown",]
-
-# Match wood density values to site specific maximum diameter values for each genus
-WD2 <- WD[match(maxD$Genus, names(WD))]
-
-
-# Format functional trait data for FD calculations
-# function dbFD requires a data frame of functional traits with genus row names
-# Note that CSN and NAK will be discarded from analysis due to poor data
-Vtraits <- cbind(maxD, WD2)
-# Remove unused level for NAK
-Vtraits$Site.CodeT <- factor(Vtraits$Site.CodeT)
 nsites <- length(levels(Vtraits$Site.CodeT))
-
-# Calculate UNWEIGHTED FD metrics for each SITE
-# Format functional trait data for FD input
-Vsites <-list()
-VSites <-list()
-
-#Extract site data by looping 
-#for(i in 1:length(levels(Vtraits$Site.CodeT))){
-#Vsites[[i]] <- Vtraits[grep(pattern=levels(Vtraits$Site.CodeT)[i], x=Vtraits$Site.CodeT),]
-#rownames(Vsites[[i]]) <- Vsites[[i]]$Genus
-#names(Vsites)[[i]] <- print(paste("Vsites",levels(Vtraits$Site.CodeT)[[i]],sep="."))
-#Vsites
-#}
-# Reduce to FD input columns only
-#for(i in 1:length(levels(Vtraits$Site.CodeT))){
-#  Vsites[[i]] <- Vtraits[grep(pattern=levels(Vtraits$Site.CodeT)[i], x=Vtraits$Site.CodeT),]
-#  VSites[[i]] <- cbind(Vsites[[i]]$maxD, Vsites[[i]]$WD2)
-#  names(VSites)[[i]] <- print(paste(levels(Vtraits$Site.CodeT)[[i]]))
-#  rownames(VSites[[i]]) <- Vsites[[i]]$Genus
-#  colnames(VSites[[i]]) <- cbind("maxD", "WD2")
-#  VSites
-}
-# Calculate unweighted FD for each site
-#library(FD)
-#FDsites <- list()
-#for(i in 1:length(VSites)){
-#  FDsites[[i]] <- dbFD(x=as.data.frame(VSites[[i]]), corr="cailliez", calc.FRic=FALSE)
-#     FDsites                          
-#}
-#names(FDsites) <- names(VSites)
-
-
-# Calculate unweighted FD at the plot level
-PlotTrees <- t(PlotGenusStemsT)
-PlotTrees <- PlotTrees[,colSums(PlotTrees)>0]
-PlotCodes <- substr(colnames(PlotTrees),4,6)
-Vplots <- list()
-VPlots <- list()
-hold1 <- vector()
-hold2 <- data.frame()
-
-#Extract plot trait data by looping & reduce to FD input columns only
-for (i in 1:dim(PlotTrees)[2]){
-  hold1 <- PlotTrees[,i]
-  hold1 <- hold1[hold1>0]
-  hold2 <- Vtraits[Vtraits$Site.CodeT==PlotCodes[i],]
-  Vplots[[i]] <- hold2[match(names(hold1), hold2$Genus),]
-  VPlots[[i]] <- cbind(Vplots[[i]]$maxD, Vplots[[i]]$WD2)
-  names(VPlots)[[i]] <- colnames(PlotTrees)[i]
-  rownames(VPlots[[i]]) <- Vplots[[i]]$Genus
-  colnames(VPlots[[i]]) <- cbind("maxD", "WD2")
-  VPlots
-}
-# Calculate FD for each plot using extracted trait data from VPlots
-library(FD)
-#FDplots <- list()
-#for(i in 1:length(VPlots)){
-#  FDplots[[i]] <- dbFD(x=as.data.frame(VPlots[[i]]), corr="cailliez", calc.FRic=FALSE)
-#  FDplots                          
-#}
-#names(FDplots) <- names(VPlots)
-
-
-# CALCULATE WEIGHTED FD for each PLOT using ABUNDANCES AS WEIGHTS - see output from object FDweighted
-# Exclude genera with missing maxD values (because they cause dbFD to fail)
-FDplotsW <- list()
-hold3 <- vector()
-for(i in 1:length(VPlots)){
-  hold1 <- PlotTrees[,i]
-  hold1 <- hold1[hold1>0]
-  hold2 <- cbind(VPlots[[i]], hold1)
-  hold2 <- na.omit(hold2)
-  hold3 <- hold2[,3]
-  names(hold3) <- rownames(hold2)
-  FDplotsW[[i]] <- dbFD(x=as.data.frame(hold2[,1:2]), corr="cailliez", a=hold3, w.abun=TRUE, calc.FRic=FALSE)
-  FDplotsW                          
-}
-
-# Create output table from FD calculations
-nbsp <- vector()
-sing.sp <- vector()
-FEve <- vector()
-FDiv <- vector()
-FDis <- vector()
-RaoQ <- vector()
-CWM.maxD <- vector()
-CWM.WD2 <- vector()
-
-for(i in 1:length(PlotCodes)){
-  nbsp[i] <- FDplotsW[[i]]$nbsp
-  sing.sp[i] <- FDplotsW[[i]]$sing.sp
-  FEve[i] <- FDplotsW[[i]]$FEve
-  FDiv[i] <- FDplotsW[[i]]$FDiv
-  FDis[i] <- FDplotsW[[i]]$FDis
-  RaoQ[i] <- FDplotsW[[i]]$RaoQ
-  CWM.maxD[i] <- FDplotsW[[i]]$CWM$maxD
-  CWM.WD2[i] <- FDplotsW[[i]]$CWM$WD2
-}
-
-FDweighted <- cbind(nbsp, sing.sp, FEve, FDiv, FDis, RaoQ, CWM.maxD, CWM.WD2)
-FDweighted <- as.data.frame(FDweighted)
-plot <- colnames(PlotTrees)
-FDweighted <- cbind(plot, PlotCodes, FDweighted)
-
 
 # Assign sites to "dry" (<1500 mm/year precipitation) or "moist" (1500-3500 mm/year) designation for carbon storage calculations
 # UDZ and BIF are dry; all others moist according to TEAM CRU rain data
@@ -466,6 +280,14 @@ Trees <- cbind(Trees, StemWD)
 #ABGdry <- WD * exp((-2/3) + 1.784*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
 #ABGmoist <- WD * exp(-1.499 + 2.148*ln(D) + 0.207*ln(D)^2 - 0.0281*ln(D)^3)
 # For missing values (neither genus nor family available), use plot mean
+
+
+# Loop over all years for each site
+# Inspect sampling periods for each site
+table(Trees$Site.CodeT, Trees$SamplingPeriod)
+# Drop second sampling period from 2005
+
+
 
 ABG <- ifelse(Trees$Site.CodeT=="UDZ" | Trees$Site.CodeT=="BIF", 
               Trees$StemWD * exp((-2/3) + 1.784 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3),
@@ -481,17 +303,15 @@ Trees <- cbind(Trees, Cstorage)
 Cplot <- aggregate(Trees$Cstorage ~ Trees$"1haPlotNumber", FUN=sum, na.omit=TRUE)
 names(Cplot) <- c("Plot", "Cstorage")
 
-plant.covs <- merge(FDweighted, PlotLevelRD, by.x="plot", by.y="Plot", all=FALSE)
-plant.covs <- merge(plant.covs, Cplot, by.x="plot", by.y="Plot", all=FALSE)
 
-# Use updated equations from Chave et al. In Press from Global Change Biology to re-calculate carbon storage
-# Data can be downloaded from http://chave.ups-tlse.fr/chave/pantropical_allometry.htm or extracted by:
+# If desired, use updated equations from Chave et al. In Press from Global Change Biology to re-calculate carbon storage
+# Data for "E" layer can be downloaded from http://chave.ups-tlse.fr/chave/pantropical_allometry.htm or extracted by:
 #source("http://chave.ups-tlse.fr/chave/pantropical/readlayers.r")
 #LatLon <- read.csv(file="SiteLatitudeLongitude.csv")
 #coord <- cbind(LatLon$Longitude, LatLon$Latitude)
 #colnames(coord) <- c("longitude", "latitude")
-#retrieve_raster("E",coord)
-E_value <- read.csv(file="E_extract_ChaveInPress.csv")
+#E_value <- retrieve_raster("E",coord)
+
 
 # Match E value to each stem in Trees to use in calculation
 E <- E_value$E[match(Trees$Site.CodeT, E_value$Site.Code)]
@@ -499,7 +319,6 @@ Trees <- cbind(Trees, E)
 
 #Equation 7: exp( -1.803 - 0.976*E_value$E + 0.976*ln(WD) + 2.673*ln(D) - 0.0299*(ln(D))^2)
 ABG2 <- exp(-1.803 - 0.976*Trees$E + 0.976*log(Trees$StemWD) + 2.673*log(Trees$Diameter) - 0.0299*(log(Trees$Diameter))^2)
-
 
 Trees <- cbind(Trees, ABG2)
 plotABG2 <- aggregate(Trees$ABG2 ~ Trees$"1haPlotNumber", FUN=mean, na.omit=TRUE)
@@ -512,15 +331,12 @@ Trees <- cbind(Trees, Cstorage2)
 Cplot2 <- aggregate(Trees$Cstorage2 ~ Trees$"1haPlotNumber", FUN=sum, na.omit=TRUE)
 names(Cplot2) <- c("Plot", "Cstorage2")
 
-plant.covs <- merge(plant.covs, Cplot2, by.x="plot", by.y="Plot", all=FALSE)
 
 
 
 # Exclude plots that have less than 80% of stems identified to family level
 ExcludePlots <- names(ExcludePlots)
 plant.covs <- plant.covs[-na.omit(match(ExcludePlots, plant.covs$plot)),]
-plant.covs <- plant.covs[,-6]
-plant.covs <- plant.covs[,-15]
 
 CV <- function(data){
   sd(data)/mean(data)
@@ -529,27 +345,5 @@ CV <- function(data){
 aggregate(plant.covs$Cstorage ~ plant.covs$PlotCodes, FUN=mean)
 aggregate(plant.covs$Cstorage ~ plant.covs$PlotCodes, FUN=CV)
 
-plot.VGmean <- matrix(NA, nrow=length(levels(plant.covs$PlotCodes)), 
-                      ncol=dim(plant.covs)[2]-4, 
-                      dimnames=list(levels(plant.covs$PlotCodes), names(plant.covs)[5:length(names(plant.covs))]))
-plot.VGmean <- plot.VGmean[-6,]
-for(i in 1:dim(plant.covs)[2]-4){
-  plot.VGmean[,i] <- aggregate(plant.covs[,i+4] ~ plant.covs$PlotCodes, FUN=mean, na.rm=TRUE)[,2]
-  plot.VGmean
-}
-colnames(plot.VGmean) <- paste("V", colnames(plot.VGmean), sep=".")
-plot.VGmean.backup <- plot.VGmean
 
-plot.VGvar <- matrix(NA, nrow=dim(plot.VGmean)[1], 
-                     ncol=dim(plot.VGmean)[2], 
-                     dimnames=list(rownames(plot.VGmean), colnames(plot.VGmean)))
-for(i in 1:dim(plant.covs)[2]-4){
-  plot.VGvar[,i] <- aggregate(plant.covs[,i+4] ~ plant.covs$PlotCodes, FUN=CV)[,2]
-  plot.VGvar
-}
-
-write.csv(plant.covs, file="PlantDiversityCalculations_PlotLevel.csv", row.names=FALSE)
-write.csv(plot.VGmean, file="PlantDiversityCalculations.csv")
-write.csv(plot.VGvar, file="PlantDiversityVariances.csv")
-# Manually add "Site.Code" as first column name for these output csv files to enable merging 
 
