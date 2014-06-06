@@ -286,23 +286,34 @@ Trees <- cbind(Trees, StemWD)
 # Inspect sampling periods for each site
 table(Trees$Site.CodeT, Trees$SamplingPeriod)
 # Drop second sampling period from 2005
-
+Trees <- Trees[Trees$SamplingPeriod!="2005.02", ]
+# Create column for each Site and Sampling.Period to loop through
+SiteYear <- as.factor(paste(Trees$Site.CodeT, Trees$SamplingPeriod, sep="."))
+PlotSiteYear <- as.factor(paste(Trees$Site.CodeT, Trees$SamplingPeriod, Trees$"1haPlotNumber", sep="."))
+#Trees <- cbind(Trees, SiteYear)
+Trees <- cbind(Trees, PlotSiteYear)
 
 
 ABG <- ifelse(Trees$Site.CodeT=="UDZ" | Trees$Site.CodeT=="BIF", 
               Trees$StemWD * exp((-2/3) + 1.784 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3),
               Trees$StemWD * exp(-1.499 + 2.148 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3))
 Trees <- cbind(Trees, ABG)
-plotABG <- aggregate(Trees$ABG ~ Trees$"1haPlotNumber", FUN=mean, na.omit=TRUE)
-names(plotABG) <- c("Plot", "ABG")
-allABG <- ifelse(is.na(Trees$ABG)==TRUE, plotABG$ABG[match(Trees$"1haPlotNumber", plotABG$Plot)], Trees$ABG)
+#plotyearABG <- aggregate(Trees$ABG ~ Trees$"1haPlotNumber" + Trees$SiteYear, FUN=mean, na.omit=TRUE)
+
+plotyearABG <- aggregate(Trees$ABG ~ Trees$PlotSiteYear, FUN=mean, na.omit=TRUE)
+
+names(plotyearABG) <- c("PlotSiteYear", "ABG")
+#allABG <- ifelse(is.na(Trees$ABG)==TRUE, plotABG$ABG[match(Trees$"1haPlotNumber", plotABG$Plot)], Trees$ABG)
+allABG <- ifelse(is.na(Trees$ABG)==TRUE, plotyearABG$ABG[match(Trees$PlotSiteYear, plotyearABG$PlotSiteYear)], Trees$ABG)
+
 Trees$ABG <- allABG
 Cstorage <- Trees$ABG*0.5
 Trees <- cbind(Trees, Cstorage)
 
-Cplot <- aggregate(Trees$Cstorage ~ Trees$"1haPlotNumber", FUN=sum, na.omit=TRUE)
-names(Cplot) <- c("Plot", "Cstorage")
+Cplot <- aggregate(Trees$Cstorage ~ Trees$PlotSiteYear, FUN=sum, na.omit=TRUE)
+names(Cplot) <- c("PlotSiteYear", "Cstorage")
 
+write.table(Cplot, "CarbonAllSitesAllYears.csv", sep=",", row.names=FALSE)
 
 # If desired, use updated equations from Chave et al. In Press from Global Change Biology to re-calculate carbon storage
 # Data for "E" layer can be downloaded from http://chave.ups-tlse.fr/chave/pantropical_allometry.htm or extracted by:
