@@ -1,9 +1,4 @@
-# Calculate plant metrics for plants-animals project
-# Above Ground Biomass
-# Species Richness
-# Species Diversity
-# Functional Diversity 
-
+# Calculate above Ground Biomass and carbon density per hectare using Chave et al. 2005 methods for all TEAM sites/plots/years for Alex
 
 # Query vegetation data from database
 #Vegdata <- f.teamdb.query("vegetation")
@@ -17,11 +12,6 @@ Site.CodeL <- substr(Vdata$liana$"1haPlotNumber",4,6)
 
 Vdata <- list(cbind(Vdata$tree, Site.CodeT), cbind(Vdata$liana, Site.CodeL))
 names(Vdata) <- c("tree", "liana")
-# Clean genus names for trees and lianas
-#Vdataclean <- table(V$tree$Genus)
-#write.table(Vdataclean, file="Vdataclean.csv", sep=",")
-#Vdataclean.liana <- table(Vdata$liana$Genus)
-#write.table(Vdataclean.liana, file="Vdataclean.liana.csv", sep=",")
 
 # Manually clean data (prior to database cleaning) using corrected spellings from Tropicos
 # Duplicate tree genera 
@@ -186,27 +176,6 @@ Vdata$liana$Family[Vdata$liana$Family=="UNKNOWN"] <- "Unknown"
 
 Trees <- Vdata$tree
 
-# Limit data to one year from each site so that data correspond to CT metrics
-# 2012 for CAX, YAS, and PSH
-# 2011 for all other sites
-#Trees <- subset(Trees,
-#                Site.CodeT=="CAX" & SamplingPeriod=="2012.01"|
-#                  Site.CodeT=="YAS" & SamplingPeriod=="2012.01"|
-#                  Site.CodeT=="PSH" & SamplingPeriod=="2012.01"|
-#                  Site.CodeT=="BBS" & SamplingPeriod=="2011.01"|
-#                  Site.CodeT=="BCI" & SamplingPeriod=="2011.01"|
-#                  Site.CodeT=="BIF" & SamplingPeriod=="2012.01"|
-#                  Site.CodeT=="COU" & SamplingPeriod=="2011.01"|
-#                  Site.CodeT=="CSN" & SamplingPeriod=="2011.01"|
-#                  Site.CodeT=="KRP" & SamplingPeriod=="2011.01"|
-#                  Site.CodeT=="MAS" & SamplingPeriod=="2011.01"|
-#                  Site.CodeT=="NAK" & SamplingPeriod=="2011.01"|
-#                  Site.CodeT=="NNN" & SamplingPeriod=="2011.01"|
-#                  Site.CodeT=="RNF" & SamplingPeriod=="2011.01"|
-#                  Site.CodeT=="UDZ" & SamplingPeriod=="2011.01"|
-#                  Site.CodeT=="VB-" & SamplingPeriod=="2011.01"|
-#                  Site.CodeT=="YAN" & SamplingPeriod=="2011.01")
-
 #Remove dead trees
 aliveT <- grep(pattern="K", x=Trees$ConditionCodes, invert=TRUE)
 Trees <- Trees[aliveT,]
@@ -223,11 +192,8 @@ Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==723] <- 72.3
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==1120] <- 112.0
 # Add decimal to outlier diameter in plot VG-YAS-1
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-YAS-1" & Trees$Diameter==420] <- 42.0
-
 # Check to be sure that no other years had outlier values for these stems
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter>300] 
-
-
 ############### END DATA CLEANING ###############
 
 ############### BEGIN CARBON CALCULATIONS ######
@@ -282,18 +248,17 @@ Trees <- cbind(Trees, StemWD)
 # For missing values (neither genus nor family available), use plot mean
 
 
-# Loop over all years for each site
 # Inspect sampling periods for each site
 table(Trees$Site.CodeT, Trees$SamplingPeriod)
 # Drop second sampling period from 2005
 Trees <- Trees[Trees$SamplingPeriod!="2005.02", ]
-# Create column for each Site and Sampling.Period to loop through
+# Create column for each Site and Sampling.Period to aggregate on
 SiteYear <- as.factor(paste(Trees$Site.CodeT, Trees$SamplingPeriod, sep="."))
 PlotSiteYear <- as.factor(paste(Trees$Site.CodeT, Trees$SamplingPeriod, Trees$"1haPlotNumber", sep="."))
 #Trees <- cbind(Trees, SiteYear)
 Trees <- cbind(Trees, PlotSiteYear)
 
-
+# Calculate above ground biomass using Chave et al. 2005 equations
 ABG <- ifelse(Trees$Site.CodeT=="UDZ" | Trees$Site.CodeT=="BIF", 
               Trees$StemWD * exp((-2/3) + 1.784 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3),
               Trees$StemWD * exp(-1.499 + 2.148 * log(Trees$Diameter) + 0.207 * log(Trees$Diameter)^2 - 0.0281 * log(Trees$Diameter)^3))
@@ -301,12 +266,12 @@ Trees <- cbind(Trees, ABG)
 #plotyearABG <- aggregate(Trees$ABG ~ Trees$"1haPlotNumber" + Trees$SiteYear, FUN=mean, na.omit=TRUE)
 
 plotyearABG <- aggregate(Trees$ABG ~ Trees$PlotSiteYear, FUN=mean, na.omit=TRUE)
-
 names(plotyearABG) <- c("PlotSiteYear", "ABG")
 #allABG <- ifelse(is.na(Trees$ABG)==TRUE, plotABG$ABG[match(Trees$"1haPlotNumber", plotABG$Plot)], Trees$ABG)
 allABG <- ifelse(is.na(Trees$ABG)==TRUE, plotyearABG$ABG[match(Trees$PlotSiteYear, plotyearABG$PlotSiteYear)], Trees$ABG)
 
 Trees$ABG <- allABG
+# Multiply ABG by 0.5 to convert to carbon storage following Chave et al. 2005
 Cstorage <- Trees$ABG*0.5
 Trees <- cbind(Trees, Cstorage)
 
@@ -314,6 +279,13 @@ Cplot <- aggregate(Trees$Cstorage ~ Trees$PlotSiteYear, FUN=sum, na.omit=TRUE)
 names(Cplot) <- c("PlotSiteYear", "Cstorage")
 
 write.table(Cplot, "CarbonAllSitesAllYears.csv", sep=",", row.names=FALSE)
+
+###################  END 2005 CARBON CALCULATIONS ####################
+
+
+
+
+################### CODE FOR CHAVE ET AL. 2014 METHODS #####################
 
 # If desired, use updated equations from Chave et al. In Press from Global Change Biology to re-calculate carbon storage
 # Data for "E" layer can be downloaded from http://chave.ups-tlse.fr/chave/pantropical_allometry.htm or extracted by:
