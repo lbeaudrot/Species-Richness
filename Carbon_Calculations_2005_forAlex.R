@@ -183,6 +183,8 @@ Trees <- Trees[aliveT,]
 # Add decimal KRP plot with inflated diameters until issue is resolved in the database
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1" & Trees$SamplingPeriod=="2011.01"] <- Trees$Diameter[Trees$"1haPlotNumber"=="VG-KRP-1"& Trees$SamplingPeriod=="2011.01"]/10
 
+# Add decimal to 2012 BCI stems with inflated diameters (all >100) until issue is resolved in the database
+
 # Add decimal to 6 stems in plot VG-COU-5 that have inflated diameters until issue is resolved in the database
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==392] <- 39.2
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==525] <- 52.5
@@ -192,6 +194,10 @@ Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==723] <- 72.3
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==1120] <- 112.0
 # Add decimal to outlier diameter in plot VG-YAS-1
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-YAS-1" & Trees$Diameter==420] <- 42.0
+# Add decimal to outlier (999) values in plots VG-CSN-1 and VG-CSN-5
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-CSN-1" & Trees$Diameter==999] <- 99.9
+Trees$Diameter[Trees$"1haPlotNumber"=="VG-CSN-5" & Trees$Diameter==999] <- 99.9
+
 # Check to be sure that no other years had outlier values for these stems
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter>300] 
 ############### END DATA CLEANING ###############
