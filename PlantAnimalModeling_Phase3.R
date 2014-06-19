@@ -118,7 +118,7 @@ MData <- as.data.frame(MData)
 
 # Add categorical variables for random effects
 Year <- c(2011, 2011, 2012, 2012, 2011, 2011, 2011, 2011, 2012, 2011, 2011, 2011, 2011, 2012)
-Continent <- c("Asia", "America", "Africa", "America", "America", "Africa", "America", "Africa", "Asia", "Africa", "Africa", "America", "America", "America")
+Continent <- c("Asia", "America", "Africa", "America", "America", "Africa", "America", "Africa", "Asia", "Madagascar", "Africa", "America", "America", "America")
 
 Mdata <- cbind(MData, Year, Continent)
 
@@ -127,8 +127,10 @@ CT.Rich.sd <- c(10.044, 6.280, 18.513, 5.167, 9.519, 10.394, 3.509, 11.639, 9.67
 Mdata <- cbind(Mdata, CT.Rich.sd)
 
 Asia <- c(1,0,0,0,0,0,0,0,1,0,0,0,0,0)
-Africa <- c(0,0,1,0,0,1,0,1,0,1,1,0,0,0)
-Mdata <- cbind(Mdata, Asia, Africa)
+Africa <- c(0,0,1,0,0,1,0,1,0,0,1,0,0,0)
+Madagascar <- c(0,0,0,0,0,0,0,0,0,1,0,0,0,0)
+
+Mdata <- cbind(Mdata, Asia, Africa, Madagascar)
 
 extras <- as.data.frame(cbind(ForestLoss$ForestLossZOI, ForestLoss$PA_area, Latitude_orig$Latitude))
 extras <- cbind(Latitude_orig$Site.Code, extras)
@@ -185,8 +187,8 @@ library(lme4)
 library(MASS) 
 library(MuMIn)
 
-fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata, weights=(1/(CT.Rich.sd^2)))
-allRich.dredge <- dredge(fitRich, fixed=c("Africa", "Asia"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata, weights=(1/(CT.Rich.sd^2)))
+allRich.dredge <- dredge(fitRich, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
 #allRich.sel <- model.sel(allRich.dredge)
 #summary(allRich)
@@ -212,8 +214,8 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata)
-allFD.dredge <- dredge(fitFD, fixed=c("Africa", "Asia"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
+allFD.dredge <- dredge(fitFD, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #allFD <- model.avg(allFD.dredge, beta=TRUE, fit=TRUE)
 #summary(allFD)
 
@@ -236,8 +238,8 @@ set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
-fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata)
-allShan.dredge <- dredge(fitShan, fixed=c("Africa", "Asia"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
+allShan.dredge <- dredge(fitShan, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #model.sel(allShan.dredge)
 #allShan <- model.avg(allShan.dredge, beta=TRUE, fit=TRUE)
 
