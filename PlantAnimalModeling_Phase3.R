@@ -340,23 +340,23 @@ dev.off()
 library(ggplot2)
 
 Rich.coef <- summary(allRich)[[3]]
-rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Stem Density",  "Rainfall","PA Size",  "Latitude", "Carbon", "Tree Diversity", "Africa", "Asia", "Forest Loss")
-
+rownames(summary(allRich)[[3]])[1:12]
+rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Stem Density", "Rainfall", "Africa", "Asia", 
+                         "Latitude", "Tree Diversity", "PA Size", "Carbon", "Forest Loss", "Elevation Mean")
+  
 Shan.coef <- summary(allShan)[[3]]
-rownames(Shan.coef) <- c("(Intercept)","Asia", "Elevation CV", "Stem Density", "Tree Diversity", "Forest Loss", "PA Size", "Latitude", "Africa", "Rainfall", "Carbon")
-
+rownames(summary(allShan)[[3]])[1:12]
+rownames(Shan.coef) <- c("(Intercept)", "Elevation CV", "Elevation Mean", "Stem Density", "Africa", "Asia",
+                         "Tree Diversity", "Forest Loss", "Latitude", "PA Size", "Rainfall", "Carbon")
+  
 FD.coef <- summary(allFD)[[3]]
-rownames(FD.coef) <- c("(Intercept)","Africa", "Forest Loss", "Tree Diversity", "Asia",  "Elevation CV", "Stem Density", "PA Size", "Carbon", "Rainfall", "Latitude")
-
+rownames(summary(allFD)[[3]])[1:12]
+rownames(FD.coef) <- c("(Intercept)", "Africa", "Asia", "Stem Density", "Latitude", "Tree Diversity", 
+                       "Elevation CV", "Rainfall", "Forest Loss", "Carbon", "Elevation Mean", "PA Size")
+  
 #graphmodels <- list(summary(allRich)[[3]], summary(allShan)[[3]], summary(allFD)[[3]])
 graphmodels <- list(Rich.coef, Shan.coef, FD.coef)
 names(graphmodels) <- c("Species Richness", "Taxonomic Diversity", "Functional Diversity")
-
-OutputPlot <- qplot(rownames(test2), test2[,1], ymin = test2[,4],
-                    ymax = test2[,5], data = test2, geom = "pointrange",
-                    ylab = NULL, xlab = NULL)
-OutputPlot <- OutputPlot + geom_hline(yintercept = 0, lwd = I(7/12), colour = I(hsv(0/12, 7/12, 7/12)), alpha = I(5/12))
-OutputPlot <- OutputPlot + facet_grid(~ ModelName) + coord_flip() + theme_bw()
 
 
 CoefficientPlot <- function(models, modelnames = ""){
@@ -375,7 +375,7 @@ CoefficientPlot <- function(models, modelnames = ""){
   MatrixofModels <- data.frame(cbind(rownames(MatrixofModels), MatrixofModels))
   colnames(MatrixofModels) <- c("IV", "Estimate", "StandardError", "AdjSE", "LowerCI", "UpperCI", "ModelName")
   #MatrixofModels$IV <- factor(MatrixofModels$IV, levels = MatrixofModels$IV)
-  MatrixofModels$IV <- factor(MatrixofModels$IV, levels = c("(Intercept)", "Africa", "Asia", "Carbon", "PA Size", "Latitude", "Forest Loss", "Tree Diversity", "Rainfall", "Elevation CV", "Stem Density"))
+  MatrixofModels$IV <- factor(MatrixofModels$IV, levels = c("(Intercept)", "Africa", "Asia", "Carbon", "PA Size", "Forest Loss", "Elevation Mean", "Tree Diversity", "Rainfall", "Latitude", "Elevation CV", "Stem Density"))
   
   MatrixofModels[, -c(1, 7)] <- apply(MatrixofModels[, -c(1, 7)], 2, function(x){as.numeric(as.character(x))})
   
@@ -389,6 +389,6 @@ CoefficientPlot <- function(models, modelnames = ""){
   return(OutputPlot)
 }
 
-pdf(file="CoefficientPlot.pdf")
+pdf(file="CoefficientPlot_19June2014.pdf")
 CoefficientPlot(graphmodels, modelnames=c("Species Richness", "Taxonomic Diversity", "Functional Diversity"))
 dev.off()
