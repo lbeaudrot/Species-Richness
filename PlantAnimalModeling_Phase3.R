@@ -185,8 +185,8 @@ library(lme4)
 library(MASS) 
 library(MuMIn)
 
-fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata, weights=(1/(CT.Rich.sd^2)))
-allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata, weights=(1/(CT.Rich.sd^2)))
+allRich.dredge <- dredge(fitRich, fixed=c("Africa", "Asia"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
 #allRich.sel <- model.sel(allRich.dredge)
 #summary(allRich)
@@ -212,8 +212,8 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata)
-allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata)
+allFD.dredge <- dredge(fitFD, fixed=c("Africa", "Asia"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #allFD <- model.avg(allFD.dredge, beta=TRUE, fit=TRUE)
 #summary(allFD)
 
@@ -236,8 +236,8 @@ set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
-fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata)
-allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
+fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia, data=Mdata)
+allShan.dredge <- dredge(fitShan, fixed=c("Africa", "Asia"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #model.sel(allShan.dredge)
 #allShan <- model.avg(allShan.dredge, beta=TRUE, fit=TRUE)
 
