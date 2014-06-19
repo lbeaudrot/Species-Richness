@@ -140,7 +140,7 @@ colnames(extras) <- c("Site.Code2", "ForestLossZOI2", "PA_area2", "Latitude2")
 # Create output table of predictor and response variables for inclusion in paper
 output.table <- cbind(model.data, Year, Continent, CT.Rich.sd, extras, Asia, Africa)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_20May2014.csv", row.names=FALSE)
+#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_19June2014.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
@@ -187,7 +187,8 @@ library(lme4)
 library(MASS) 
 library(MuMIn)
 
-fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata, weights=(1/(CT.Rich.sd^2)))
+#fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata, weights=(1/(CT.Rich.sd^2)))
+fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
 allRich.dredge <- dredge(fitRich, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
 #allRich.sel <- model.sel(allRich.dredge)
@@ -196,7 +197,7 @@ allRich.dredge <- dredge(fitRich, fixed=c("Africa", "Asia", "Madagascar"), beta=
 Richconfset.95p <- get.models(allRich.dredge, cumsum(weight) <= .95)
 allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
 Rich95output <- model.sel(Richconfset.95p)
-#write.csv(Rich95output, file="ModelAveraging_Rich95output_WLS_WCBio12_DummyVariables.csv", row.names=FALSE)
+#write.csv(Rich95output, file="ModelAveraging_Rich95output_WLS_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
 summary(allRich)
 
 
@@ -222,7 +223,7 @@ allFD.dredge <- dredge(fitFD, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE
 FDconfset.95p <- get.models(allFD.dredge, cumsum(weight) <= .95)
 allFD <- model.avg(FDconfset.95p, beta=TRUE, fit=TRUE)
 FD95output <- model.sel(FDconfset.95p)
-#write.csv(FD95output, file="ModelAveraging_FD95output_WCBio12_DummyVariables.csv", row.names=FALSE)
+#write.csv(FD95output, file="ModelAveraging_FD95output_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
 summary(allFD)
 
 plot(resid(fitFD), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Functional Diversity")
@@ -247,7 +248,7 @@ allShan.dredge <- dredge(fitShan, fixed=c("Africa", "Asia", "Madagascar"), beta=
 Shanconfset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
 allShan <- model.avg(Shanconfset.95p, beta=TRUE, fit=TRUE)
 Shan95output <- model.sel(Shanconfset.95p)
-#write.csv(Shan95output, file="ModelAveraging_Shan95output_WCBio12_DummyVariables.csv", row.names=FALSE)
+#write.csv(Shan95output, file="ModelAveraging_Shan95output_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
 
 summary(allShan)
 
