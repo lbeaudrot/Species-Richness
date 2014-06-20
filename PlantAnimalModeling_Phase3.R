@@ -164,8 +164,8 @@ pdf(file="PAIRS_Vegetation.pdf")
 pairs(plot.VGmean[,2:12], lower.panel = panel.smooth, upper.panel = panel.cor)
 dev.off()
 
-Examine <- as.data.frame(cbind(Mdata$CT.median, Mdata$CT.FDisMedian, Mdata$Shannon.Index, Mdata$V.Cstorage, Mdata$V.Cstorage2, MData$V.TShan, Mdata$V.NStemsT, Mdata$RainTotal, Mdata$Elev.CV, Mdata$ForestLossZOI, Mdata$Latitude, Mdata$PA_area, Mdata$WC_Bio12))
-names(Examine) <- c("CT.median", "FDis", "Shannon", "V.Cstorage", "V.Cstorage2", "V.TShan", "V.NStemsT", "RainTotal", "Elev.CV", "ForestLossZOI", "Latitude", "PA_area", "WC_Bio12")
+Examine <- as.data.frame(cbind(Mdata$CT.median, Mdata$CT.FDisMedian, Mdata$Shannon.Index,  Mdata$V.Cstorage2, MData$V.TShan, Mdata$V.NStemsT,  Mdata$Elev.Mean, Mdata$Elev.CV, Mdata$ForestLossZOI, Mdata$Latitude, Mdata$PA_area, Mdata$WC_Bio12))
+names(Examine) <- c("SpRichness", "FuncDiv", "TaxonDiv", "Carbon", "Tree Diversity", "Stem Density",  "Elev.Mean", "Elev.CV", "ForestLoss", "Latitude", "PA Size", "Rainfall")
 pairs(Examine, lower.panel = panel.smooth, upper.panel = panel.cor)
 
 # VISUALIZE species richness across sites
@@ -193,6 +193,9 @@ allRich.dredge <- dredge(fitRich, fixed=c("Africa", "Asia", "Madagascar"), beta=
 #allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
 #allRich.sel <- model.sel(allRich.dredge)
 #summary(allRich)
+
+fitRichbest <- lm(CT.median ~  Africa + Asia + Elev.CV  + V.NStemsT + WC_Bio12, data=Mdata, weights=(1/(CT.Rich.sd^2)))
+summary(fitRichbest)
 
 Richconfset.95p <- get.models(allRich.dredge, cumsum(weight) <= .95)
 allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
@@ -280,7 +283,7 @@ robust.se <- function(model, cluster){
 }
 
 cluster.var <- Continent
-Model <- fitShan
+Model <- fitRichbest
 robust.se(Model, cluster.var)
 
 #To save only the variance-covariance matrix
