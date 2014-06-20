@@ -215,6 +215,8 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
+
+#fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, weights=(1/(CT.FDis.sd^2)), data=Mdata)
 fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
 allFD.dredge <- dredge(fitFD, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #allFD <- model.avg(allFD.dredge, beta=TRUE, fit=TRUE)
@@ -239,6 +241,7 @@ set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
+#fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, weights=(1/(Shannon.Index.sd^2)), data=Mdata)
 fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
 allShan.dredge <- dredge(fitShan, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE)
 #model.sel(allShan.dredge)
@@ -334,6 +337,12 @@ barplot(barplotdata, beside=TRUE, horiz=FALSE, las=2, ylab="Relative Variable Im
 legend("topright", pch=22, pt.cex=1.5, legend=c("Species Richness", "Taxonomic Diversity", "Functional Diversity"), col=c("black"), pt.bg=c("black", "gray", "gray92"), bty="n")
 dev.off()
 
+RelRich <- summary(allRich)[[6]]
+RelShan <- summary(allShan)[[6]]
+RelFD <- summary(allFD)[[6]]
+
+RelRich[charmatch(names(RelRich), names(RelShan))]
+RelShan[charmatch(names(RelFD), names(RelShan))]
 
 ## Coefficient Plot
 # Code modified from https://gist.github.com/dsparks/818976
