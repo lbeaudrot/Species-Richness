@@ -187,21 +187,26 @@ library(lme4)
 library(MASS) 
 library(MuMIn)
 
-fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata, weights=(1/(CT.Rich.sd^2)))
-#fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
-allRich.dredge <- dredge(fitRich, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
+fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata, weights=(1/(CT.Rich.sd^2)))
+fitRich2 <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
+allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
+#allRich.dredge <- dredge(fitRich, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
+#allRich.dredge <- dredge(fitRich, subset=dc(Africa, Asia, Madagascar), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
+
+# try also (instead of fixed) subset=dc("Africa", "Asia", "Madagascar")
 #allRich <- model.avg(allRich.dredge, beta=TRUE, fit=TRUE)
 #allRich.sel <- model.sel(allRich.dredge)
 #summary(allRich)
-
-fitRichbest <- lm(CT.median ~  Africa + Asia + Elev.CV  + V.NStemsT + WC_Bio12, data=Mdata, weights=(1/(CT.Rich.sd^2)))
-summary(fitRichbest)
 
 Richconfset.95p <- get.models(allRich.dredge, cumsum(weight) <= .95)
 allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
 Rich95output <- model.sel(Richconfset.95p)
 #write.csv(Rich95output, file="ModelAveraging_Rich95output_WLS_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
 summary(allRich)
+
+fitRichbest <- lm(CT.median ~  Elev.CV  + V.NStemsT + WC_Bio12, data=Mdata, weights=(1/(CT.Rich.sd^2)))
+fitRichbest2 <- lm(CT.median ~  Elev.CV  + V.NStemsT + WC_Bio12, data=Mdata)
+summary(fitRichbest)
 
 
 plot(Mdata$CT.median, resid(fitRich), xlab="Global Model Residuals", ylab="Predicted Species Richness")
@@ -219,9 +224,12 @@ set.panel()
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
 
-fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, weights=(1/(CT.FDis.sd^2)), data=Mdata)
-#fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
-allFD.dredge <- dredge(fitFD, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
+fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, weights=(1/(CT.FDis.sd^2)), data=Mdata)
+fitFD2 <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
+allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
+#allFD.dredge <- dredge(fitFD, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
+#allFD.dredge <- dredge(fitFD, subset=dc(Africa, Asia, Madagascar), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
+
 #allFD <- model.avg(allFD.dredge, beta=TRUE, fit=TRUE)
 #summary(allFD)
 
@@ -234,6 +242,9 @@ summary(allFD)
 plot(resid(fitFD), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Functional Diversity")
 hist(resid(fitFD), main="", xlab="Global Model Residuals")
 
+fitFDbest <- lm(CT.FDisMedian ~ Africa + Elev.CV, weights=(1/(CT.FDis.sd^2)), data=Mdata)
+fitFDbest2 <- lm(CT.FDisMedian ~ Africa + Elev.CV, data=Mdata)
+summary(fitFDbest)
 
 ###### VISUALIZE Terrestrial Vertebrate TAXONOMIC DIVERSITY
 set.panel(2,1)
@@ -244,9 +255,11 @@ set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
-fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, weights=(1/(Shannon.Index.sd^2)), data=Mdata)
-#fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.Mean + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
-allShan.dredge <- dredge(fitShan, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
+fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, weights=(1/(Shannon.Index.sd^2)), data=Mdata)
+fitShan2 <- lm(Shannon.Index ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
+allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
+#allShan.dredge <- dredge(fitShan, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
+#allShan.dredge <- dredge(fitShan, subset=dc(Africa, Asia), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
 #model.sel(allShan.dredge)
 #allShan <- model.avg(allShan.dredge, beta=TRUE, fit=TRUE)
 
@@ -259,6 +272,11 @@ Shan95output <- model.sel(Shanconfset.95p)
 summary(allShan)
 
 #confint(allShan)
+
+fitShanbest <- lm(Shannon.Index ~ Elev.CV + Madagascar, weights=(1/(Shannon.Index.sd^2)), data=Mdata)
+fitShanbest2 <- lm(Shannon.Index ~ Elev.CV + Madagascar, data=Mdata)
+summary(fitShanbest)
+
 
 plot(resid(fitShan), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Taxonomic Diversity")
 hist(resid(fitShan), main="", xlab="Global Model Residuals")
@@ -283,7 +301,7 @@ robust.se <- function(model, cluster){
 }
 
 cluster.var <- Continent
-Model <- fitRichbest
+Model <- fitRichbest2
 robust.se(Model, cluster.var)
 
 #To save only the variance-covariance matrix
