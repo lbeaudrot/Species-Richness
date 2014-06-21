@@ -481,3 +481,9 @@ CoefficientPlot <- function(models, modelnames = ""){
 pdf(file="CoefficientPlot_21June2014.pdf")
 CoefficientPlot(graphmodels, modelnames=c("Species Richness", "Taxonomic Diversity", "Functional Diversity"))
 dev.off()
+
+
+# Compare observed and predicted species richness estimates with a paired t-test
+observed <- c(20, 20, 21, 26, 32, 25, 28, 25, 23, 15, 25, 18, 19, 32)
+expected <- Mdata$CT.median
+t.test(expected, observed, paired=TRUE)
