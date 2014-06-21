@@ -140,7 +140,7 @@ colnames(extras) <- c("Site.Code2", "ForestLossZOI2", "PA_area2", "Latitude2")
 # Create output table of predictor and response variables for inclusion in paper
 output.table <- cbind(model.data, Year, Continent, CT.Rich.sd, extras, Asia, Africa)
 output.table <- merge(output.table, plot.VGvar, by.x="Site.Code", by.y="Site.Code", all=FALSE)
-#write.csv(output.table, file="Table_PredictorResponseVariables_Phase2_19June2014.csv", row.names=FALSE)
+#write.csv(output.table, file="Table_PredictorResponseVariables_Phase3_21June2014.csv", row.names=FALSE)
 
 ################################## END DATA FORMATTING ###########################
 
@@ -201,6 +201,8 @@ allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=T
 Richconfset.95p <- get.models(allRich.dredge, cumsum(weight) <= .95)
 allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
 Rich95output <- model.sel(Richconfset.95p)
+RichAlloutput <- model.sel(allRich.dredge)
+write.csv(RichAlloutput, file="ModelAveraging_RichAlloutput_WLS_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
 #write.csv(Rich95output, file="ModelAveraging_Rich95output_WLS_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
 summary(allRich)
 
@@ -235,6 +237,8 @@ allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE,
 FDconfset.95p <- get.models(allFD.dredge, cumsum(weight) <= .95)
 allFD <- model.avg(FDconfset.95p, beta=TRUE, fit=TRUE)
 FD95output <- model.sel(FDconfset.95p)
+FDAlloutput <- model.sel(allFD.dredge)
+write.csv(FDAlloutput, file="ModelAveraging_FDAlloutput_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
 #write.csv(FD95output, file="ModelAveraging_FD95output_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
 summary(allFD)
 
@@ -266,6 +270,8 @@ allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=T
 Shanconfset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
 allShan <- model.avg(Shanconfset.95p, beta=TRUE, fit=TRUE)
 Shan95output <- model.sel(Shanconfset.95p)
+ShanAlloutput <- model.sel(allShan.dredge)
+write.csv(Shan95output, file="ModelAveraging_ShanAlloutput_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
 #write.csv(Shan95output, file="ModelAveraging_Shan95output_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
 
 summary(allShan)
@@ -302,6 +308,21 @@ robust.se <- function(model, cluster){
 cluster.var <- Continent
 Model <- fitShanbest2
 robust.se(Model, cluster.var)
+
+# Modify robust SE function as a first step to incorporate robust SEs in model selection; modified function incorporates Continent variable
+robust.se2 <- function(model){
+  require(sandwich)
+  require(lmtest)
+  M <- length(unique(Continent))
+  N <- length(Continent)
+  K <- model$rank
+  dfc <- (M/(M - 1)) * ((N - 1)/(N - K))
+  uj <- apply(estfun(model), 2, function(x) tapply(x, Continent, sum));
+  rcse.cov <- dfc * sandwich(model, meat = crossprod(uj)/N)
+  rcse.se <- coeftest(model, rcse.cov)
+  return(list(rcse.cov, rcse.se))
+}
+
 
 #To save only the variance-covariance matrix
 vcov<-robust.se(model,clustervar)[[1]]
@@ -401,18 +422,18 @@ library(ggplot2)
 
 Rich.coef <- summary(allRich)[[3]]
 rownames(summary(allRich)[[3]])[1:12]
-rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Stem Density", "Rainfall", "Africa", "Asia", 
-                         "Latitude", "Tree Diversity", "PA Size", "Carbon", "Forest Loss", "Elevation Mean")
+rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Madagascar", "Stem Density",  "Africa", "Asia", 
+                          "Tree Diversity", "Carbon", "PA Size", "Forest Loss", "Rainfall", "Latitude")
   
 Shan.coef <- summary(allShan)[[3]]
 rownames(summary(allShan)[[3]])[1:12]
-rownames(Shan.coef) <- c("(Intercept)", "Elevation CV", "Elevation Mean", "Stem Density", "Africa", "Asia",
-                         "Tree Diversity", "Forest Loss", "Latitude", "PA Size", "Rainfall", "Carbon")
+rownames(Shan.coef) <- c("(Intercept)", "Asia", "Elevation CV",  "Stem Density", "Tree Diversity", "Madagascar",
+                         "Africa", "Forest Loss",  "PA Size",  "Latitude", "Rainfall", "Carbon")
   
 FD.coef <- summary(allFD)[[3]]
 rownames(summary(allFD)[[3]])[1:12]
-rownames(FD.coef) <- c("(Intercept)", "Africa", "Asia", "Stem Density", "Latitude", "Tree Diversity", 
-                       "Elevation CV", "Rainfall", "Forest Loss", "Carbon", "Elevation Mean", "PA Size")
+rownames(FD.coef) <- c("(Intercept)", "Africa",  "Stem Density", "Forest Loss", "Tree Diversity", "Latitude",
+                       "Asia", "Madagascar", "Elevation CV", "Carbon", "PA Size", "Rainfall")
   
 #graphmodels <- list(summary(allRich)[[3]], summary(allShan)[[3]], summary(allFD)[[3]])
 graphmodels <- list(Rich.coef, Shan.coef, FD.coef)
@@ -435,7 +456,7 @@ CoefficientPlot <- function(models, modelnames = ""){
   MatrixofModels <- data.frame(cbind(rownames(MatrixofModels), MatrixofModels))
   colnames(MatrixofModels) <- c("IV", "Estimate", "StandardError", "AdjSE", "LowerCI", "UpperCI", "ModelName")
   #MatrixofModels$IV <- factor(MatrixofModels$IV, levels = MatrixofModels$IV)
-  MatrixofModels$IV <- factor(MatrixofModels$IV, levels = c("(Intercept)", "Africa", "Asia", "Carbon", "PA Size", "Forest Loss", "Elevation Mean", "Tree Diversity", "Rainfall", "Latitude", "Elevation CV", "Stem Density"))
+  MatrixofModels$IV <- factor(MatrixofModels$IV, levels = c("(Intercept)", "Madagascar", "Africa", "Asia", "Carbon", "Rainfall", "Latitude", "PA Size", "Forest Loss", "Tree Diversity", "Stem Density", "Elevation CV"))
   
   MatrixofModels[, -c(1, 7)] <- apply(MatrixofModels[, -c(1, 7)], 2, function(x){as.numeric(as.character(x))})
   
@@ -449,6 +470,6 @@ CoefficientPlot <- function(models, modelnames = ""){
   return(OutputPlot)
 }
 
-pdf(file="CoefficientPlot_19June2014.pdf")
+pdf(file="CoefficientPlot_21June2014.pdf")
 CoefficientPlot(graphmodels, modelnames=c("Species Richness", "Taxonomic Diversity", "Functional Diversity"))
 dev.off()
