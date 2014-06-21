@@ -187,8 +187,8 @@ library(lme4)
 library(MASS) 
 library(MuMIn)
 
-fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata, weights=(1/(CT.Rich.sd^2)))
-fitRich2 <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
+fitRich <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
+#fitRich2 <- lm(CT.median ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata, weights=(1/(CT.Rich.sd^2)))
 allRich.dredge <- dredge(fitRich, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
 #allRich.dredge <- dredge(fitRich, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
 #allRich.dredge <- dredge(fitRich, subset=dc(Africa, Asia, Madagascar), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
@@ -205,8 +205,8 @@ Rich95output <- model.sel(Richconfset.95p)
 summary(allRich)
 
 fitRichbest <- lm(CT.median ~  Elev.CV  + V.NStemsT + WC_Bio12, data=Mdata, weights=(1/(CT.Rich.sd^2)))
-fitRichbest2 <- lm(CT.median ~  Elev.CV  + V.NStemsT + WC_Bio12, data=Mdata)
-summary(fitRichbest)
+fitRichbest2 <- lm(CT.median ~  Elev.CV + Madagascar, data=Mdata)
+summary(fitRichbest2)
 
 
 plot(Mdata$CT.median, resid(fitRich), xlab="Global Model Residuals", ylab="Predicted Species Richness")
@@ -223,9 +223,8 @@ set.panel()
 
 ###### MODEL MAMMAL Vertebrate FUNCTIONAL DIVERSITY
 
-
-fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, weights=(1/(CT.FDis.sd^2)), data=Mdata)
-fitFD2 <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
+fitFD <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
+#fitFD2 <- lm(CT.FDisMedian ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, weights=(1/(CT.FDis.sd^2)), data=Mdata)
 allFD.dredge <- dredge(fitFD, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
 #allFD.dredge <- dredge(fitFD, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
 #allFD.dredge <- dredge(fitFD, subset=dc(Africa, Asia, Madagascar), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
@@ -243,7 +242,7 @@ plot(resid(fitFD), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predict
 hist(resid(fitFD), main="", xlab="Global Model Residuals")
 
 fitFDbest <- lm(CT.FDisMedian ~ Africa + Elev.CV, weights=(1/(CT.FDis.sd^2)), data=Mdata)
-fitFDbest2 <- lm(CT.FDisMedian ~ Africa + Elev.CV, data=Mdata)
+fitFDbest2 <- lm(CT.FDisMedian ~ Africa, data=Mdata)
 summary(fitFDbest)
 
 ###### VISUALIZE Terrestrial Vertebrate TAXONOMIC DIVERSITY
@@ -255,8 +254,8 @@ set.panel()
 
 ###### MODEL Terrestrial Vertebrate TAXONOMIC DIVERSITY
 
-fitShan <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, weights=(1/(Shannon.Index.sd^2)), data=Mdata)
-fitShan2 <- lm(Shannon.Index ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
+fitShan <- lm(Shannon.Index ~  V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, data=Mdata)
+#fitShan2 <- lm(Shannon.Index ~ V.Cstorage2 + V.TShan + V.NStemsT + WC_Bio12 + Elev.CV + ForestLossZOI + Latitude + PA_area + Africa + Asia + Madagascar, weights=(1/(Shannon.Index.sd^2)), data=Mdata)
 allShan.dredge <- dredge(fitShan, beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
 #allShan.dredge <- dredge(fitShan, fixed=c("Africa", "Asia", "Madagascar"), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
 #allShan.dredge <- dredge(fitShan, subset=dc(Africa, Asia), beta=TRUE, evaluate=TRUE, rank="AICc", trace=TRUE, extra=list("confint", "adjR^2"))
@@ -273,9 +272,9 @@ summary(allShan)
 
 #confint(allShan)
 
-fitShanbest <- lm(Shannon.Index ~ Elev.CV + Madagascar, weights=(1/(Shannon.Index.sd^2)), data=Mdata)
-fitShanbest2 <- lm(Shannon.Index ~ Elev.CV + Madagascar, data=Mdata)
-summary(fitShanbest)
+fitShanbest <- lm(Shannon.Index ~ Elev.CV, weights=(1/(Shannon.Index.sd^2)), data=Mdata)
+fitShanbest2 <- lm(Shannon.Index ~ Elev.CV + V.NStemsT + V.TShan + Asia, data=Mdata)
+summary(fitShanbest2)
 
 
 plot(resid(fitShan), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Taxonomic Diversity")
@@ -301,7 +300,7 @@ robust.se <- function(model, cluster){
 }
 
 cluster.var <- Continent
-Model <- fitRichbest2
+Model <- fitShanbest2
 robust.se(Model, cluster.var)
 
 #To save only the variance-covariance matrix
