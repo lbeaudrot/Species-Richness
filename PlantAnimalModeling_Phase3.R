@@ -400,10 +400,18 @@ points(LatLon$Longitude, LatLon$Latitude, col="green4", pch=c(1:14), cex=1)
 legend(x=-132, y=37, legend=LatLon$Site.Code, pch=c(1:14), border="transparent", col="green4", bg="white", box.col="transparent", title="TEAM Sites", title.adj=0.12, cex=0.66)
 dev.off()
 
-RelVar <- read.csv("RelativeVariableImportance_WCBio12_DummyVariables.csv")
-barplotdata <- t(RelVar[,2:4])
-colnames(barplotdata) <- RelVar$Variable
-pdf(file="RelativeVariableImportance_BarPlot_WCBio12_DummyVariables.pdf", height=5)
+#RelVar <- read.csv("RelativeVariableImportance_WCBio12_DummyVariables.csv")
+
+Variable <- c("Elevation CV", "Madagascar", "Africa", "Tree Diversity", "Stem Density", "Forest Loss", "Asia", "PA Size", "Latitude", "Rainfall", "Carbon")
+RelVar.Rich <- c(0.87, 0.80, 0.07, 0.06, 0.27, 0.05, 0.06, 0.11, 0.08, 0.07, 0.06)
+RelVar.Shan <- c(0.61, 0.28, 0.14, 0.56, 0.39, 0.23, 0.17, 0.17, 0.14, 0.07, 0.06)
+RelVar.FD <- c(0.10, 0.11, 0.65, 0.36, 0.27, 0.29, 0.15, 0.07, 0.12, 0.10, 0.07)
+RelVar <- cbind(RelVar.Rich, RelVar.Shan, RelVar.FD)
+rownames(RelVar) <- Variable
+
+barplotdata <- t(RelVar)
+colnames(barplotdata) <- Variable
+pdf(file="RelativeVariableImportance_BarPlot_WCBio12_DummyVariables_21June2014.pdf", height=5)
 par(mar=c(8,5,2,2))
 barplot(barplotdata, beside=TRUE, horiz=FALSE, las=2, ylab="Relative Variable Importance", cex.lab=1, cex.axis=1, ylim=c(0,1))
 legend("topright", pch=22, pt.cex=1.5, legend=c("Species Richness", "Taxonomic Diversity", "Functional Diversity"), col=c("black"), pt.bg=c("black", "gray", "gray92"), bty="n")
