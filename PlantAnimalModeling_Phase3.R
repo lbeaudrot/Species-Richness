@@ -373,12 +373,10 @@ legend("topright", legend=c("Asia", "Americas", "Africa", "Madagascar"), col=c("
 mtext("               Aboveground Carbon Storage (Mg C per ha)", side=1, outer=TRUE, line=-2)
 dev.off()
 
-
-legend(x=-22, y=-15, cex=1.2, legend=c("Geography*", "Geography > Environment",
-                                       "Geography* > Environment*", "Environment > Geography"), 
-       fill=c(rainbow(n)[9], rainbow(n)[8], rainbow(n)[7], rainbow(n)[5]), border="white", box.col="white")
-
-
+set.panel(1,2)
+plot(Mdata$CT.median, Mdata$CT.FDisMedian, col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], xlab="Species Richness", ylab="Functional Diversity")
+legend("topleft", legend=c("Asia", "Americas", "Africa", "Madagascar"), col=c("red", "green3", "blue","black"), pch=c(17,16,15,18),  box.col="transparent", cex=0.8)
+plot(Mdata$Shannon.Index, Mdata$CT.FDisMedian, col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], xlab="Taxonomic Diversity", ylab="Functional Diversity")
 
 
 set.panel(1,3)
@@ -500,3 +498,11 @@ summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="Asia"] ~ Mdata$V.Cstorage2[Mdat
 summary(lm(Mdata$Shannon.Index[Mdata$Continent=="Africa"] ~ Mdata$V.Cstorage2[Mdata$Continent=="Africa"]))
 summary(lm(Mdata$Shannon.Index[Mdata$Continent=="America"] ~ Mdata$V.Cstorage2[Mdata$Continent=="America"]))
 summary(lm(Mdata$Shannon.Index[Mdata$Continent=="Asia"] ~ Mdata$V.Cstorage2[Mdata$Continent=="Asia"]))
+
+# Examine relationship between functional diversity and species richness & taxonomic diversity within continents
+
+summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="Africa"] ~ Mdata$Shannon.Index[Mdata$Continent=="Africa"]))
+summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="America"] ~ Mdata$Shannon.Index[Mdata$Continent=="America"]))
+
+summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="Africa"] ~ Mdata$CT.median[Mdata$Continent=="Africa"]))
+summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="America"] ~ Mdata$CT.median[Mdata$Continent=="America"]))
