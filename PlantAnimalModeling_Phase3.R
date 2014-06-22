@@ -487,3 +487,16 @@ dev.off()
 observed <- c(20, 20, 21, 26, 32, 25, 28, 25, 23, 15, 25, 18, 19, 32)
 expected <- Mdata$CT.median
 t.test(expected, observed, paired=TRUE)
+
+# Examine relationship between carbon storage and diversity within continents
+summary(lm(Mdata$CT.median[Mdata$Continent=="Africa"] ~ Mdata$V.Cstorage2[Mdata$Continent=="Africa"]))
+summary(lm(Mdata$CT.median[Mdata$Continent=="America"] ~ Mdata$V.Cstorage2[Mdata$Continent=="America"]))
+summary(lm(Mdata$CT.median[Mdata$Continent=="Asia"] ~ Mdata$V.Cstorage2[Mdata$Continent=="Asia"]))
+
+summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="Africa"] ~ Mdata$V.Cstorage2[Mdata$Continent=="Africa"]))
+summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="America"] ~ Mdata$V.Cstorage2[Mdata$Continent=="America"]))
+summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="Asia"] ~ Mdata$V.Cstorage2[Mdata$Continent=="Asia"]))
+
+summary(lm(Mdata$Shannon.Index[Mdata$Continent=="Africa"] ~ Mdata$V.Cstorage2[Mdata$Continent=="Africa"]))
+summary(lm(Mdata$Shannon.Index[Mdata$Continent=="America"] ~ Mdata$V.Cstorage2[Mdata$Continent=="America"]))
+summary(lm(Mdata$Shannon.Index[Mdata$Continent=="Asia"] ~ Mdata$V.Cstorage2[Mdata$Continent=="Asia"]))
