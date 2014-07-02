@@ -363,21 +363,48 @@ hist(resid(fitShan), main="", xlab="Global Model Residuals")
 pdf(file="AnimalDiversity_Carbon2_Plots_ByRegionColor.pdf", height=2.7)
 set.panel(1,3)
 par(mar=c(5, 5, 1, 1))
-plot(model.data$V.Cstorage2/1000, Mdata$CT.median, las=1, ylab="Species Richness", xlab="", bty="n", xlim=c(100, 250), ylim=c(10,50), cex.lab=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.3)
+plot(model.data$V.Cstorage2/1000, Mdata$CT.median, las=1, ylab="Species Richness", xlab="", bty="n", xlim=c(100, 250), 
+     ylim=c(10,50), cex.lab=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], 
+     col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.3)
 legend("bottomleft", expression(R^2* " < 0.001, df=12, p=0.77"), cex=1, bty="n")
-plot(model.data$V.Cstorage2/1000, Mdata$Shannon.Index, las=1, ylab="Taxonomic Diversity", xlab="", bty="n", xlim=c(100, 250), ylim=c(2.2, 3.4), cex.lab=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.3)
+plot(model.data$V.Cstorage2/1000, Mdata$Shannon.Index, las=1, ylab="Taxonomic Diversity", xlab="", bty="n", xlim=c(100, 250), 
+     ylim=c(2.2, 3.4), cex.lab=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], 
+     col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.3)
 legend("bottomleft", expression(R^2* " = 0.03, df=12, p=0.56"), cex=1, bty="n")
-plot(model.data$V.Cstorage2/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity", xlab="", bty="n", xlim=c(100, 250), ylim=c(0.24,0.32), cex.lab=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.3)
+plot(model.data$V.Cstorage2/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity", xlab="", bty="n", xlim=c(100, 250), 
+     ylim=c(0.24,0.32), cex.lab=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], 
+     col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.3)
 legend("bottomleft", expression(R^2* " = 0.05, df=12, p=0.22"), cex=1, bty="n")
-legend("topright", legend=c("Asia", "Americas", "Africa", "Madagascar"), col=c("red", "green3", "blue","black"), pch=c(17,16,15,18),  box.col="transparent", cex=1)
+legend("topright", legend=c("Asia", "Americas", "Africa", "Madagascar"), col=c("red", "green3", "blue","black"), 
+       pch=c(17,16,15,18),  box.col="transparent", cex=1)
 mtext("               Aboveground Carbon Storage (Mg C per ha)", side=1, outer=TRUE, line=-2)
 dev.off()
 
-set.panel(1,2)
-plot(Mdata$CT.median, Mdata$CT.FDisMedian, col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], xlab="Species Richness", ylab="Functional Diversity")
-legend("topleft", legend=c("Asia", "Americas", "Africa", "Madagascar"), col=c("red", "green3", "blue","black"), pch=c(17,16,15,18),  box.col="transparent", cex=0.8)
-plot(Mdata$Shannon.Index, Mdata$CT.FDisMedian, col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], xlab="Taxonomic Diversity", ylab="Functional Diversity")
 
+
+# Examine relationship between functional diversity and species richness & taxonomic diversity within continents
+
+summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="Africa"] ~ Mdata$Shannon.Index[Mdata$Continent=="Africa"]))
+summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="America"] ~ Mdata$Shannon.Index[Mdata$Continent=="America"]))
+AB <- coef(summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="America"] ~ Mdata$Shannon.Index[Mdata$Continent=="America"])))[1:2]
+
+summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="Africa"] ~ Mdata$CT.median[Mdata$Continent=="Africa"]))
+summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="America"] ~ Mdata$CT.median[Mdata$Continent=="America"]))
+CD <- coef(summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="America"] ~ Mdata$CT.median[Mdata$Continent=="America"])))[1:2]
+
+
+pdf(file="FunctionalDiversity_OtherDiversity_Plots_ByRegionColor.pdf", height=4)
+set.panel(1,2)
+plot(Mdata$CT.median, Mdata$CT.FDisMedian, col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], 
+     pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], xlab="Species Richness", ylab="Functional Diversity")
+abline(coef=CD, lty=1, lwd=2, col="green3")
+
+legend("topleft", legend=c("Asia", "Americas", "Africa", "Madagascar"), col=c("red", "green3", "blue","black"), 
+       pch=c(17,16,15,18),  box.col="transparent", cex=0.8)
+plot(Mdata$Shannon.Index, Mdata$CT.FDisMedian, col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], 
+     pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], xlab="Taxonomic Diversity", ylab="Functional Diversity")
+abline(coef=AB, lty=2, lwd=2, col="green3")
+dev.off()
 
 set.panel(1,3)
 par(mar=c(3, 5, 2, 0))
@@ -396,6 +423,29 @@ par(mar=c(0,0,0,0))
 map('world', interior=FALSE, xlim=c(-132, 155), ylim=c(-60, 37), col="gray60")
 points(LatLon$Longitude, LatLon$Latitude, col="green4", pch=c(1:14), cex=1)
 legend(x=-132, y=37, legend=LatLon$Site.Code, pch=c(1:14), border="transparent", col="green4", bg="white", box.col="transparent", title="TEAM Sites", title.adj=0.12, cex=0.66)
+dev.off()
+
+pdf(file="TEAM_Map_14Sites_Numbered.pdf", height=3)
+par(mar=c(0,0,0,0))
+map('world', interior=FALSE, xlim=c(-132, 155), ylim=c(-60, 37), col="gray60")
+#points(LatLon$Longitude, LatLon$Latitude, col="black", pch=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"), cex=0.01)
+#text(LatLon$Longitude, LatLon$Latitude, col="black", labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"), cex=1)
+#legend(x=-132, y=37, legend=LatLon$Site.Code, labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"), border="transparent", col="black", bg="white", box.col="transparent", title="TEAM Sites", title.adj=0.12, cex=0.66)
+points(LatLon$Longitude, LatLon$Latitude, col="black", pch=20, cex=1)
+text(LatLon$Longitude[1]-8, LatLon$Latitude[1], col="black", labels=LatLon$Site.Code[1], cex=0.7)
+text(LatLon$Longitude[2]-5, LatLon$Latitude[2]-4, col="black", labels=LatLon$Site.Code[2], cex=0.7)
+text(LatLon$Longitude[3]-6, LatLon$Latitude[3], col="black", labels=LatLon$Site.Code[3], cex=0.7)
+text(LatLon$Longitude[4]-5, LatLon$Latitude[4]+4, col="black", labels=LatLon$Site.Code[4], cex=0.7)
+text(LatLon$Longitude[5]+5, LatLon$Latitude[5]-4, col="black", labels=LatLon$Site.Code[5], cex=0.7)
+text(LatLon$Longitude[6]-2, LatLon$Latitude[6]+4, col="black", labels=LatLon$Site.Code[6], cex=0.7)
+text(LatLon$Longitude[7], LatLon$Latitude[7]-4, col="black", labels=LatLon$Site.Code[7], cex=0.7)
+text(LatLon$Longitude[8], LatLon$Latitude[8]+4, col="black", labels=LatLon$Site.Code[8], cex=0.7)
+text(LatLon$Longitude[9]+6, LatLon$Latitude[9]+3, col="black", labels=LatLon$Site.Code[9], cex=0.7)
+text(LatLon$Longitude[10]+8, LatLon$Latitude[10], col="black", labels=LatLon$Site.Code[10], cex=0.7)
+text(LatLon$Longitude[11]-8, LatLon$Latitude[11], col="black", labels=LatLon$Site.Code[11], cex=0.7)
+text(LatLon$Longitude[12]-7, LatLon$Latitude[12], col="black", labels="VB", cex=0.7)
+text(LatLon$Longitude[13]-8, LatLon$Latitude[13], col="black", labels=LatLon$Site.Code[13], cex=0.7)
+text(LatLon$Longitude[14]-7, LatLon$Latitude[14], col="black", labels=LatLon$Site.Code[14], cex=0.7)
 dev.off()
 
 #RelVar <- read.csv("RelativeVariableImportance_WCBio12_DummyVariables.csv")
@@ -482,7 +532,8 @@ dev.off()
 
 
 # Compare observed and predicted species richness estimates with a paired t-test
-observed <- c(20, 20, 21, 26, 32, 25, 28, 25, 23, 15, 25, 18, 19, 32)
+#observed <- c(20, 20, 21, 26, 32, 25, 28, 25, 23, 15, 25, 18, 19, 32)
+observed <- c(24, 28, 22, 29, 36, 26, 29, 32, 31, 16, 27, 20, 23, 38)
 expected <- Mdata$CT.median
 t.test(expected, observed, paired=TRUE)
 
@@ -499,10 +550,6 @@ summary(lm(Mdata$Shannon.Index[Mdata$Continent=="Africa"] ~ Mdata$V.Cstorage2[Md
 summary(lm(Mdata$Shannon.Index[Mdata$Continent=="America"] ~ Mdata$V.Cstorage2[Mdata$Continent=="America"]))
 summary(lm(Mdata$Shannon.Index[Mdata$Continent=="Asia"] ~ Mdata$V.Cstorage2[Mdata$Continent=="Asia"]))
 
-# Examine relationship between functional diversity and species richness & taxonomic diversity within continents
 
-summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="Africa"] ~ Mdata$Shannon.Index[Mdata$Continent=="Africa"]))
-summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="America"] ~ Mdata$Shannon.Index[Mdata$Continent=="America"]))
 
-summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="Africa"] ~ Mdata$CT.median[Mdata$Continent=="Africa"]))
-summary(lm(Mdata$CT.FDisMedian[Mdata$Continent=="America"] ~ Mdata$CT.median[Mdata$Continent=="America"]))
+
