@@ -553,3 +553,19 @@ write.csv(plot.VGmean, file="PlantDiversityCalculations.csv")
 write.csv(plot.VGvar, file="PlantDiversityVariances.csv")
 # Manually add "Site.Code" as first column name for these output csv files to enable merging 
 
+
+
+# Examine relationship between stem density and DBH
+DBH.mean <- aggregate(Trees$Diameter ~ Trees$"1haPlotNumber", FUN=mean, na.omit=TRUE)
+test <- cbind(DBH.mean, NStemsT)
+names(test) <- c("plot", "Diameter", "NStemsT")
+test2 <- test[-na.omit(match(names(ExcludePlots), test$plot)),]
+test.site <- substr(test2$plot,4,6)
+test2 <- cbind(test2, test.site)
+meanD <- aggregate(test2$Diameter ~ test2$test.site, FUN=mean, na.omit=TRUE)
+meanSD <- aggregate(test2$NStemsT ~ test2$test.site, FUN=mean, na.omit=TRUE)
+model3 <- lm(meanD[,2]~meanSD[,2])
+pdf(file="StemDensity_v_DBH.pdf", width=5, height=5)
+plot( meanSD[,2], meanD[,2], pch=19, xlab="Stem Density", ylab="Mean DBH", las=1)
+abline(coef(model3)[1], coef(model3)[2], lwd=2)
+dev.off()
