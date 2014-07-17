@@ -186,6 +186,7 @@ Vdata$liana$Family[Vdata$liana$Family=="UNKNOWN"] <- "Unknown"
 
 Trees <- Vdata$tree
 
+
 # Limit data to one year from each site so that data correspond to CT metrics
 # 2012 for CAX, YAS, and PSH
 # 2011 for all other sites
@@ -206,6 +207,12 @@ Trees <- subset(Trees,
       Site.CodeT=="UDZ" & SamplingPeriod=="2011.01"|
       Site.CodeT=="VB-" & SamplingPeriod=="2011.01"|
       Site.CodeT=="YAN" & SamplingPeriod=="2011.01")
+
+# Replace Diameter column with New Diameter column for BCI, NAK, NNN and RNF
+Trees$Diameter <- ifelse(Trees$Site.CodeT=="BCI"|Trees$Site.CodeT=="NAK"|Trees$Site.CodeT=="NNN"|Trees$Site.CodeT=="RNF", Trees$NewDiameter, Trees$Diameter)
+
+# Replace Diameter with NewDiameter measurement for any stems with a NewDiameter measurement if NewPOM !=1.3
+#ifelse(Trees$NewPOMHeight!=1.3, Trees$NewDiameter, Trees$Diameter)
 
 #Remove dead trees
 aliveT <- grep(pattern="K", x=Trees$ConditionCodes, invert=TRUE)
