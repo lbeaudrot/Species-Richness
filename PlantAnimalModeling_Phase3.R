@@ -371,7 +371,7 @@ plot(model.data$V.Cstorage2/1000, Mdata$Shannon.Index, las=1, ylab="Taxonomic Di
      ylim=c(2.2, 3.4), cex.lab=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], 
      col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.3)
 legend("bottomleft", expression(R^2* " = 0.03, df=12, p=0.56"), cex=1, bty="n")
-plot(model.data$V.Cstorage2/1000, Mdata$CT.FDisMedian, las=1, ylab="Functional Diversity", xlab="", bty="n", xlim=c(100, 250), 
+plot(model.data$V.Cstorage2/1000, Mdata$CT.FDisMedian, las=1, ylab="Trait Diversity", xlab="", bty="n", xlim=c(100, 250), 
      ylim=c(0.24,0.32), cex.lab=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], 
      col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.3)
 legend("bottomleft", expression(R^2* " = 0.05, df=12, p=0.22"), cex=1, bty="n")
@@ -459,10 +459,10 @@ rownames(RelVar) <- Variable
 
 barplotdata <- t(RelVar)
 colnames(barplotdata) <- Variable
-pdf(file="RelativeVariableImportance_BarPlot_WCBio12_DummyVariables_21June2014.pdf", height=5)
+pdf(file="RelativeVariableImportance_BarPlot_WCBio12_DummyVariables_17July2014.pdf", height=5)
 par(mar=c(8,5,2,2))
 barplot(barplotdata, beside=TRUE, horiz=FALSE, las=2, ylab="Relative Variable Importance", cex.lab=1, cex.axis=1, ylim=c(0,1))
-legend("topright", pch=22, pt.cex=1.5, legend=c("Species Richness", "Taxonomic Diversity", "Functional Diversity"), col=c("black"), pt.bg=c("black", "gray", "gray92"), bty="n")
+legend("topright", pch=22, pt.cex=1.5, legend=c("Species Richness", "Taxonomic Diversity", "Trait Diversity"), col=c("black"), pt.bg=c("black", "gray", "gray92"), bty="n")
 dev.off()
 
 RelRich <- summary(allRich)[[6]]
@@ -493,7 +493,7 @@ rownames(FD.coef) <- c("(Intercept)", "Africa",  "Stem Density", "Forest Loss", 
   
 #graphmodels <- list(summary(allRich)[[3]], summary(allShan)[[3]], summary(allFD)[[3]])
 graphmodels <- list(Rich.coef, Shan.coef, FD.coef)
-names(graphmodels) <- c("Species Richness", "Taxonomic Diversity", "Functional Diversity")
+names(graphmodels) <- c("Species Richness", "Taxonomic Diversity", "Trait Diversity")
 
 
 CoefficientPlot <- function(models, modelnames = ""){
@@ -516,7 +516,7 @@ CoefficientPlot <- function(models, modelnames = ""){
   
   MatrixofModels[, -c(1, 7)] <- apply(MatrixofModels[, -c(1, 7)], 2, function(x){as.numeric(as.character(x))})
   
-  MatrixofModels$ModelName <- factor(MatrixofModels$ModelName, levels=c("Species Richness", "Taxonomic Diversity", "Functional Diversity"))
+  MatrixofModels$ModelName <- factor(MatrixofModels$ModelName, levels=c("Species Richness", "Taxonomic Diversity", "Trait Diversity"))
   
   OutputPlot <- qplot(IV, Estimate, ymin = LowerCI,
                       ymax = UpperCI, data = MatrixofModels, geom = "pointrange",
@@ -527,7 +527,7 @@ CoefficientPlot <- function(models, modelnames = ""){
 }
 
 pdf(file="CoefficientPlot_21June2014.pdf")
-CoefficientPlot(graphmodels, modelnames=c("Species Richness", "Taxonomic Diversity", "Functional Diversity"))
+CoefficientPlot(graphmodels, modelnames=c("Species Richness", "Taxonomic Diversity", "Trait Diversity"))
 dev.off()
 
 
@@ -551,5 +551,5 @@ summary(lm(Mdata$Shannon.Index[Mdata$Continent=="America"] ~ Mdata$V.Cstorage2[M
 summary(lm(Mdata$Shannon.Index[Mdata$Continent=="Asia"] ~ Mdata$V.Cstorage2[Mdata$Continent=="Asia"]))
 
 
-
+# Examine relationship between IUCN status, elevation variability and stem density
 
