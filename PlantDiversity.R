@@ -208,8 +208,9 @@ Trees <- subset(Trees,
       Site.CodeT=="VB-" & SamplingPeriod=="2011.01"|
       Site.CodeT=="YAN" & SamplingPeriod=="2011.01")
 
-# Replace Diameter column with New Diameter column for BCI, NAK, NNN and RNF
-Trees$Diameter <- ifelse(Trees$Site.CodeT=="BCI"|Trees$Site.CodeT=="NAK"|Trees$Site.CodeT=="NNN"|Trees$Site.CodeT=="RNF", Trees$NewDiameter, Trees$Diameter)
+# Replace Diameter column with New Diameter column if applicable
+#Trees$Diameter <- ifelse(Trees$Site.CodeT=="BCI"|Trees$Site.CodeT=="NAK"|Trees$Site.CodeT=="NNN"|Trees$Site.CodeT=="RNF", Trees$NewDiameter, Trees$Diameter)
+Trees$Diameter <- ifelse(is.na(Trees$NewDiameter), Trees$Diameter, Trees$NewDiameter)
 
 # Replace Diameter with NewDiameter measurement for any stems with a NewDiameter measurement if NewPOM !=1.3
 #ifelse(Trees$NewPOMHeight!=1.3, Trees$NewDiameter, Trees$Diameter)
@@ -232,10 +233,11 @@ Trees$Diameter[Trees$"1haPlotNumber"=="VG-COU-5" & Trees$Diameter==1120] <- 112.
 Trees$Diameter[Trees$"1haPlotNumber"=="VG-YAS-1" & Trees$Diameter==420] <- 42.0
 
 # Check for number of duplicate stems
-dim(Trees[duplicated(Trees$SamplingUnitName)==TRUE,])
+#dim(Trees[duplicated(Trees$SamplingUnitName)==TRUE,])
 
 # Remove duplicated SamplingUnitNames until issue is resolved in the database
-Trees <- Trees[duplicated(Trees$SamplingUnitName)==FALSE,]
+# Following conversation with AZ on 7/23/2014, don't remove duplicate stems because they are different stems missing extra digits
+#Trees <- Trees[duplicated(Trees$SamplingUnitName)==FALSE,]
 
 
 Lianas <- Vdata$liana 
