@@ -202,7 +202,7 @@ Richconfset.95p <- get.models(allRich.dredge, cumsum(weight) <= .95)
 allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
 Rich95output <- model.sel(Richconfset.95p)
 RichAlloutput <- model.sel(allRich.dredge)
-write.csv(RichAlloutput, file="ModelAveraging_RichAlloutput_WLS_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
+#write.csv(RichAlloutput, file="ModelAveraging_RichAlloutput_WLS_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
 #write.csv(Rich95output, file="ModelAveraging_Rich95output_WLS_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
 summary(allRich)
 
@@ -238,7 +238,7 @@ FDconfset.95p <- get.models(allFD.dredge, cumsum(weight) <= .95)
 allFD <- model.avg(FDconfset.95p, beta=TRUE, fit=TRUE)
 FD95output <- model.sel(FDconfset.95p)
 FDAlloutput <- model.sel(allFD.dredge)
-write.csv(FDAlloutput, file="ModelAveraging_FDAlloutput_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
+#write.csv(FDAlloutput, file="ModelAveraging_FDAlloutput_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
 #write.csv(FD95output, file="ModelAveraging_FD95output_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
 summary(allFD)
 
@@ -271,7 +271,7 @@ Shanconfset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
 allShan <- model.avg(Shanconfset.95p, beta=TRUE, fit=TRUE)
 Shan95output <- model.sel(Shanconfset.95p)
 ShanAlloutput <- model.sel(allShan.dredge)
-write.csv(Shan95output, file="ModelAveraging_ShanAlloutput_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
+#write.csv(Shan95output, file="ModelAveraging_ShanAlloutput_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
 #write.csv(Shan95output, file="ModelAveraging_Shan95output_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
 
 summary(allShan)
@@ -431,7 +431,8 @@ map('world', interior=FALSE, xlim=c(-132, 155), ylim=c(-60, 37), col="gray60")
 #points(LatLon$Longitude, LatLon$Latitude, col="black", pch=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"), cex=0.01)
 #text(LatLon$Longitude, LatLon$Latitude, col="black", labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"), cex=1)
 #legend(x=-132, y=37, legend=LatLon$Site.Code, labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"), border="transparent", col="black", bg="white", box.col="transparent", title="TEAM Sites", title.adj=0.12, cex=0.66)
-points(LatLon$Longitude, LatLon$Latitude, col="black", pch=20, cex=1)
+points(LatLon$Longitude, LatLon$Latitude, col="black", pch=20, cex=1.6)
+text(22, -50, "TEAM Network Sites")
 text(LatLon$Longitude[1]-8, LatLon$Latitude[1], col="black", labels=LatLon$Site.Code[1], cex=0.7)
 text(LatLon$Longitude[2]-5, LatLon$Latitude[2]-4, col="black", labels=LatLon$Site.Code[2], cex=0.7)
 text(LatLon$Longitude[3]-6, LatLon$Latitude[3], col="black", labels=LatLon$Site.Code[3], cex=0.7)
@@ -450,16 +451,18 @@ dev.off()
 
 #RelVar <- read.csv("RelativeVariableImportance_WCBio12_DummyVariables.csv")
 
-Variable <- c("Elevation CV", "Madagascar", "Africa", "Tree Diversity", "Stem Density", "Forest Loss", "Asia", "PA Size", "Latitude", "Rainfall", "Carbon")
-RelVar.Rich <- c(0.87, 0.80, 0.07, 0.06, 0.27, 0.05, 0.06, 0.11, 0.08, 0.07, 0.06)
-RelVar.Shan <- c(0.61, 0.28, 0.14, 0.56, 0.39, 0.23, 0.17, 0.17, 0.14, 0.07, 0.06)
-RelVar.FD <- c(0.10, 0.11, 0.65, 0.36, 0.27, 0.29, 0.15, 0.07, 0.12, 0.10, 0.07)
+Variable <- c("Elevation CV", "Madagascar", "Africa", "Tree Diversity", "Stem Density", "Forest Loss", "PA Size", "Latitude", "Asia", "Rainfall", 
+              "Carbon")
+RelVar.Rich <- c(0.87, 0.85, 0.08, 0.06, 0.22,
+                 0.05, 0.11, 0.09, 0.06, 0.07, 0.06)
+RelVar.Shan <- c(0.58, 0.37, 0.1, 0.44, 0.31, 0.27, 0.21, 0.17, 0.15, 0.08, 0.07)
+RelVar.FD <- c(0.11, 0.12, 0.72, 0.27, 0.32, 0.23, 0.07, 0.13, 0.15, 0.1, 0.09)
 RelVar <- cbind(RelVar.Rich, RelVar.Shan, RelVar.FD)
 rownames(RelVar) <- Variable
 
 barplotdata <- t(RelVar)
 colnames(barplotdata) <- Variable
-pdf(file="RelativeVariableImportance_BarPlot_WCBio12_DummyVariables_17July2014.pdf", height=5)
+pdf(file="RelativeVariableImportance_BarPlot_WCBio12_DummyVariables_24July2014.pdf", height=5)
 par(mar=c(8,5,2,2))
 barplot(barplotdata, beside=TRUE, horiz=FALSE, las=2, ylab="Relative Variable Importance", cex.lab=1, cex.axis=1, ylim=c(0,1))
 legend("topright", pch=22, pt.cex=1.5, legend=c("Species Richness", "Taxonomic Diversity", "Trait Diversity"), col=c("black"), pt.bg=c("black", "gray", "gray92"), bty="n")
@@ -478,21 +481,20 @@ library(ggplot2)
 
 Rich.coef <- summary(allRich)[[3]]
 rownames(summary(allRich)[[3]])[1:12]
-rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Madagascar", "Stem Density",  "Africa", "Asia", 
-                          "Tree Diversity", "Carbon", "PA Size", "Forest Loss", "Rainfall", "Latitude")
+rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Madagascar", "Stem Density",  "Africa", "Asia", "Tree Diversity", "Carbon","PA Size", "Forest Loss", "Rainfall", "Latitude")
   
 Shan.coef <- summary(allShan)[[3]]
 rownames(summary(allShan)[[3]])[1:12]
-rownames(Shan.coef) <- c("(Intercept)", "Asia", "Elevation CV",  "Stem Density", "Tree Diversity", "Madagascar",
-                         "Africa", "Forest Loss",  "PA Size",  "Latitude", "Rainfall", "Carbon")
+rownames(Shan.coef) <- c("(Intercept)",  "Elevation CV",  "Madagascar", "Tree Diversity", "Asia", "Stem Density", "Forest Loss", 
+                         "PA Size", "Latitude", "Africa", "Carbon", "Rainfall")
   
 FD.coef <- summary(allFD)[[3]]
 rownames(summary(allFD)[[3]])[1:12]
 rownames(FD.coef) <- c("(Intercept)", "Africa",  "Stem Density", "Forest Loss", "Tree Diversity", "Latitude",
-                       "Asia", "Madagascar", "Elevation CV", "Carbon", "PA Size", "Rainfall")
+                       "Asia", "Madagascar", "Carbon", "Elevation CV", "PA Size", "Rainfall")
   
 #graphmodels <- list(summary(allRich)[[3]], summary(allShan)[[3]], summary(allFD)[[3]])
-graphmodels <- list(Rich.coef, Shan.coef, FD.coef)
+graphmodels <- list(Rich.coef[-1,], Shan.coef[-1,], FD.coef[-1,])#remove intercept from figure by removing its row here
 names(graphmodels) <- c("Species Richness", "Taxonomic Diversity", "Trait Diversity")
 
 
@@ -526,7 +528,7 @@ CoefficientPlot <- function(models, modelnames = ""){
   return(OutputPlot)
 }
 
-pdf(file="CoefficientPlot_21June2014.pdf")
+pdf(file="CoefficientPlot_24July2014.pdf")
 CoefficientPlot(graphmodels, modelnames=c("Species Richness", "Taxonomic Diversity", "Trait Diversity"))
 dev.off()
 
