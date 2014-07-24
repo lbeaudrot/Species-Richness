@@ -209,6 +209,11 @@ Trees <- subset(Trees,
       Site.CodeT=="YAN" & SamplingPeriod=="2011.01")
 
 # Replace Diameter column with New Diameter column if applicable
+# BCI incorrectly uses zeros instead of NAs when NewDiameter does not apply.  
+Trees$Diameter[Trees$Diameter == 0] <- NA
+Trees$POMHeight[Trees$POMHeight == 0] <- NA
+Trees$NewDiameter[Trees$NewDiameter == 0] <- NA
+Trees$NewPOMHeight[Trees$NewPOMHeight == 0] <- NA
 #Trees$Diameter <- ifelse(Trees$Site.CodeT=="BCI"|Trees$Site.CodeT=="NAK"|Trees$Site.CodeT=="NNN"|Trees$Site.CodeT=="RNF", Trees$NewDiameter, Trees$Diameter)
 Trees$Diameter <- ifelse(is.na(Trees$NewDiameter), Trees$Diameter, Trees$NewDiameter)
 
