@@ -532,6 +532,7 @@ plant.covs <- merge(plant.covs, Cplot2, by.x="plot", by.y="Plot", all=FALSE)
 
 # Exclude plots that have less than 80% of stems identified to family level
 ExcludePlots <- names(ExcludePlots)
+plant.covs <- plant.covs[-59,]
 plant.covs <- plant.covs[-na.omit(match(ExcludePlots, plant.covs$plot)),]
 plant.covs <- plant.covs[,-6]
 plant.covs <- plant.covs[,-15]
