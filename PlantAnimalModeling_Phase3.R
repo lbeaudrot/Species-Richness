@@ -203,7 +203,7 @@ allRich <- model.avg(Richconfset.95p, beta=TRUE, fit=TRUE)
 Rich95output <- model.sel(Richconfset.95p)
 RichAlloutput <- model.sel(allRich.dredge)
 #write.csv(RichAlloutput, file="ModelAveraging_RichAlloutput_WLS_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
-#write.csv(Rich95output, file="ModelAveraging_Rich95output_WLS_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
+#write.csv(Rich95output, file="ModelAveraging_Rich95output_WLS_WCBio12_DummyVariables_4August2014.csv", row.names=FALSE)
 summary(allRich)
 
 fitRichbest <- lm(CT.median ~  Elev.CV  + V.NStemsT + WC_Bio12, data=Mdata, weights=(1/(CT.Rich.sd^2)))
@@ -238,8 +238,7 @@ FDconfset.95p <- get.models(allFD.dredge, cumsum(weight) <= .95)
 allFD <- model.avg(FDconfset.95p, beta=TRUE, fit=TRUE)
 FD95output <- model.sel(FDconfset.95p)
 FDAlloutput <- model.sel(allFD.dredge)
-#write.csv(FDAlloutput, file="ModelAveraging_FDAlloutput_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
-#write.csv(FD95output, file="ModelAveraging_FD95output_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
+#write.csv(FD95output, file="ModelAveraging_FD95output_WCBio12_DummyVariables_4August2014.csv", row.names=FALSE)
 summary(allFD)
 
 plot(resid(fitFD), Mdata$CT.median, xlab="Global Model Residuals", ylab="Predicted Functional Diversity")
@@ -271,8 +270,7 @@ Shanconfset.95p <- get.models(allShan.dredge, cumsum(weight) <= .95)
 allShan <- model.avg(Shanconfset.95p, beta=TRUE, fit=TRUE)
 Shan95output <- model.sel(Shanconfset.95p)
 ShanAlloutput <- model.sel(allShan.dredge)
-#write.csv(Shan95output, file="ModelAveraging_ShanAlloutput_WCBio12_DummyVariables_21June2014.csv", row.names=FALSE)
-#write.csv(Shan95output, file="ModelAveraging_Shan95output_WCBio12_DummyVariables_19June2014.csv", row.names=FALSE)
+#write.csv(Shan95output, file="ModelAveraging_ShanAlloutput_WCBio12_DummyVariables_4August2014.csv", row.names=FALSE)
 
 summary(allShan)
 
@@ -359,27 +357,57 @@ hist(resid(fitFD), main="", xlab="Global Model Residuals")
 hist(resid(fitShan), main="", xlab="Global Model Residuals")
 
 
+summary(lm(Mdata$CT.median ~ Mdata$V.Cstorage2))
+
+summary(lm(Mdata$CT.FDisMedian ~ Mdata$V.Cstorage2))
+
+summary(lm(Mdata$Shannon.Index ~ Mdata$V.Cstorage2))
+
+
 ############ Create Plots #########
 pdf(file="AnimalDiversity_Carbon2_Plots_ByRegionColor.pdf", height=2.7)
 set.panel(1,3)
-par(mar=c(5, 5, 1, 1))
+par(mar=c(4, 5, 0.5, 0.5))
+plot(model.data$V.Cstorage2/1000, Mdata$CT.median, las=1, ylab="Species Richness", xlab="", bty="n", xlim=c(100, 250), 
+     ylim=c(10,50), cex.lab=1.4, cex.axis=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], 
+     col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.5)
+legend("bottomleft", expression(R^2*"=-0.03, df=12, p=0.47"), cex=1.15, bty="n")
+plot(model.data$V.Cstorage2/1000, Mdata$Shannon.Index, las=1, ylab="Taxonomic Diversity", xlab="", bty="n", xlim=c(100, 250), 
+     ylim=c(2.2, 3.4), cex.lab=1.4, cex.axis=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], 
+     col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.5)
+legend("bottomleft", expression(R^2*"=-0.02, df=12, p=0.40"), cex=1.15, bty="n")
+plot(model.data$V.Cstorage2/1000, Mdata$CT.FDisMedian, las=1, ylab="", xlab="", bty="n", xlim=c(100, 250), 
+     ylim=c(0.24,0.32), cex.lab=1.4, cex.axis=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], 
+     col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.5)
+mtext("Trait Diversity", side=2, line=4)
+legend("bottomleft", expression(R^2*"=0.05, df=12, p=0.22"), cex=1.15, bty="n")
+legend("topright", legend=c("Asia", "Americas", "Africa", "Madagascar"), col=c("red", "green3", "blue","black"), 
+       pch=c(17,16,15,18),  box.col="transparent", cex=1.15)
+mtext("               Aboveground Carbon Storage (Mg C per ha)", side=1, outer=TRUE, line=-1.5)
+dev.off()
+
+# Change to vertical orientation 
+pdf(file="AnimalDiversity_Carbon2_Plots_ByRegionColor_Vertical.pdf", width=2.7)
+set.panel(3, 1)
+par(oma=c(2, 0, 0, 0), mar=c(2, 5, 0, 1))
 plot(model.data$V.Cstorage2/1000, Mdata$CT.median, las=1, ylab="Species Richness", xlab="", bty="n", xlim=c(100, 250), 
      ylim=c(10,50), cex.lab=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], 
      col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.3)
-legend("bottomleft", expression(R^2* " < 0.001, df=12, p=0.77"), cex=1, bty="n")
+legend("bottomleft", expression(R^2* " = -0.03, df=12, p=0.47"), cex=1, bty="n")
+legend(x=185, y=27, legend=c("Asia", "Americas", "Africa", "Madagascar"), col=c("red", "green3", "blue","black"), 
+       pch=c(17,16,15,18),  box.col="transparent", cex=1)
 plot(model.data$V.Cstorage2/1000, Mdata$Shannon.Index, las=1, ylab="Taxonomic Diversity", xlab="", bty="n", xlim=c(100, 250), 
      ylim=c(2.2, 3.4), cex.lab=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], 
      col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.3)
-legend("bottomleft", expression(R^2* " = 0.03, df=12, p=0.56"), cex=1, bty="n")
+legend("bottomleft", expression(R^2* " = -0.02, df=12, p=0.40"), cex=1, bty="n")
 plot(model.data$V.Cstorage2/1000, Mdata$CT.FDisMedian, las=1, ylab="Trait Diversity", xlab="", bty="n", xlim=c(100, 250), 
      ylim=c(0.24,0.32), cex.lab=1.2, pch=c(15,16,17,18)[unclass(as.factor(Mdata$Continent))], 
      col=c("blue","green3","red","black")[unclass(as.factor(Mdata$Continent))], cex=1.3)
 legend("bottomleft", expression(R^2* " = 0.05, df=12, p=0.22"), cex=1, bty="n")
-legend("topright", legend=c("Asia", "Americas", "Africa", "Madagascar"), col=c("red", "green3", "blue","black"), 
+#legend("topright", legend=c("Asia", "Americas", "Africa", "Madagascar"), col=c("red", "green3", "blue","black"), 
        pch=c(17,16,15,18),  box.col="transparent", cex=1)
-mtext("               Aboveground Carbon Storage (Mg C per ha)", side=1, outer=TRUE, line=-2)
+mtext("       Aboveground Carbon Storage (Mg C per ha)", side=1, outer=TRUE, line=0.5, cex=0.7)
 dev.off()
-
 
 
 # Examine relationship between functional diversity and species richness & taxonomic diversity within continents
@@ -425,7 +453,7 @@ points(LatLon$Longitude, LatLon$Latitude, col="green4", pch=c(1:14), cex=1)
 legend(x=-132, y=37, legend=LatLon$Site.Code, pch=c(1:14), border="transparent", col="green4", bg="white", box.col="transparent", title="TEAM Sites", title.adj=0.12, cex=0.66)
 dev.off()
 
-pdf(file="TEAM_Map_14Sites_Numbered.pdf", height=3)
+pdf(file="TEAM_Map_14Sites_Labeled.pdf", height=3)
 par(mar=c(0,0,0,0))
 map('world', interior=FALSE, xlim=c(-132, 155), ylim=c(-60, 37), col="gray60")
 #points(LatLon$Longitude, LatLon$Latitude, col="black", pch=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"), cex=0.01)
@@ -449,20 +477,43 @@ text(LatLon$Longitude[13]-8, LatLon$Latitude[13], col="black", labels=LatLon$Sit
 text(LatLon$Longitude[14]-7, LatLon$Latitude[14], col="black", labels=LatLon$Site.Code[14], cex=0.7)
 dev.off()
 
+pdf(file="TEAM_Map_14Sites_Numbered.pdf", height=3)
+par(mar=c(0,0,0,0))
+map('world', interior=FALSE, xlim=c(-132, 155), ylim=c(-60, 37), col="gray60")
+#points(LatLon$Longitude, LatLon$Latitude, col="black", pch=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"), cex=0.01)
+#text(LatLon$Longitude, LatLon$Latitude, col="black", labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"), cex=1)
+#legend(x=-132, y=37, legend=LatLon$Site.Code, labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"), border="transparent", col="black", bg="white", box.col="transparent", title="TEAM Sites", title.adj=0.12, cex=0.66)
+points(LatLon$Longitude, LatLon$Latitude, col="black", pch=20, cex=1.6)
+text(22, -50, "TEAM Network Sites")
+text(LatLon$Longitude[1]-8, LatLon$Latitude[1], col="black", labels="1", cex=0.7)
+text(LatLon$Longitude[2]-4, LatLon$Latitude[2]-4, col="black", labels="2", cex=0.7)
+text(LatLon$Longitude[3]-6, LatLon$Latitude[3], col="black", labels="3", cex=0.7)
+text(LatLon$Longitude[4]-5, LatLon$Latitude[4]+4, col="black", labels="4", cex=0.7)
+text(LatLon$Longitude[5]+5, LatLon$Latitude[5]-4, col="black", labels="5", cex=0.7)
+text(LatLon$Longitude[6]-2, LatLon$Latitude[6]+4, col="black", labels="6", cex=0.7)
+text(LatLon$Longitude[7], LatLon$Latitude[7]-5, col="black", labels="7", cex=0.7)
+text(LatLon$Longitude[8], LatLon$Latitude[8]+4, col="black", labels="8", cex=0.7)
+text(LatLon$Longitude[9]+6, LatLon$Latitude[9]+3, col="black", labels="9", cex=0.7)
+text(LatLon$Longitude[10]+8, LatLon$Latitude[10], col="black", labels="10", cex=0.7)
+text(LatLon$Longitude[11]-8, LatLon$Latitude[11], col="black", labels="11", cex=0.7)
+text(LatLon$Longitude[12]-7, LatLon$Latitude[12], col="black", labels="12", cex=0.7)
+text(LatLon$Longitude[13]-7, LatLon$Latitude[13], col="black", labels="13", cex=0.7)
+text(LatLon$Longitude[14]-7, LatLon$Latitude[14], col="black", labels="14", cex=0.7)
+dev.off()
+
 #RelVar <- read.csv("RelativeVariableImportance_WCBio12_DummyVariables.csv")
 
-Variable <- c("Elevation CV", "Madagascar", "Africa", "Tree Diversity", "Stem Density", "Forest Loss", "PA Size", "Latitude", "Asia", "Rainfall", 
+Variable <- c("Elevation CV", "Madagascar", "Africa", "Tree Diversity", "Stem Density", "Forest Loss", "PA Size", "Asia", "Latitude", "Rainfall", 
               "Carbon")
-RelVar.Rich <- c(0.87, 0.85, 0.08, 0.06, 0.22,
-                 0.05, 0.11, 0.09, 0.06, 0.07, 0.06)
-RelVar.Shan <- c(0.58, 0.37, 0.1, 0.44, 0.31, 0.27, 0.21, 0.17, 0.15, 0.08, 0.07)
-RelVar.FD <- c(0.11, 0.12, 0.72, 0.27, 0.32, 0.23, 0.07, 0.13, 0.15, 0.1, 0.09)
+RelVar.Rich <- c(0.88, 0.71, 0.07, 0.06, 0.35, 0.05, 0.12, 0.06, 0.08, 0.08, 0.06)
+RelVar.Shan <- c(0.6, 0.26, 0.15, 0.58, 0.4, 0.23, 0.17, 0.15, 0.14, 0.07, 0.07)
+RelVar.FD <- c(0.1, 0.11, 0.65, 0.36, 0.27, 0.29, 0.08, 0.15, 0.12, 0.1, 0.07)
 RelVar <- cbind(RelVar.Rich, RelVar.Shan, RelVar.FD)
 rownames(RelVar) <- Variable
 
 barplotdata <- t(RelVar)
 colnames(barplotdata) <- Variable
-pdf(file="RelativeVariableImportance_BarPlot_WCBio12_DummyVariables_24July2014.pdf", height=5)
+pdf(file="RelativeVariableImportance_BarPlot_WCBio12_DummyVariables_4August2014.pdf", height=5)
 par(mar=c(8,5,2,2))
 barplot(barplotdata, beside=TRUE, horiz=FALSE, las=2, ylab="Relative Variable Importance", cex.lab=1, cex.axis=1, ylim=c(0,1))
 legend("topright", pch=22, pt.cex=1.5, legend=c("Species Richness", "Taxonomic Diversity", "Trait Diversity"), col=c("black"), pt.bg=c("black", "gray", "gray92"), bty="n")
@@ -481,17 +532,17 @@ library(ggplot2)
 
 Rich.coef <- summary(allRich)[[3]]
 rownames(summary(allRich)[[3]])[1:12]
-rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Madagascar", "Stem Density",  "Africa", "Asia", "Tree Diversity", "Carbon","PA Size", "Forest Loss", "Rainfall", "Latitude")
+rownames(Rich.coef) <- c("(Intercept)", "Elevation CV", "Madagascar", "Stem Density",  "Africa", "PA Size", "Asia", "Tree Diversity", "Carbon", "Forest Loss", "Rainfall", "Latitude")
   
 Shan.coef <- summary(allShan)[[3]]
 rownames(summary(allShan)[[3]])[1:12]
-rownames(Shan.coef) <- c("(Intercept)",  "Elevation CV",  "Madagascar", "Tree Diversity", "Asia", "Stem Density", "Forest Loss", 
-                         "PA Size", "Latitude", "Africa", "Carbon", "Rainfall")
+rownames(Shan.coef) <- c("(Intercept)",  "Elevation CV", "Stem Density", "Tree Diversity", "Asia", "Madagascar", "Africa", "Forest Loss", 
+                         "PA Size", "Latitude", "Rainfall", "Carbon")
   
 FD.coef <- summary(allFD)[[3]]
 rownames(summary(allFD)[[3]])[1:12]
 rownames(FD.coef) <- c("(Intercept)", "Africa",  "Stem Density", "Forest Loss", "Tree Diversity", "Latitude",
-                       "Asia", "Madagascar", "Carbon", "Elevation CV", "PA Size", "Rainfall")
+                       "Asia", "Madagascar", "Elevation CV", "Carbon", "PA Size", "Rainfall")
   
 #graphmodels <- list(summary(allRich)[[3]], summary(allShan)[[3]], summary(allFD)[[3]])
 graphmodels <- list(Rich.coef[-1,], Shan.coef[-1,], FD.coef[-1,])#remove intercept from figure by removing its row here
@@ -528,7 +579,7 @@ CoefficientPlot <- function(models, modelnames = ""){
   return(OutputPlot)
 }
 
-pdf(file="CoefficientPlot_24July2014.pdf")
+pdf(file="CoefficientPlot_4August2014.pdf")
 CoefficientPlot(graphmodels, modelnames=c("Species Richness", "Taxonomic Diversity", "Trait Diversity"))
 dev.off()
 
